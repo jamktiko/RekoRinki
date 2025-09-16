@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Install Frontend Dependencies
         working-directory: ./frontend
@@ -38,8 +38,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'FrontendApp'
-          environment_name: 'Frontend-env'
+          application_name: 'RekoRinki'
+          environment_name: 'RekoRinki-env'
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: frontend-build.zip
@@ -54,7 +54,7 @@ jobs:
       - name: Set up Node.js (tai muu runtime)
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '22'
 
       - name: Install Backend Dependencies
         working-directory: ./backend
@@ -72,8 +72,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'BackendApp'
-          environment_name: 'Backend-env'
+          application_name: 'RekoRinki'
+          environment_name: 'RekoRinki-env'
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: backend-build.zip
