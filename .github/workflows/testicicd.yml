@@ -7,19 +7,17 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: [ ubuntu-latest ]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Install Dependencies
-        run: npm install
-      - name: Genrate Deployment Package
-        run: zip -r nodejs-app-build.zip .
-      - name: Deploy to EB
+
+      - name: Create Dummy App
+        run: |
+          echo "Hello from GitHub Actions" > index.html
+          zip -r nodejs-app-build.zip index.html
+
+      - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
