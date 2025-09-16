@@ -12,10 +12,14 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Create Dummy App
-        run: |
-          echo "Hello from GitHub Actions" > index.html
-          zip -r nodejs-app-build.zip index.html
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test || echo "No tests defined"
+
+      - name: Generate Deployment Package
+        run: zip -r nodejs-app-build.zip . -x ".git/*" "node_modules/*"
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
