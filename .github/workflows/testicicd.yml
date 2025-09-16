@@ -6,28 +6,74 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy-frontend:
+    name: Deploy Frontend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: npm install  # käytä tätä jos ei ole package-lock.json
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-      - name: Run Tests
-        run: npm test || echo "No tests defined"
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm install
 
-      - name: Generate Deployment Package
-        run: zip -r nodejs-app-build.zip . -x ".git/*" "node_modules/*"
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: npm test || echo "No frontend tests defined"
 
-      - name: Deploy to Elastic Beanstalk
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Generate Frontend Deployment Package
+        run: zip -r frontend-build.zip ./frontend/* -x "*.git*" "node_modules/*"
+
+      - name: Deploy Frontend to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'RekoRinki'
-          environment_name: 'RekoRinki-env'
+          application_name: 'FrontendApp'
+          environment_name: 'Frontend-env'
           version_label: ${{ github.sha }}
           region: eu-north-1
-          deployment_package: nodejs-app-build.zip
+          deployment_package: frontend-build.zip
+
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js (tai muu runtime)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Run Backend Tests
+        working-directory: ./backend
+        run: npm test || echo "No backend tests defined"
+
+      - name: Generate Backend Deployment Package
+        run: zip -r backend-build.zip ./backend/* -x "*.git*" "node_modules/*"
+
+      - name: Deploy Backend to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: 'BackendApp'
+          environment_name: 'Backend-env'
+          version_label: ${{ github.sha }}
+          region: eu-north-1
+          deployment_package: backend-build.zip
