@@ -39,7 +39,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: 'RekoRinki'
-          environment_name: 'RekoRinki-env'
+          environment_name: 'RekoRinki-frontend-env'
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: frontend-build.zip
@@ -65,7 +65,9 @@ jobs:
         run: npm test || echo "No backend tests defined"
 
       - name: Generate Backend Deployment Package
-        run: zip -r backend-build.zip ./backend/* -x "*.git*" "node_modules/*"
+        run: |
+          cd backend
+          zip -r ../backend-build.zip . -x "*.git*" "node_modules/*"
 
       - name: Deploy Backend to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
