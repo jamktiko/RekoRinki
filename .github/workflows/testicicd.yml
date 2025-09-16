@@ -80,4 +80,3 @@ jobs:
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: backend-build.zip
-
