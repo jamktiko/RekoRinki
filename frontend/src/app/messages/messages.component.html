@@ -1,0 +1,22 @@
+<h1 class="text-center">Viestit</h1>
+@if (contacts.length ===0) {
+<p class="text-center">Ei viestejä</p>
+}
+@else{
+@for (message of contacts; track $index) {
+<div class="messages">
+  <p class="text-center">Etunimi: {{message.firstName}}</p>
+  <p class="text-center">Sukunimi: {{message.lastName}}</p>
+  <p class="text-center">Sähköposti: {{message.email}}</p>
+  <p class="text-center">Puhelinnumero: {{message.phoneNumber}}</p>
+  <p class="text-center">Viesti: {{message.message}}</p>
+  <p class="text-center">Haluan yhteydenoton {{message.answer}}</p>
+  <div class="text-center">
+    <button class="btn btn-primary" (click)="remove(message)">Poista</button>
+  </div>
+</div>
+}
+}
+@if(this.contactService.delete === true){
+<p class="text-center">Viesti poistettu</p>
+}

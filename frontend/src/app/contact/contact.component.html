@@ -1,0 +1,44 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value);">
+  <div class="container text-center" style="max-width:500px">
+    <div>
+      <label class="form-label" for="firstName">Etunimi</label>
+      <input type="text" class="form-control" name="firstName" placeHolder="Etunimi" ngModel required
+        #firstName="ngModel">
+      <span [hidden]="!f.form.hasError('required', 'firstName')||f.pristine">Etunimikenttä on pakollinen</span>
+    </div>
+    <div>
+      <label class="form-label" for="lastName">Sukunimi</label>
+      <input type="text" class="form-control" name="lastName" placeholder="Sukunimi" ngModel required
+        #lastName="ngModel">
+      <span [hidden]="!f.form.hasError('required', 'lastName')||f.pristine">Sukunimikenttä on pakollinen</span>
+    </div>
+    <div>
+      <label class="form-label" for="email">Sähköposti</label>
+      <input type="email" class="form-control" name="email" placeHolder="Sähköposti"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ngModel required #email="ngModel">
+      <span [hidden]="!f.form.hasError('required', 'email')||f.pristine">Sähköpostikenttä on pakollinen</span>
+      <span [hidden]="!f.form.hasError('pattern', 'email')">Anna sähköpostiosoite oikeassa muodossa</span>
+    </div>
+    <div>
+      <label class="form-label" for="phoneNumber">Puhelinnumero</label>
+      <input type="text" class="form-control" name="phoneNumber" placeHolder="Puhelinnumero"
+        pattern="^\+?[1-9]\d{1,14}$" ngModel required #phonenumber="ngModel">
+      <span [hidden]="!f.form.hasError('required', 'phoneNumber')||f.pristine">Puhelinumerokenttä on pakollinen</span>
+      <span [hidden]="!f.form.hasError('pattern', 'phoneNumber')">Anna puhelinnumero oikeassa muodossa</span>
+    </div>
+    <div>
+      <label class="form-label" for="message">Viesti</label>
+      <input type="text" class="form-control" name="message" placeHolder="Viesti" ngModel required #message="ngModel">
+      <span [hidden]="!f.form.hasError('required', 'message')||f.pristine">Viestikenttä on pakollinen</span>
+    </div>
+    <label>Haluan yhteydenoton</label>
+    <select name="answer" class="form-select" ngModel>
+      <option value="Yhteyden otto sähköpostilla">Sähköpostilla</option>
+      <option value="Yhteydenotto puhelimella">Puhelimella</option>
+    </select>
+    <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Lähetä</button>
+    @if(submit === true) {
+    <p>Viesti lähetetty</p>
+    }
+  </div>
+</form>

@@ -1,0 +1,18 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value, f.valid);">
+  <div class="container text-center" style="max-width:500px">
+    <div>
+      <label class="form-label" for="username">Käyttäjätunnus</label>
+      <input type="text" class="form-control" name="username" ngModel required #username="ngModel">
+      <span [hidden]="!f.form.hasError('required', 'username')||f.pristine">Käyttäjätunnus on pakollinen</span>
+    </div>
+    <div>
+      <label class="form-label" for="password">Salasana</label>
+      <input type="password" class="form-control" name="password" ngModel required #password="ngModel">
+      <span [hidden]="!f.form.hasError('required', 'password')||f.pristine">Salasana vaaditaan</span>
+    </div>
+    <button type="submit" class="btn btn-primary">Kirjaudu sisään</button>
+    @if (this.err === true) {
+    <p>Kirjautuminen epäonnistui</p>
+    }
+  </div>
+</form>

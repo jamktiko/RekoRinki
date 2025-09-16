@@ -1,0 +1,27 @@
+# POST http://localhost:3000/messages/createmessage/koe HTTP/1.1
+# Content-Type: application/json
+
+# {   
+#   "firstName": "testi",
+#   "lastName": "test",
+#  "email": "testi@gmail.com",
+#  "phoneNumber": "+358401231122",
+# "message": "Tämä on testi",
+# "answer": "Haluan yhteydenoton sähköpostilla"
+# }
+# DELETE http://localhost:3000/messages/deletemessage/koe/6881f31063b1bf7684d34499 HTTP/1.1
+# Content-Type: application/json
+# POST http://localhost:3000/messages/register HTTP/1.1
+#  Content-Type: application/json
+
+# {
+#   "username": "koe2",
+# "password": "koe1234."
+# }
+POST http://localhost:3000/messages/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "koe2",
+" password": "koe1234."
+}
