@@ -8,19 +8,31 @@ require('./dbconnection');
 
 const indexRouter = require('./routes/index');
 const messagesRouter = require('./routes/messages');
+
 const app = express();
+
+// CORS
 const corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: '*', // Productionissa kannattaa rajata domainiin
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+
+// Middlewaret
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Staattiset tiedostot (frontend build)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routes
 app.use('/', indexRouter);
 app.use('/messages', messagesRouter);
+
+// Portti
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
 
 module.exports = app;
