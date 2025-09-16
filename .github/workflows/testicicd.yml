@@ -43,6 +43,7 @@ jobs:
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: frontend-build.zip
+          use_existing_version_if_available: true
 
   deploy-backend:
     name: Deploy Backend
