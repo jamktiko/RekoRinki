@@ -29,15 +29,19 @@ jobs:
       - name: Build Frontend
         working-directory: ./frontend
         run: npm run build
-
-      - name: Generate Frontend Deployment Package
-        run: zip -r frontend-build.zip ./frontend/* -x "*.git*" "node_modules/*"
-
+    
+      - name: Package Frontend for EB
+        run: |
+          cd frontend
+          mkdir -p .ebextensions
+          echo "option_settings:\n  aws:elasticbeanstalk:environment:proxy:staticfiles:\n    /: build" > .ebextensions/static.config.yml
+          zip -r ../frontend-build.zip build .ebextensions -x "*.git*" "node_modules/*"
+    
       - name: Deploy Frontend to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
           application_name: 'Reko'
           environment_name: 'Reko-env'
           version_label: ${{ github.sha }}
