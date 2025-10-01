@@ -38,8 +38,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'RekoRinki'
-          environment_name: 'RekoRinki-env'
+          application_name: 'Reko'
+          environment_name: 'Reko-env'
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: frontend-build.zip
@@ -75,8 +75,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'RekoRinki'
-          environment_name: 'RekoRinki-env'
+          application_name: 'Reko'
+          environment_name: 'Reko-env'
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: backend-build.zip
