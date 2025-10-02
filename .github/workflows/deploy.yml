@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,18 +19,25 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
+        working-directory: ./frontend
         run: npm install
 
-      - name: Build Svelte app
+      - name: Build frontend
+        working-directory: ./frontend
         run: npm run build
 
       - name: Prepare EB deployment package
         run: |
-          mkdir -p .ebextensions
+          mkdir -p eb-deploy
+          cp -r frontend/build eb-deploy/
+          cp frontend/package.json eb-deploy/
+          cp frontend/server.js eb-deploy/
+          mkdir -p eb-deploy/.ebextensions
           echo "option_settings:
             aws:elasticbeanstalk:environment:proxy:staticfiles:
-              /: frontend/build" > .ebextensions/static.config.yml
-          zip -r eb-deploy.zip frontend/build frontend/package.json server.js .ebextensions -x "*.git*" "node_modules/*"
+              /: build" > eb-deploy/.ebextensions/static.config.yml
+          cd eb-deploy
+          zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/*"
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
