@@ -24,6 +24,9 @@ jobs:
 
       - name: Build frontend
         working-directory: ./frontend
+        env:
+          VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
+          VITE_CLIENT_SECRET: ${{ secrets.VITE_CLIENT_SECRET }}
         run: npm run build
 
       - name: Prepare EB deployment package
