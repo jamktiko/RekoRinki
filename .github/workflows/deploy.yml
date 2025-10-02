@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p .ebextensions
           echo "option_settings:
-          aws:elasticbeanstalk:environment:proxy:staticfiles:
+        aws:elasticbeanstalk:environment:proxy:staticfiles:
           /: frontend/build" > .ebextensions/static.config.yml
                 zip -r eb-deploy.zip frontend/build frontend/package.json server.js .ebextensions -x "*.git*" "node_modules/*"
 
