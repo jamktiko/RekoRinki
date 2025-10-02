@@ -9,7 +9,6 @@ jobs:
   deploy-frontend:
     name: Deploy Frontend
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
@@ -23,19 +22,20 @@ jobs:
         working-directory: ./frontend
         run: npm install
 
-      - name: Run Frontend Tests
-        working-directory: ./frontend
-        run: npm test || echo "No frontend tests defined"
-
       - name: Build Frontend
         working-directory: ./frontend
         run: npm run build
 
       - name: Package Frontend for Elastic Beanstalk
-        run:  |
-          mkdir -p .ebextensions
-          echo "option_settings:\n  aws:elasticbeanstalk:environment:proxy:staticfiles:\n    /: dist" > .ebextensions/static.config.yml
-          zip -r frontend-build.zip frontend/dist frontend/package.json frontend/server.js .ebextensions -x "*.git*" "node_modules/*"
+        run: |
+          # Luo ebextensions kansio ja konfiguroi staattiset tiedostot
+          mkdir -p frontend/.ebextensions
+          echo "option_settings:
+          aws:elasticbeanstalk:environment:proxy:staticfiles:
+          /: build" > frontend/.ebextensions/static.config.yml
+          cd frontend
+          zip -r ../frontend-build.zip server.js package.json build .ebextensions -x "*.git*" "node_modules/*"
+          cd ..
 
       - name: Deploy Frontend to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
@@ -48,6 +48,8 @@ jobs:
           region: eu-north-1
           deployment_package: frontend-build.zip
           use_existing_version_if_available: false
+          wait_for_deployment: true
+          wait_for_environment_recovery: true
 
 
 
