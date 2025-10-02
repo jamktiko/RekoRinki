@@ -32,7 +32,7 @@ jobs:
         run: npm run build
 
       - name: Package Frontend for Elastic Beanstalk
-        run: |
+        run:  |
           mkdir -p .ebextensions
           echo "option_settings:\n  aws:elasticbeanstalk:environment:proxy:staticfiles:\n    /: dist" > .ebextensions/static.config.yml
           zip -r frontend-build.zip frontend/dist frontend/package.json frontend/server.js .ebextensions -x "*.git*" "node_modules/*"
@@ -41,7 +41,7 @@ jobs:
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: 'Reko'
           environment_name: 'Reko-env'
           version_label: ${{ github.sha }}
