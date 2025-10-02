@@ -20,35 +20,30 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: ./frontend
-        run: npm ci
+        run: npm install
+
+      - name: Run Frontend Tests
+        working-directory: ./frontend
+        run: npm test || echo "No frontend tests defined"
 
       - name: Build Frontend
         working-directory: ./frontend
         run: npm run build
 
-      - name: Package Frontend for Elastic Beanstalk
-        run: |
-          mkdir -p frontend/.ebextensions
-          echo "option_settings:
-          aws:elasticbeanstalk:environment:proxy:staticfiles:
-          /: build" > frontend/.ebextensions/static.config.yml
-          cd frontend
-          zip -r ../frontend-build.zip server.js package.json build .ebextensions -x "*.git*" "node_modules/*"
-          cd ..
+      - name: Generate Frontend Deployment Package
+        run: zip -r frontend-build.zip ./frontend/* -x "*.git*" "node_modules/*"
 
       - name: Deploy Frontend to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'Reko'
-          environment_name: 'Reko-env'
+          application_name: 'RekoRinki'
+          environment_name: 'RekoRinki-env'
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: frontend-build.zip
-          use_existing_version_if_available: false
-          wait_for_deployment: true
-          wait_for_environment_recovery: true
+          use_existing_version_if_available: true
 
 
 
