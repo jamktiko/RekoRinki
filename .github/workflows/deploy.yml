@@ -1,0 +1,45 @@
+name: Deploy Angular to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular app
+        run: npm run build -- --prod
+
+      - name: Prepare EB deployment package
+        run: |
+          mkdir -p .ebextensions
+          echo "option_settings:
+            aws:elasticbeanstalk:environment:proxy:staticfiles:
+              /: dist" > .ebextensions/static.config.yml
+          zip -r eb-deploy.zip dist .ebextensions package.json server.js -x "*.git*" "node_modules/*"
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: 'Reko'
+          environment_name: 'Reko-env'
+          version_label: ${{ github.sha }}
+          region: eu-north-1
+          deployment_package: eb-deploy.zip
+          use_existing_version_if_available: false
