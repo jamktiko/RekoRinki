@@ -1,4 +1,4 @@
-name: CICD
+name: Deploy Hello World to EB
 
 on:
   push:
@@ -6,11 +6,10 @@ on:
       - main
 
 jobs:
-  deploy-frontend:
-    name: Deploy Frontend
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source
+      - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -18,32 +17,22 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install Frontend Dependencies
-        working-directory: ./frontend
+      - name: Install Dependencies
         run: npm install
 
-      - name: Run Frontend Tests
-        working-directory: ./frontend
-        run: npm test || echo "No frontend tests defined"
+      - name: Package for Elastic Beanstalk
+        run: zip -r eb-deploy.zip . -x "*.git*" "node_modules/*"
 
-      - name: Build Frontend
-        working-directory: ./frontend
-        run: npm run build
-
-      - name: Generate Frontend Deployment Package
-        run: zip -r frontend-build.zip ./frontend/* -x "*.git*" "node_modules/*"
-
-      - name: Deploy Frontend to Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: 'Reko'
           environment_name: 'Reko-env'
-          version_label: ${{ github.sha }}
-          region: eu-north-1
-          deployment_package: frontend-build.zip
-          use_existing_version_if_available: true
+          region: 'eu-north-1'
+          deployment_package: eb-deploy.zip
+          use_existing_version_if_available: false
 
 
 
