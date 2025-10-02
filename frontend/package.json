@@ -1,20 +1,17 @@
 {
   "name": "harjoitustyo",
+  "version": "0.0.1",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start": "node server.js"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^5.0.2",
-    "svelte": "^5.14.3",
-    "vite": "^6.0.3"
+    "start": "node server.js",
+    "build": "vite build"
   },
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "svelte": "^5.14.3",
+    "vite": "^6.0.3",
+    "@sveltejs/vite-plugin-svelte": "^5.0.2"
   }
 }
