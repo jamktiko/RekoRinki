@@ -20,7 +20,7 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: ./frontend
-        run: npm install
+        run: npm ci
 
       - name: Build Frontend
         working-directory: ./frontend
@@ -28,7 +28,6 @@ jobs:
 
       - name: Package Frontend for Elastic Beanstalk
         run: |
-          # Luo ebextensions kansio ja konfiguroi staattiset tiedostot
           mkdir -p frontend/.ebextensions
           echo "option_settings:
           aws:elasticbeanstalk:environment:proxy:staticfiles:
