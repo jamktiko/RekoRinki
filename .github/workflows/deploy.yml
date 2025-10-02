@@ -29,13 +29,13 @@ jobs:
       - name: Prepare EB deployment package
         run: |
           mkdir -p eb-deploy
-          cp -r frontend/build eb-deploy/
+          cp -r frontend/dist eb-deploy/
           cp frontend/package.json eb-deploy/
           cp frontend/server.js eb-deploy/
           mkdir -p eb-deploy/.ebextensions
           echo "option_settings:
             aws:elasticbeanstalk:environment:proxy:staticfiles:
-              /: build" > eb-deploy/.ebextensions/static.config.yml
+              /: dist" > eb-deploy/.ebextensions/static.config.yml
           cd eb-deploy
           zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/*"
 
