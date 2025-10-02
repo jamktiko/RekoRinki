@@ -32,10 +32,9 @@ jobs:
 
       - name: Package Frontend for EB
         run: |
-          cd frontend
           mkdir -p .ebextensions
           echo "option_settings:\n  aws:elasticbeanstalk:environment:proxy:staticfiles:\n    /: dist" > .ebextensions/static.config.yml
-          zip -r ../frontend-build.zip dist .ebextensions -x "*.git*" "node_modules/*"
+          zip -r ../frontend-build.zip server.js package.json frontend/dist .ebextensions -x "*.git*" "node_modules/*"
 
       - name: Deploy Frontend to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
