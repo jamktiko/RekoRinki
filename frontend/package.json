@@ -2,9 +2,14 @@
   "name": "frontend",
   "version": "0.0.1",
   "scripts": {
+    "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod"
-  },
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  }
+,
   "dependencies": {
     "@angular/core": "^16.0.0",
     "@angular/common": "^16.0.0",
