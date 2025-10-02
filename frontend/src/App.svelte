@@ -35,7 +35,6 @@
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       accessToken = data.access_token;
     });
 
