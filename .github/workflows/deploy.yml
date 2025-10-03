@@ -1,4 +1,4 @@
-name: Deploy Svelte + Backend to Elastic Beanstalk
+name: Deploy Svelte to Elastic Beanstalk
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install frontend dependencies
+      - name: Install dependencies
         working-directory: ./frontend
         run: npm install
 
@@ -29,19 +29,12 @@ jobs:
           VITE_CLIENT_SECRET: ${{ secrets.VITE_CLIENT_SECRET }}
         run: npm run build
 
-      - name: Install backend dependencies
-        working-directory: ./backend
-        run: npm install
-
       - name: Prepare EB deployment package
         run: |
           mkdir -p eb-deploy
           cp -r frontend/dist eb-deploy/
           cp frontend/package.json eb-deploy/
           cp frontend/server.js eb-deploy/
-          mkdir -p eb-deploy/backend
-          cp backend/server.js eb-deploy/backend/
-          cp backend/package.json eb-deploy/backend/
           mkdir -p eb-deploy/.ebextensions
           echo "option_settings:
             aws:elasticbeanstalk:environment:proxy:staticfiles:
