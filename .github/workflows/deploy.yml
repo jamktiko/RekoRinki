@@ -41,7 +41,7 @@ jobs:
               /: dist" > eb-deploy/.ebextensions/static.config.yml
           cd eb-deploy
           zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/*"
-
+          
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -53,3 +53,4 @@ jobs:
           region: eu-north-1
           deployment_package: eb-deploy.zip
           use_existing_version_if_available: false
+          
