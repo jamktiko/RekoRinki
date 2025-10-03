@@ -20,7 +20,7 @@ USE `RekoRinki` ;
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Asiakas` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kayttajatunnus` VARCHAR(20) NOT NULL,
-  `salasana` VARCHAR(50) NOT NULL,
+  `salasana` VARCHAR(255) NOT NULL,
   `etunimi` VARCHAR(50) NOT NULL,
   `sukunimi` VARCHAR(50) NOT NULL,
   `puhelinnro` VARCHAR(15) NOT NULL,
@@ -43,7 +43,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tuottaja` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kayttajatunnus` VARCHAR(50) NOT NULL,
-  `salasana` VARCHAR(50) NOT NULL,
+  `salasana` VARCHAR(255) NOT NULL,
   `etunimi` VARCHAR(50) NOT NULL,
   `sukunimi` VARCHAR(50) NOT NULL,
   `puhelinnro` VARCHAR(15) NOT NULL,
