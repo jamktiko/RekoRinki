@@ -1,10 +1,9 @@
-// server.js
 import express from 'express';
 import mysql from 'mysql2/promise';
 
 const app = express();
-const port = process.env.PORT || 3000;
 
+// Test endpoint tietokantaan
 app.get('/test-db', async (req, res) => {
     try {
         const connection = await mysql.createConnection({
@@ -25,6 +24,8 @@ app.get('/test-db', async (req, res) => {
     }
 });
 
+// Kuuntele Elastic Beanstalkin porttia
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Backend running on port ${port}`);
 });
