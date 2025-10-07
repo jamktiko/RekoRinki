@@ -1,0 +1,27 @@
+Sprint Planning:
+
+Päivämäärä: 23.9.2025
+
+
+Osanottajat:
+
+	Maya Ramo
+	Tanja Kuukkanen
+	Elina Turtiainen
+
+
+
+Sprint tavoite:
+
+	tietokanta kuntoon
+
+
+
+
+Sprint backlog:
+
+	Github projektinhallinta haltuun
+	tietokantarakenne kuntoon
+	Figmassa sivut loppuun sekä responsiivisuus
+
+		
