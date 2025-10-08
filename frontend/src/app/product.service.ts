@@ -7,18 +7,18 @@ import { Observable } from 'rxjs';
 import { Product } from './types';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
- // valepalvelimen osoite
- serverurl = 'api/products';
+  // valepalvelimen osoite
+  serverurl = 'api/products';
 
- // liitetään eli injektoidaan HttpClient-olio tähän luokkaan konstruktorin argumenttina (Dependency injection)
- constructor(private http: HttpClient) { }
+  // liitetään eli injektoidaan HttpClient-olio tähän luokkaan konstruktorin argumenttina (Dependency injection)
+  constructor(private http: HttpClient) {}
 
- // Tehdään palvelimelle pyyntö jolla haetaan products-taulukko observablena
- getProducts(): Observable<Product[]> {
-   return this.http.get<Product[]>(this.serverurl);
-   //virheenkäsittely voitaisiin tehdä tähän
- }
+  // Tehdään palvelimelle pyyntö jolla haetaan products-taulukko observablena
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.serverurl);
+    //virheenkäsittely voitaisiin tehdä tähän
+  }
 }

@@ -10,6 +10,11 @@ kesken ostostapahtuman.
 Cartstoren tietotyyppi on samanlainen kuin productstoren, mutta
 storejen tilat ovat erilaiset. Koska tiedot ovat tyypiltään samat,
 voi tietoja käsitellä samantapaisilla metodeilla molemmissa storeissa.
+
+CartStore: pitää yllä ostoskorin sisältöä (products). 
+Siihen lisätään tuotteita addToCart, poistetaan removeFromCart jne.
+
+
 */
 
 import {

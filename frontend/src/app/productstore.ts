@@ -9,6 +9,12 @@ Store on siis eräänlainen tiedon välivarasto, jonka ansiosta ei tarvitse jatk
 päivittää tietokantaa. Saman tiedon välittäminen useisiin komponentteihin on 
 helpompaa, koska ei tarvitse siirtää tietoa komponenttien välillä. Tieto
 kulkee aina pelkästään storesta komponentteihin tai komponenteista storeen.
+
+
+ProductStore: pitää yllä kaikkia tuotteita, myös niiden määrää (amount). 
+Jos ostoskorissa lisätään tai vähennetään tuotetta, tämä store päivittyy 
+addAmount ja reduceAmount -metodeilla.
+
 */
 
 import { inject } from '@angular/core';
@@ -32,7 +38,7 @@ jonka argumentteina on funktioita ja olioita
 export const ProductStore = signalStore(
   { providedIn: 'root' },
   // storen alkutila, jonka päälle tulee heti uusi tila kannasta
-  withState(initialState), 
+  withState(initialState),
   // storen elinkaarimetodit eli hookit
   withHooks({
     /* onInit-hookissa voidaan suorittaa tapahtumat jotka tapahtuvat
@@ -44,7 +50,7 @@ export const ProductStore = signalStore(
         .pipe(
           takeUntilDestroyed(),
           // patchState päivittää storen tilaa
-          tap((prods) => patchState(store, {products: prods}))
+          tap((prods) => patchState(store, { products: prods }))
         )
         .subscribe();
     },
@@ -62,10 +68,10 @@ export const ProductStore = signalStore(
      storen tietoa käsittelevät metodit. products ja store tulevat argumentteina
      sisään. 
   */
-  withMethods(({ products, ...store }) => ({  
+  withMethods(({ products, ...store }) => ({
     // Vähennetään ostoskoriin siirretyn tuotteen määrää productstoressa yhdellä
-    reduceAmount(id:number) {
-    // products() on signaalin kutsu, joka myös "avaa" signaalin
+    reduceAmount(id: number) {
+      // products() on signaalin kutsu, joka myös "avaa" signaalin
       const updated = products().map((p) =>
         p.id === id ? { ...p, amount: p.amount - 1 } : p
       );
