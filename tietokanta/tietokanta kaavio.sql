@@ -86,7 +86,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `RekoRinki`.`Tuotteet`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tuotteet` (
-  `tuoteID` INT NOT NULL AUTO_INCREMENT,
+  `tuoteID` INT NOT NULL,
   `tuottajaID` INT NOT NULL,
   `nimi` VARCHAR(100) NOT NULL,
   `yksikko` VARCHAR(20) NOT NULL,
