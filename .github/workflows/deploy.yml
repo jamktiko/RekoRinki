@@ -1,0 +1,63 @@
+name: Deploy Angular to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build Angular app
+        working-directory: ./frontend
+        run: npm run build -- --configuration=production
+
+      - name: Prepare EB deployment package
+        run: |
+          mkdir -p eb-deploy
+          cp -r frontend/dist/frontend eb-deploy/dist
+          cp frontend/package.json eb-deploy/
+          # Luodaan yksinkertainen server.js, joka palvelee Angularin buildia
+          echo "const express = require('express');
+          const path = require('path');
+          const app = express();
+          app.use(express.static(path.join(__dirname, 'dist')));
+          app.get('*', (req, res) => {
+            res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+          });
+          const port = process.env.PORT || 8080;
+          app.listen(port, () => console.log('Server running on port ' + port));" > eb-deploy/server.js
+          
+          mkdir -p eb-deploy/.ebextensions
+          echo "option_settings:
+            aws:elasticbeanstalk:environment:proxy:staticfiles:
+              /: dist" > eb-deploy/.ebextensions/static.config.yml
+
+          cd eb-deploy
+          zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/*"
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: 'RekoRinki'
+          environment_name: 'RekoRinki-env'
+          version_label: ${{ github.sha }}
+          region: eu-north-1
+          deployment_package: eb-deploy.zip
+          use_existing_version_if_available: false
