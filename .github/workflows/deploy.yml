@@ -1,4 +1,4 @@
-name: Deploy Svelte to Elastic Beanstalk
+name: Deploy Angular to Elastic Beanstalk
 
 on:
   push:
@@ -22,23 +22,31 @@ jobs:
         working-directory: ./frontend
         run: npm install
 
-      - name: Build frontend
+      - name: Build Angular app
         working-directory: ./frontend
-        env:
-          VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
-          VITE_CLIENT_SECRET: ${{ secrets.VITE_CLIENT_SECRET }}
-        run: npm run build
+        run: npm run build -- --configuration=production
 
       - name: Prepare EB deployment package
         run: |
           mkdir -p eb-deploy
-          cp -r frontend/dist eb-deploy/
+          cp -r frontend/dist/frontend eb-deploy/dist
           cp frontend/package.json eb-deploy/
-          cp frontend/server.js eb-deploy/
+          # Luodaan yksinkertainen server.js, joka palvelee Angularin buildia
+          echo "const express = require('express');
+          const path = require('path');
+          const app = express();
+          app.use(express.static(path.join(__dirname, 'dist')));
+          app.get('*', (req, res) => {
+            res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+          });
+          const port = process.env.PORT || 8080;
+          app.listen(port, () => console.log('Server running on port ' + port));" > eb-deploy/server.js
+          
           mkdir -p eb-deploy/.ebextensions
           echo "option_settings:
             aws:elasticbeanstalk:environment:proxy:staticfiles:
               /: dist" > eb-deploy/.ebextensions/static.config.yml
+
           cd eb-deploy
           zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/*"
 
