@@ -1,21 +1,22 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
+# Frontend project files are located in /frontend
+# This .gitignore applies globally to all subfolders
 
 # 🏗️ Compiled output
-dist/
-tmp/
-out-tsc/
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
 bazel-out/
 build/
 
 # 🧱 Node & package management
-node_modules/
+frontend/node_modules/
 npm-debug.log
 yarn-error.log
 package-lock.json
 
 # 🧩 Angular build cache
-.angular/cache/
+frontend/.angular/cache/
 
 # 🧰 IDEs and editors
 .idea/
@@ -37,7 +38,7 @@ package-lock.json
 # 🧮 Miscellaneous
 .sass-cache/
 connect.lock
-coverage/
+frontend/coverage/
 libpeerconnection.log
 testem.log
 typings/
