@@ -1,0 +1,11 @@
+<h2>Tuotteet</h2>
+
+@for (p of pstore.products(); track $index) {
+<p>
+  {{ p.name }} - hinta {{ p.price }}e - varastossa
+  {{ p.amount }}
+  <button (click)="addToCart(p)">Osta</button>
+</p>
+}
+
+<a [routerLink]="['/producers/:id']">Tuottajatsivu</a>

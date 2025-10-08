@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* 
+   Legacy (Tailwind v1–2):
+   @import 'tailwindcss';
+*/
+
+/* Moderni Tailwind v3+: */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Oma fonttiluokka – toimii kuten ennenkin */
+.font-paprika {
+  font-family: 'Paprika', cursive;
+}
