@@ -22,39 +22,27 @@ jobs:
         working-directory: ./frontend
         run: npm install
 
-      - name: Ensure @tailwindcss/postcss is installed
-        working-directory: ./frontend
-        run: |
-          if ! npm list @tailwindcss/postcss >/dev/null 2>&1; then
-            npm install @tailwindcss/postcss@^4.0.0 --save
-          fi
-
       - name: Build Angular app
         working-directory: ./frontend
         run: npm run build --configuration=production
 
       - name: Prepare EB deployment package
         run: |
-          mkdir -p eb-deploy
-          cp -r frontend/dist/frontend eb-deploy/dist
+          mkdir -p eb-deploy/dist
+          cp -r frontend/dist/browser/* eb-deploy/dist/
           cp frontend/package.json eb-deploy/
-          echo "const express = require('express');
-          const path = require('path');
-          const app = express();
-          app.use(express.static(path.join(__dirname, 'dist')));
-          app.get('*', (req, res) => {
-            res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-          });
-          const port = process.env.PORT || 8080;
-          app.listen(port, () => console.log('Server running on port ' + port));" > eb-deploy/server.js
-          
+          cp frontend/server.js eb-deploy/
+
           mkdir -p eb-deploy/.ebextensions
           echo "option_settings:
             aws:elasticbeanstalk:environment:proxy:staticfiles:
-              /: dist" > eb-deploy/.ebextensions/static.config.yml
+              /: dist
+            aws:elasticbeanstalk:container:nodejs:
+              NodeVersion: 20" > eb-deploy/.ebextensions/node.config.yml
 
           cd eb-deploy
-          zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/*"
+          npm install --production
+          zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/aws-sdk/*"
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
