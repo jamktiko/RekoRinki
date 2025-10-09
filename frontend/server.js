@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const distPath = path.join(__dirname, 'dist'); // oletetaan, että kopioit browser/* dist/ juureen
+const distPath = path.join(__dirname, 'dist', 'browser');
 app.use(express.static(distPath));
 
 app.get('*', (req, res) => {

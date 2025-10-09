@@ -29,14 +29,14 @@ jobs:
       - name: Prepare EB deployment package
         run: |
           mkdir -p eb-deploy/dist
-          cp -r frontend/dist/browser/* eb-deploy/dist/
+          cp -r frontend/dist/browser eb-deploy/dist/
           cp frontend/package.json eb-deploy/
           cp frontend/server.js eb-deploy/
 
           mkdir -p eb-deploy/.ebextensions
           echo "option_settings:
             aws:elasticbeanstalk:environment:proxy:staticfiles:
-              /: dist
+              /: dist/browser
             aws:elasticbeanstalk:container:nodejs:
               NodeVersion: 20" > eb-deploy/.ebextensions/node.config.yml
 
