@@ -1,16 +1,24 @@
-const mysql = require('mysql2');
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
-const conn = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  database: process.env.DB_DATABASE || 'rekorinki',
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-});
-conn.connect((err) => {
-  if (err) {
-    return console.error('MySQL yhteysvirhe: ' + err.message);
+const conn = new Sequelize(
+  process.env.DB_DATABASE || 'rekorinki',
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST || 'localhost',
+    dialect: 'mysql',
+    port: process.env.DB_PORT || 3306,
+    logging: false,
+    define: {
+      timestamps: false,
+    },
   }
-  console.log('Yhteys MySQL-kantaan toimii!');
-});
-
-module.exports = conn;
+);
+conn
+  .authenticate()
+  .then(() => {
+    console.log('Yhteys tietokantaan toimii!');
+  })
+  .catch((err) => {
+    console.error('MySQL yhteysvirhe');
+  });
