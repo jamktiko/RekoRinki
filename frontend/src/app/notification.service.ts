@@ -7,24 +7,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Notification } from './types';
+import { AppNotification } from './types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private serverUrl = 'api/notifications'; // sama kuin in-memory-data.service palauttaa
+  private serverUrl = 'api/notifications';
 
   constructor(private http: HttpClient) {}
 
-  // Hakee kaikki ilmoitukset (etusivu)
-  getNotifications(): Observable<Notification[]> {
-    return this.http.get<Notification[]>(this.serverUrl);
+  getNotifications(): Observable<AppNotification[]> {
+    return this.http.get<AppNotification[]>(this.serverUrl);
   }
 
-  // Hakee yhden ilmoituksen id:n perusteella (ilmoitustuotteet-sivu)
-  getNotificationById(id: number): Observable<Notification> {
+  getNotificationById(id: number): Observable<AppNotification> {
     const url = `${this.serverUrl}/${id}`;
-    return this.http.get<Notification>(url);
+    return this.http.get<AppNotification>(url);
   }
 }

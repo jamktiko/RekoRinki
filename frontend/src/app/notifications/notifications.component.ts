@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Notification } from '../types';
+import { AppNotification } from '../types';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NotificationService } from '../notification.service';
@@ -13,8 +13,8 @@ import { NotificationService } from '../notification.service';
   styleUrl: './notifications.component.css',
 })
 export class NotificationsComponent {
-  notifications: Notification[] = [];
-  filteredNotifications: Notification[] = [];
+  notifications: AppNotification[] = [];
+  filteredNotifications: AppNotification[] = [];
   searchTerm: string = '';
 
   constructor(private notificationService: NotificationService) {}

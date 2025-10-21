@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Product } from '../types';
 import { ActivatedRoute } from '@angular/router';
-import { Notification } from '../types';
+import { AppNotification } from '../types';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../notification.service';
 import { ProductService } from '../product.service';
@@ -59,7 +59,7 @@ export class IlmoitustuotteetComponent {
   readonly cstore = inject(CartStore);
   readonly pstore = inject(ProductStore);
 
-  notification!: Notification;
+  notification!: AppNotification;
   relatedProducts: Product[] = [];
 
   constructor(

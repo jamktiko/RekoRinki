@@ -1,7 +1,7 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 import { Injectable } from '@angular/core';
 import { Product } from './types'; // tuotteen tyyppi
-import { Notification } from './types';
+import { AppNotification } from './types';
 
 @Injectable({
   providedIn: 'root',
@@ -12,50 +12,60 @@ export class InMemoryDataService implements InMemoryDbService {
     const products: Product[] = [
       {
         id: 1,
+        // producerID: 1,
         name: 'Mansikka',
         price: 8,
         amount: 500,
         totalprice: 2000,
         description:
           'Tuoretta, täysmehuaista mansikkaa, joka on poimittu aamutuimaan. Tuoksuu kesältä, tiiviitä ja mehuaista.',
+        unit: 'g',
       },
       {
         id: 2,
+        // producerID: 2,
         name: 'Vadelma',
         price: 6,
         amount: 500,
         totalprice: 2000,
         description: 'Täysikypsää, tummaa ja raikkaita marjoja.',
+        unit: 'g',
       },
       {
         id: 3,
+        // producerID: 3,
         name: 'Pensasmustikkka',
         price: 10,
         amount: 500,
         totalprice: 5000,
         description:
           'Aitoa suomalaista pensasmustikkaa, täynnä antioksydantteja.',
+        unit: 'g',
       },
       {
         id: 4,
+        // producerID: 4,
         name: 'Peruna',
         price: 3,
         amount: 500,
         totalprice: 1500,
         description: 'Tuoreita perunoita suoraan tilalta.',
+        unit: 'g',
       },
       {
         id: 5,
+        // producerID: 5,
         name: 'Porkkana',
         price: 3,
         amount: 500,
         totalprice: 1200,
         description: 'Makeita ja rapeita porkkanoita.',
+        unit: 'g',
       },
     ];
 
     // notifications-taulukko ilmoituksille
-    const notifications: Notification[] = [
+    const notifications: AppNotification[] = [
       {
         id: 1,
         title: 'Muurame Jyväskylä',
@@ -67,6 +77,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'Mansikat ovat nyt huippukunnossa, täysin kypsiä ja makeita. Vadelmat ja pensasmustikat tuovat pöytään kesän värejä ja makuja.',
           'Takaamme tuoreuden ja laadun jokaisessa marjassa!',
         ],
+        producerID: 1,
         producers: 'Nisulan tila',
         producersImge: '/pexels-jk04-2933243.jpg',
         date: '22.9.2025 - 28.9.2025',
@@ -88,6 +99,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'Käytämme vain luomumenetelmiä ja kunnioitamme luonnon kiertokulkua.',
           'Tuotteemme ovat aina tuoreita ja laadukkaita.',
         ],
+        producerID: 2,
         producers: 'Marjatila Tynrikka',
         producersImge: '/pexels-neslihan-ozdemir-590391077-17117954.jpg',
         date: '22.9.2025 - 28.9.2025',
@@ -108,6 +120,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'Tuotamme pientä mutta laadukasta sadetta koko perheen tarpeisiin.',
           'Tervetuloa tutustumaan tilallemme!',
         ],
+        producerID: 3,
         producers: 'Apilakosken tila',
         producersImge: '/pexels-trinitykubassek-288621.jpg',
         date: '22.9.2025 - 28.9.2025',
@@ -128,6 +141,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'Käytämme vain luomumenetelmiä ja kunnioitamme luonnon kiertokulkua.',
           'Tuotteemme ovat aina tuoreita ja laadukkaita.',
         ],
+        producerID: 4,
         producers: 'Matias tila',
         producersImge: '/pexels-pixabay-221100.jpg',
         date: '22.9.2025 - 28.9.2025',
@@ -148,6 +162,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'Käytämme vain luomumenetelmiä ja kunnioitamme luonnon kiertokulkua.',
           'Tuotteemme ovat aina tuoreita ja laadukkaita.',
         ],
+        producerID: 5,
         producers: 'Pekan tila',
         producersImge: '/pexels-carolin-wenske-762365559-26646961.jpg',
         date: '22.9.2025 - 28.9.2025',
@@ -170,6 +185,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'Mansikat ovat nyt huippukunnossa, täysin kypsiä ja makeita. Vadelmat ja pensasmustikat tuovat pöytään kesän värejä ja makuja.',
           'Takaamme tuoreuden ja laadun jokaisessa marjassa!',
         ],
+        producerID: 6,
         producers: 'Annan tila',
         producersImge: '/pexels-clement-proust-363898785-21906698.jpg',
         date: '22.9.2025 - 28.9.2025',

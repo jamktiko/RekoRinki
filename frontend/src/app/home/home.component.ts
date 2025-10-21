@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Notification } from '../types';
+import { AppNotification } from '../types';
 import { CommonModule } from '@angular/common';
 
 @Component({

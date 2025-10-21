@@ -1,3 +1,91 @@
+<!-- <header class="flex justify-between items-center bg-white px-4 md:px-8 py-3 shadow-md"> -->
+<!-- Logo + nimi -->
+<!-- <div class="flex items-center space-x-2">
+    <button routerLink="/notifications" class="flex items-center space-x-2">
+      <img src="/logo.png" alt="Reko logo" class="h-8 w-8 md:h-10 md:w-10">
+      <span class="text-xl md:text-2xl font-paprika text-gray-800">REKO</span>
+    </button>
+  </div> -->
+
+<!-- Desktop navigaatio -->
+<!-- <nav class="hidden md:flex space-x-6 lg:space-x-8 text-gray-700 font-medium">
+    <a routerLink="/notifications" class="hover:text-green-600 transition-colors">Etusivu</a>
+    <a routerLink="/products" class="hover:text-green-600 transition-colors">Tuotteet</a>
+    <a routerLink="/producers/id" class="hover:text-green-600 transition-colors">Tuottajat</a>
+  </nav> -->
+
+<!-- Ikonit -->
+<!-- <div class="hidden md:flex flex items-center space-x-4 md:space-x-6 text-green-600"> -->
+<!-- Haku -->
+<!-- <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors hidden sm:block">
+      search
+    </span> -->
+
+<!-- Ostoskori -->
+<!-- <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors">
+      <a routerLink="cart" class="flex items-center">shopping_cart</a>
+    </span> -->
+
+<!-- Profiili -->
+<!-- <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors hidden sm:block">
+      <a routerLink="profile">account_circle</a>
+    </span> -->
+
+
+<!-- </div> -->
+<!-- Mobiili menu-nappi -->
+<!-- <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors" (click)="isMenuOpen = !isMenuOpen">
+    <span class="material-symbols-outlined">
+      {{ isMenuOpen ? 'close' : 'menu' }}
+    </span>
+  </button> -->
+
+<!-- </header> -->
+
+<!-- Mobiilin avautuva navigaatio -->
+<!-- @if (isMenuOpen) {
+<nav class="md:hidden flex flex-col bg-white shadow-md border-t">
+  <a routerLink="/home" class="hover:bg-gray-100 border-green-600 transition-colors py-2" (click)="isMenuOpen = false">
+    Etusivu
+  </a>
+
+  <a class="border border-gray-200"></a>
+
+  <a routerLink="/products" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+    (click)="isMenuOpen = false">
+    Tuotteet
+  </a>
+  <a class="border border-gray-200"></a>
+
+  <a routerLink="/producers/id" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+    (click)="isMenuOpen = false">
+    Tuottajat
+  </a> -->
+
+<!-- Mobiili-ikonit -->
+
+<!-- <a class="border border-gray-200"></a> -->
+
+<!-- <a routerLink="cart" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"> -->
+<!-- <span class="material-symbols-outlined text-lg">shopping_cart</span> -->
+<!-- <span>Ostoskori</span> -->
+<!-- </a> -->
+
+<!-- <a class="border border-gray-200"></a> -->
+
+<!-- <a routerLink="profile" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"> -->
+<!-- <span class="material-symbols-outlined text-lg">account_circle</span> -->
+<!-- <span>Profiili</span> -->
+<!-- </a> -->
+
+
+
+<!-- </nav> -->
+<!-- } -->
+
+
+
+
 <header class="flex justify-between items-center bg-white px-4 md:px-8 py-3 shadow-md">
   <!-- Logo + nimi -->
   <div class="flex items-center space-x-2">
@@ -22,17 +110,25 @@
     </span>
 
     <!-- Ostoskori -->
-    <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors">
-      <a routerLink="cart" class="flex items-center">shopping_cart</a>
-    </span>
+    <div class="relative">
+      <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors">
+        <a routerLink="cart" class="flex items-center">shopping_cart</a>
+      </span>
+      <!-- Ostoskorin numero -->
+      @if (cstore.totalCount() > 0) {
+      <div
+        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+        {{ cstore.totalCount() }}
+      </div>
+      }
+    </div>
 
     <!-- Profiili -->
     <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors hidden sm:block">
       <a routerLink="profile">account_circle</a>
     </span>
-
-
   </div>
+
   <!-- Mobiili menu-nappi -->
   <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors" (click)="isMenuOpen = !isMenuOpen">
     <span class="material-symbols-outlined">
@@ -66,19 +162,22 @@
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="cart" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2">
-    <!-- <span class="material-symbols-outlined text-lg">shopping_cart</span> -->
+  <a routerLink="cart"
+    class="flex items-center justify-between hover:bg-gray-100 border-green-600 transition-colors py-2 px-4"
+    (click)="isMenuOpen = false">
     <span>Ostoskori</span>
+    @if (cstore.totalCount() > 0) {
+    <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+      {{ cstore.totalCount() }}
+    </div>
+    }
   </a>
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="profile" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2">
-    <!-- <span class="material-symbols-outlined text-lg">account_circle</span> -->
+  <a routerLink="profile" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"
+    (click)="isMenuOpen = false">
     <span>Profiili</span>
   </a>
-
-
-
 </nav>
 }

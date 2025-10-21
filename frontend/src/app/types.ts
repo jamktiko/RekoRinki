@@ -8,6 +8,8 @@ export interface Product {
   description?: string; // Tuotteen kuvaus
   image?: string; // Tuotteen kuva
   isExpanded?: boolean; // tämä lisää "Näytä lisää" -logiikan tuen
+  // producerID: number;
+  unit?: string; // Yksikkö (esim. 'g')
 }
 
 /* Ostoskorin ja tuotekokoelman tietotyypit on tehty tarkoituksella samanlaisiksi, jotta
@@ -28,13 +30,14 @@ export interface Cart {
   products: Product[];
 }
 
-export interface Notification {
+export interface AppNotification {
   id: number;
   title: string;
   location: string;
   notificationsImage?: string;
   description?: string[];
   producers?: string;
+  producerID: number;
   producersImge?: string;
   date?: string;
   productsID: number[];

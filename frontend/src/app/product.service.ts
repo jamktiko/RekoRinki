@@ -1,3 +1,5 @@
+// ProductService: hakee tuotteet ja välittää ne ProductStorelle.
+
 import { Injectable } from '@angular/core';
 // HttpClient tarvitaan datan lähettämiseen palvelimelle ja sen hakemiseen palvelimelta
 import { HttpClient } from '@angular/common/http';
