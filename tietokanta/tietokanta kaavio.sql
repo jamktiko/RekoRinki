@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Asiakas` (
   `postinumero` VARCHAR(5) NOT NULL,
   `postitoimipaikka` VARCHAR(40) NOT NULL,
   `paikkakunta` VARCHAR(40) NOT NULL,
+  `kuva` VARCHAR(200),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `sahkoposti_UNIQUE` (`sahkoposti` ASC) VISIBLE,
   UNIQUE INDEX `kayttajatunnus_UNIQUE` (`kayttajatunnus` ASC) VISIBLE)
@@ -61,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tuottaja` (
   `postitoimipaikka` VARCHAR(40) NOT NULL,
   `paikkakunta` VARCHAR(40) NOT NULL,
   `lisatiedot` VARCHAR(500) NOT NULL,
+  `kuva` VARCHAR(200),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `sahkoposti_UNIQUE` (`sahkoposti` ASC) VISIBLE,
   UNIQUE INDEX `kayttajatunnus_UNIQUE` (`kayttajatunnus` ASC) VISIBLE)
@@ -157,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tilaus` (
   `tilauspaiva` DATE NOT NULL,
   `summa` DECIMAL(10,2) NOT NULL,
   `Reitit_id` INT NOT NULL,
+  `kuva` VARCHAR(200),
   PRIMARY KEY (`tilausnro`),
   INDEX `asiakasID` (`asiakasID` ASC) VISIBLE,
   INDEX `tuottajaID` (`tuottajaID` ASC) VISIBLE,
