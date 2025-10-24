@@ -89,7 +89,7 @@
 <header class="flex justify-between items-center bg-white px-4 md:px-8 py-3 shadow-md">
   <!-- Logo + nimi -->
   <div class="flex items-center space-x-2">
-    <button routerLink="/notifications" class="flex items-center space-x-2">
+    <button routerLink="/notifications" class="flex items-center space-x-2" (click)="isMenuOpen = false">
       <img src="/logo.png" alt="Reko logo" class="h-8 w-8 md:h-10 md:w-10">
       <span class="text-xl md:text-2xl font-paprika text-gray-800">REKO</span>
     </button>
@@ -141,7 +141,8 @@
 <!-- Mobiilin avautuva navigaatio -->
 @if (isMenuOpen) {
 <nav class="md:hidden flex flex-col bg-white shadow-md border-t">
-  <a routerLink="/home" class="hover:bg-gray-100 border-green-600 transition-colors py-2" (click)="isMenuOpen = false">
+  <a routerLink="/notifications" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+    (click)="isMenuOpen = false">
     Etusivu
   </a>
 
@@ -163,7 +164,7 @@
   <a class="border border-gray-200"></a>
 
   <a routerLink="cart"
-    class="flex items-center justify-between hover:bg-gray-100 border-green-600 transition-colors py-2 px-4"
+    class="flex items-center justify-between hover:bg-gray-100 border-green-600 transition-colors py-2"
     (click)="isMenuOpen = false">
     <span>Ostoskori</span>
     @if (cstore.totalCount() > 0) {

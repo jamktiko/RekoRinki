@@ -2,7 +2,9 @@
 
 
 
-<div class="min-h-screen bg-white py-8">
+
+
+<div class="min-h-screen py-8">
   <div class="max-w-6xl mx-auto px-4">
     <!-- Otsikko -->
     <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center lg:text-left">
@@ -14,7 +16,10 @@
       <!-- VASEN - Tuotelista -->
       <div class="lg:col-span-2 space-y-6 order-1">
         <ng-container *ngFor="let product of cartProducts; trackBy: trackById">
-          <div class="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition">
+          <!-- Klikattava tuotekortti -->
+          <div
+            class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 cursor-pointer bg-white hover:bg-gray-50"
+            (click)="goToProductNotification(product)">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <!-- Vasemmalle: Tuotekuva ja tiedot -->
               <div class="flex items-start sm:items-center gap-4 w-full">
@@ -40,10 +45,10 @@
 
                   <div class="flex flex-wrap gap-3 text-xs text-gray-500 mt-1">
                     <p *ngIf="product.id"><span class="font-medium">TuoteID:</span> {{ product.id }}</p>
-                    <p *ngIf="product.notificationID"><span class="font-medium">IlmoitusID:</span> {{
+                    <!-- <p *ngIf="product.notificationID"><span class="font-medium">IlmoitusID:</span> {{
                       product.notificationID }}</p>
                     <p *ngIf="product.producerID"><span class="font-medium">TuottajaID:</span> {{ product.producerID }}
-                    </p>
+                    </p> -->
                   </div>
 
                   <!-- MÄÄRÄ GRAMMOINA -->
@@ -54,19 +59,21 @@
               </div>
 
               <!-- Oikealle: määrä ja hinta -->
-              <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
+              <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4"
+                (click)="$event.stopPropagation()">
                 <!-- ROSKAKORI JA MÄÄRÄN SÄÄTÖ -->
                 <div class="flex items-center gap-3">
                   <!-- Roskakori - omassa laatikossa samalla tyylillä -->
                   <button (click)="removeFromCart(product)"
-                    class="w-8 h-8 flex items-center justify-center border-2 border-green-600 rounded-lg bg-white transition-colors">
+                    class="w-8 h-8 flex items-center justify-center border-2 border-green-600 rounded-lg bg-white transition-colors hover:bg-red-50">
                     <span class="text-lg material-symbols-outlined hover:text-red-800">delete</span>
                   </button>
 
                   <!-- Määrän säätö laatikko -->
-                  <div class="flex items-center border-2 border-green-600 rounded-lg bg-white">
+                  <div
+                    class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
                     <button (click)="removeOne(product)"
-                      class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 transition-colors rounded-l-lg"
+                      class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
                       [disabled]="product.amount <= 500" [class.opacity-50]="product.amount <= 500"
                       [class.cursor-not-allowed]="product.amount <= 500">
                       <span class="text-gray-700 text-lg material-symbols-outlined">remove</span>
@@ -78,7 +85,7 @@
                     </span>
 
                     <button (click)="addOne(product)"
-                      class="w-8 h-8 flex items-center justify-center hover:bg-gray-50 transition-colors rounded-r-lg">
+                      class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
                       <span class="text-gray-700 text-lg material-symbols-outlined">add</span>
                     </button>
                   </div>
@@ -115,10 +122,10 @@
           </span>
         </div>
 
-        <!-- Kassalle -->
-        <button [routerLink]="['/payment']"
-          class="w-full bg-green-600 text-white py-4 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg mb-4">
-          Siirry kassalle
+        <!-- Vahvistusnappi -->
+        <button (click)="confirmOrder()"
+          class="w-full bg-green-600 text-black py-4 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg mb-4">
+          Vahvista tilaus
         </button>
 
         <!-- Jatka ostamista -->
@@ -142,4 +149,35 @@
       </button>
     </div>
   </div>
+
+  <!-- VAHVISTUS-IKKUNA - Kuvan mukainen -->
+  @if (showConfirmation) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-auto">
+
+      <!-- Sisältö -->
+      <div class="p-8 text-center">
+        <!-- Checkmark-ikoni -->
+        <div class="text-green-600 text-6xl mb-6">
+          <span class="material-symbols-outlined text-6xl">check_circle</span>
+        </div>
+
+        <!-- Viesti -->
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">
+          Tilauksesi on vahvistettu!
+        </h3>
+
+        <p class="text-gray-600 mb-2">
+          Kiitos tilauksestasi
+        </p>
+
+        <!-- Sulje-nappi -->
+        <button (click)="closeConfirmation()"
+          class="w-full bg-green-600 text-black py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold">
+          Sulje
+        </button>
+      </div>
+    </div>
+  </div>
+  }
 </div>
