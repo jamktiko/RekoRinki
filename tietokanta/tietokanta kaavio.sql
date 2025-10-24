@@ -20,11 +20,7 @@ USE `RekoRinki` ;
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Asiakas` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kayttajatunnus` VARCHAR(20) NOT NULL,
-<<<<<<< HEAD
-  `salasana` VARCHAR(255) NOT NULL,
-=======
   `salasana` VARCHAR(50) NOT NULL,
->>>>>>> main
   `etunimi` VARCHAR(50) NOT NULL,
   `sukunimi` VARCHAR(50) NOT NULL,
   `puhelinnro` VARCHAR(15) NOT NULL,
@@ -48,11 +44,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tuottaja` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kayttajatunnus` VARCHAR(50) NOT NULL,
-<<<<<<< HEAD
-  `salasana` VARCHAR(255) NOT NULL,
-=======
   `salasana` VARCHAR(50) NOT NULL,
->>>>>>> main
   `etunimi` VARCHAR(50) NOT NULL,
   `sukunimi` VARCHAR(50) NOT NULL,
   `puhelinnro` VARCHAR(15) NOT NULL,
@@ -81,11 +73,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Ilmoitukset` (
   `julkaisupaiva` TIMESTAMP NOT NULL,
   `kuvaus` VARCHAR(200) NOT NULL,
   `voimassaolo_paattyy` TIMESTAMP NOT NULL,
-<<<<<<< HEAD
   `kuva` VARCHAR(200),
-=======
-  `kuva` VARCHAR(200) NOT NULL,
->>>>>>> main
   PRIMARY KEY (`ilmoitusID`),
   INDEX `tuottajaID` (`tuottajaID` ASC) VISIBLE,
   CONSTRAINT `ilmoitukset_ibfk_1`
@@ -100,11 +88,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `RekoRinki`.`Tuotteet`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tuotteet` (
-<<<<<<< HEAD
-  `tuoteID` INT NOT NULL,
-=======
   `tuoteID` INT NOT NULL AUTO_INCREMENT,
->>>>>>> main
   `tuottajaID` INT NOT NULL,
   `nimi` VARCHAR(100) NOT NULL,
   `yksikko` VARCHAR(20) NOT NULL,
@@ -194,11 +178,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Ilmoitus_has_Tuotteet` (
   `ilmoitusID` INT NOT NULL,
   `maara` INT NOT NULL,
   `yksikkohinta` DECIMAL(10,2) NOT NULL,
-<<<<<<< HEAD
-  `kuva` VARCHAR(200),
-=======
   `kuva` VARCHAR(200) NOT NULL,
->>>>>>> main
   PRIMARY KEY (`id`),
   INDEX `tuoteID` (`tuoteID` ASC) VISIBLE,
   INDEX `tuottajaID` (`tuottajaID` ASC) VISIBLE,
