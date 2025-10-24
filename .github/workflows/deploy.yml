@@ -55,3 +55,4 @@ jobs:
           region: eu-north-1
           deployment_package: eb-deploy.zip
           use_existing_version_if_available: false
+          
