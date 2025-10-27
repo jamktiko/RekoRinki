@@ -44,7 +44,7 @@ phases:
       - aws elasticbeanstalk create-application-version \
           --application-name "Reko-rinki" \
           --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" \
-          --source-bundle S3Bucket="YOUR_S3_BUCKET",S3Key="eb-deploy.zip" \
+          --source-bundle S3Bucket="Reko-rinki",S3Key="eb-deploy.zip" \
           --region eu-north-1
 
       - echo "Updating Elastic Beanstalk environment..."
