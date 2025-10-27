@@ -38,7 +38,7 @@ phases:
       - cd ..
 
       - echo "Uploading deployment package to S3..."
-      - aws s3 cp eb-deploy.zip s3://YOUR_S3_BUCKET/eb-deploy.zip
+      - aws s3 cp eb-deploy.zip s3://Reko-rinki/eb-deploy.zip
 
       - echo "Creating new Elastic Beanstalk application version..."
       - aws elasticbeanstalk create-application-version \
