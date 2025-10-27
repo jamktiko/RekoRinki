@@ -39,18 +39,10 @@ phases:
       - echo "Uploading deployment package to S3..."
       - aws s3 cp eb-deploy.zip s3://elasticbeanstalk-eu-north-1-996068820846/eb-deploy.zip --region eu-north-1
       - echo "Creating new Elastic Beanstalk application version..."
-      - aws elasticbeanstalk create-application-version \
-          --application-name "Reko-rinki" \
-          --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" \
-          --source-bundle S3Bucket="elasticbeanstalk-eu-north-1-996068820846",S3Key="eb-deploy.zip" \
-          --region eu-north-1
+      - aws elasticbeanstalk create-application-version --application-name "Reko-rinki" --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" --source-bundle S3Bucket="elasticbeanstalk-eu-north-1-996068820846",S3Key="eb-deploy.zip" --region eu-north-1
       - echo "Updating Elastic Beanstalk environment..."
-      - aws elasticbeanstalk update-environment \
-          --environment-name "Reko-rinki-env" \
-          --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" \
-          --region eu-north-1
+      - aws elasticbeanstalk update-environment --environment-name "Reko-rinki-env" --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" --region eu-north-1
 
 artifacts:
   files:
     - eb-deploy.zip
-    
