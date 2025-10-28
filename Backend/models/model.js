@@ -27,7 +27,7 @@ Asiakas.init(
       type: Sequelize.STRING(50),
       allowNull: false,
     },
-    puhelinnumero: {
+    puhelinnro: {
       type: Sequelize.STRING(15),
       allowNull: false,
       validate: {
@@ -58,8 +58,12 @@ Asiakas.init(
       type: Sequelize.STRING(40),
       allowNull: false,
     },
+    kuva: {
+      type: Sequelize.STRING(200),
+      allowNull: true,
+    },
   },
-  { sequelize: conn, modelName: 'Asiakas' }
+  { sequelize: conn, modelName: 'Asiakas', freezeTableName: true }
 );
 class Tuottaja extends Model {}
 Tuottaja.init(
@@ -87,7 +91,7 @@ Tuottaja.init(
       type: Sequelize.STRING(50),
       allowNull: false,
     },
-    puhelinnumero: {
+    puhelinnro: {
       type: Sequelize.STRING(15),
       allowNull: false,
       validate: {
@@ -122,8 +126,12 @@ Tuottaja.init(
       type: Sequelize.STRING(500),
       allowNull: false,
     },
+    kuva: {
+      type: Sequelize.STRING(200),
+      allowNull: true,
+    },
   },
-  { sequelize: conn, modelName: 'Tuottaja' }
+  { sequelize: conn, modelName: 'Tuottaja', freezeTableName: true }
 );
 class Ilmoitukset extends Model {}
 Ilmoitukset.init(
@@ -157,9 +165,10 @@ Ilmoitukset.init(
     },
     kuva: {
       type: Sequelize.STRING(200),
+      allowNull: true,
     },
   },
-  { sequelize: conn, modelName: 'Ilmoitukset' }
+  { sequelize: conn, modelName: 'Ilmoitukset', freezeTableName: true }
 );
 class Tuotteet extends Model {}
 Tuotteet.init(
@@ -168,7 +177,6 @@ Tuotteet.init(
       type: Sequelize.INTEGER,
       allowNull: false,
       autoIncrement: true,
-      primaryKey: true,
     },
     tuottajaID: {
       type: Sequelize.INTEGER,
@@ -200,7 +208,7 @@ Tuotteet.init(
       allowNull: false,
     },
   },
-  { sequelize: conn, modelName: 'Tuotteet' }
+  { sequelize: conn, modelName: 'Tuotteet', freezeTableName: true }
 );
 class Reitit extends Model {}
 Reitit.init(
@@ -235,11 +243,11 @@ Reitit.init(
       type: Sequelize.STRING(255),
       allowNull: false,
     },
-    tuottaja_id: {
+    Tuottaja_id: {
       type: Sequelize.INTEGER,
     },
   },
-  { sequelize: conn, modelName: 'Reitit' }
+  { sequelize: conn, modelName: 'Reitit', freezeTableName: true }
 );
 class Tilaus extends Model {}
 Tilaus.init(
@@ -280,12 +288,16 @@ Tilaus.init(
       type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
-    reitit_id: {
+    Reitit_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    kuva: {
+      type: Sequelize.STRING(200),
+      allowNull: true,
+    },
   },
-  { sequelize: conn, modelName: 'Tilaus' }
+  { sequelize: conn, modelName: 'Tilaus', freezeTableName: true }
 );
 class Ilmoitus_has_Tuotteet extends Model {}
 Ilmoitus_has_Tuotteet.init(
@@ -320,7 +332,7 @@ Ilmoitus_has_Tuotteet.init(
       type: Sequelize.STRING(200),
     },
   },
-  { sequelize: conn, modelName: 'Ilmoitus_has_Tuotteet' }
+  { sequelize: conn, modelName: 'Ilmoitus_has_Tuotteet', freezeTableName: true }
 );
 class Tilaus_has_Tuotteet extends Model {}
 Tilaus_has_Tuotteet.init(
@@ -352,7 +364,7 @@ Tilaus_has_Tuotteet.init(
       allowNull: false,
     },
   },
-  { sequelize: conn, modelName: 'Tilaus_has_Tuotteet' }
+  { sequelize: conn, modelName: 'Tilaus_has_Tuotteet', freezeTableName: true }
 );
 class Reitit_has_Ilmoitukset extends Model {}
 Reitit_has_Ilmoitukset.init(
@@ -368,7 +380,11 @@ Reitit_has_Ilmoitukset.init(
       primaryKey: true,
     },
   },
-  { sequelize: conn, modelName: 'Reitit_has_Ilmoitukset' }
+  {
+    sequelize: conn,
+    modelName: 'Reitit_has_Ilmoitukset',
+    freezeTableName: true,
+  }
 );
 Asiakas.hasMany(Tilaus, {
   foreignKey: 'asiakasID',
@@ -379,7 +395,7 @@ Tilaus.belongsTo(Asiakas, {
   targetKey: 'id',
 });
 Tuottaja.hasMany(Ilmoitukset, {
-  foreignKey: 'TuottajaID',
+  foreignKey: 'tuottajaID',
   sourceKey: 'id',
 });
 Ilmoitukset.belongsTo(Tuottaja, {
@@ -424,7 +440,7 @@ Reitit.hasMany(Tilaus, {
 });
 Tilaus.belongsTo(Reitit, {
   foreignKey: 'Reitit_id',
-  targetKey: id,
+  targetKey: 'id',
 });
 Tuotteet.hasMany(Ilmoitus_has_Tuotteet, {
   foreignKey: 'tuoteID',
@@ -434,11 +450,11 @@ Ilmoitus_has_Tuotteet.belongsTo(Tuotteet, {
   foreignKey: 'tuoteID',
   targetKey: 'tuoteID',
 });
-Ilmoitukset.hasMany(Ilmoitukset_has_Tuotteet, {
+Ilmoitukset.hasMany(Ilmoitus_has_Tuotteet, {
   foreignKey: 'ilmoitusID',
   sourceKey: 'ilmoitusID',
 });
-Ilmoitukset_has_Tuotteet.belongsTo(Ilmoitukset, {
+Ilmoitus_has_Tuotteet.belongsTo(Ilmoitukset, {
   foreignKey: 'ilmoitusID',
   targetKey: 'ilmoitusID',
 });
@@ -450,19 +466,11 @@ Ilmoitus_has_Tuotteet.belongsTo(Tuottaja, {
   foreignKey: 'tuottajaID',
   targetKey: 'id',
 });
-Tuotteet.hasMany(Tilaus_has_Tuotteet, {
-  foreignKey: 'tuoteID',
-  sourceKey: 'tuoteID',
-});
-Tilaus_has_Tuotteet.belongsTo(tilaus, {
-  foreignKey: 'tuoteID',
-  targetKey: 'tuoteID',
-});
 Tilaus.hasMany(Tilaus_has_Tuotteet, {
   foreignKey: 'tilausID',
   sourceKey: 'tilausnro',
 });
-tilaus_has_Tuotteet.belongsTo(Tilaus, {
+Tilaus_has_Tuotteet.belongsTo(Tilaus, {
   foreignKey: 'tilausID',
   targetKey: 'tilausnro',
 });
@@ -484,7 +492,6 @@ Ilmoitukset.belongsToMany(Reitit, {
   foreignKey: 'Ilmoitukset_ilmoitusID',
   otherKey: 'Reitit_id',
 });
-Reitit.belongsToMany(i);
 module.exports = {
   Asiakas,
   Tuottaja,
@@ -493,5 +500,6 @@ module.exports = {
   Reitit,
   Tilaus,
   Ilmoitus_has_Tuotteet,
+  Tilaus_has_Tuotteet,
   Reitit_has_Ilmoitukset,
 };
