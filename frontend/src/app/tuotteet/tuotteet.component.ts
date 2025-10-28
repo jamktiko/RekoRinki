@@ -6,13 +6,13 @@ import { RouterLink } from '@angular/router';
 import { ProducersComponent } from '../producers/producers.component';
 
 @Component({
-  selector: 'app-products',
+  selector: 'app-tuotteet',
   standalone: true,
   imports: [RouterLink, ProducersComponent],
-  templateUrl: './products.component.html',
-  styleUrl: './products.component.css',
+  templateUrl: './tuotteet.component.html',
+  styleUrl: './tuotteet.component.css',
 })
-export class ProductsComponent {
+export class TuotteetComponent {
   // injektoidaan eli liitetään storet komponenttiin
   // komponentilla ei ole omaa tilaa, vaan tila on storessa
   readonly pstore = inject(ProductStore);

@@ -98,7 +98,7 @@
   <!-- Desktop navigaatio -->
   <nav class="hidden md:flex space-x-6 lg:space-x-8 text-gray-700 font-medium">
     <a routerLink="/notifications" class="hover:text-green-600 transition-colors">Etusivu</a>
-    <a routerLink="/products" class="hover:text-green-600 transition-colors">Tuotteet</a>
+    <a routerLink="/tuotteet" class="hover:text-green-600 transition-colors">Tuotteet</a>
     <a routerLink="/producers/id" class="hover:text-green-600 transition-colors">Tuottajat</a>
   </nav>
 
@@ -125,7 +125,7 @@
 
     <!-- Profiili -->
     <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors hidden sm:block">
-      <a routerLink="profile">account_circle</a>
+      <a routerLink="profiili">account_circle</a>
     </span>
   </div>
 
@@ -148,7 +148,7 @@
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="/products" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+  <a routerLink="/tuotteet" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
     (click)="isMenuOpen = false">
     Tuotteet
   </a>
@@ -176,7 +176,7 @@
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="profile" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"
+  <a routerLink="profiili" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"
     (click)="isMenuOpen = false">
     <span>Profiili</span>
   </a>

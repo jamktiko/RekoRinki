@@ -11,7 +11,8 @@
   <!-- VASEN SIVU - Tuotteet -->
   <div *ngIf="notification" class="bg-[#f1ece4] rounded-xl shadow-md w-full sm:max-w-[650px] mx-auto overflow-hidden">
     <!-- Kuva -->
-    <img [src]="notification.notificationsImage" [alt]="notification.title" class="w-full h-64 object-cover">
+    <img [src]="notification.notificationsImage" [alt]="notification.title" title="notificationsImage"
+      class="w-full h-64 object-cover">
 
     <!-- Otsikko -->
     <div class="px-6 py-4">
@@ -29,7 +30,7 @@
         <!-- Kuva -->
         <div class="w-20 h-20 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center mr-4">
           <ng-container *ngIf="product.image; else noImage">
-            <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" />
+            <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" title="product name" />
           </ng-container>
 
           <ng-template #noImage>
@@ -79,7 +80,7 @@
         <div
           class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
           <ng-container *ngIf="product.image; else noImage">
-            <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" />
+            <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" title="product name" />
           </ng-container>
 
           <ng-template #noImage>
@@ -131,7 +132,7 @@
       <div
         class="w-32 h-32 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center border-4 border-white shadow-md">
         <img [src]="notification.producersImge" [alt]="notification.producers" class="w-full h-full object-cover"
-          onerror="this.style.display='none'">
+          title="notification producersImge" onerror="this.style.display='none'">
         <div *ngIf="!notification.producersImge" class="text-gray-400 text-center">
           <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

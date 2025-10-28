@@ -18,6 +18,8 @@ export class CartComponent {
   private pstore = inject(ProductStore);
   private nservice = inject(NotificationService);
   private router = inject(Router); // LISÄTTY: Router injektointi
+  showConfirmationDialog = false; // LISÄTTY: Näytetäänkö vahvistusdialogi
+  pendingProduct: Product | null = null; // LISÄTTY: Odottava tuote
 
   // tuotteet ostoskorissa (laajennettu tieto)
   cartProducts: (Product & {
