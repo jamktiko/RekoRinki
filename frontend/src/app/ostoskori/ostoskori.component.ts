@@ -7,13 +7,13 @@ import { NotificationService } from '../notification.service';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-cart',
+  selector: 'app-ostoskori',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './cart.component.html',
-  styleUrl: './cart.component.css',
+  templateUrl: './ostoskori.component.html',
+  styleUrl: './ostoskori.component.css',
 })
-export class CartComponent {
+export class OstoskoriComponent {
   private cstore = inject(CartStore);
   private pstore = inject(ProductStore);
   private nservice = inject(NotificationService);

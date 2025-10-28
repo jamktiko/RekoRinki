@@ -2,7 +2,7 @@
 
 import { Routes } from '@angular/router';
 import { TuotteetComponent } from './tuotteet/tuotteet.component';
-import { CartComponent } from './cart/cart.component';
+import { OstoskoriComponent } from './ostoskori/ostoskori.component';
 import { PaymentComponent } from './payment/payment.component';
 import { TuottajatComponent } from './tuottajat/tuottajat.component';
 import { HomeComponent } from './home/home.component';
@@ -17,8 +17,8 @@ export const routes: Routes = [
     path: 'tuotteet',
   },
   {
-    component: CartComponent,
-    path: 'cart',
+    component: OstoskoriComponent,
+    path: 'ostoskori',
   },
   {
     component: PaymentComponent,
