@@ -8,7 +8,7 @@ import { TuottajatComponent } from './tuottajat/tuottajat.component';
 import { HomeComponent } from './home/home.component';
 import { ProfiiliComponent } from './profiili/profiili.component';
 import { IlmoituksetComponent } from './ilmoitukset/ilmoitukset.component';
-import { IlmoitustuotteetComponent } from './ilmoitustuotteet/ilmoitustuotteet.component';
+import { IlmoitusComponent } from './ilmoitus/ilmoitus.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/ilmoitukset', pathMatch: 'full' },
@@ -35,8 +35,8 @@ export const routes: Routes = [
     path: 'ilmoitukset',
   },
   {
-    component: IlmoitustuotteetComponent,
-    path: 'ilmoitustuotteet/id/:id',
+    component: IlmoitusComponent,
+    path: 'ilmoitus/id/:id',
   },
   {
     component: ProfiiliComponent,

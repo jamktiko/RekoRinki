@@ -9,13 +9,13 @@ import { CartStore } from '../cartstore';
 import { ProductStore } from '../productstore';
 
 @Component({
-  selector: 'app-ilmoitustuotteet',
+  selector: 'app-ilmoitus',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './ilmoitustuotteet.component.html',
-  styleUrl: './ilmoitustuotteet.component.css',
+  templateUrl: './ilmoitus.component.html',
+  styleUrl: './ilmoitus.component.css',
 })
-export class IlmoitustuotteetComponent {
+export class IlmoitusComponent {
   // notificationId!: number;
   // notification!: Notification | undefined;
   // products: Product[] = [];
