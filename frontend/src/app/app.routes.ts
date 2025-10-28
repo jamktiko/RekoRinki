@@ -4,7 +4,7 @@ import { Routes } from '@angular/router';
 import { TuotteetComponent } from './tuotteet/tuotteet.component';
 import { CartComponent } from './cart/cart.component';
 import { PaymentComponent } from './payment/payment.component';
-import { ProducersComponent } from './producers/producers.component';
+import { TuottajatComponent } from './tuottajat/tuottajat.component';
 import { HomeComponent } from './home/home.component';
 import { ProfiiliComponent } from './profiili/profiili.component';
 import { IlmoituksetComponent } from './ilmoitukset/ilmoitukset.component';
@@ -24,7 +24,7 @@ export const routes: Routes = [
     component: PaymentComponent,
     path: 'payment',
   },
-  { component: ProducersComponent, path: 'producers/:id' },
+  { component: TuottajatComponent, path: 'tuottajat/:id' },
   {
     component: HomeComponent,
     path: 'home',

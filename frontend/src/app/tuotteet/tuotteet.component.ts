@@ -3,12 +3,12 @@ import { ProductStore } from '../productstore';
 import { CartStore } from '../cartstore';
 import { Product } from '../types';
 import { RouterLink } from '@angular/router';
-import { ProducersComponent } from '../producers/producers.component';
+import { TuottajatComponent } from '../tuottajat/tuottajat.component';
 
 @Component({
   selector: 'app-tuotteet',
   standalone: true,
-  imports: [RouterLink, ProducersComponent],
+  imports: [RouterLink, TuottajatComponent],
   templateUrl: './tuotteet.component.html',
   styleUrl: './tuotteet.component.css',
 })
