@@ -25,7 +25,7 @@ phases:
           aws:elasticbeanstalk:environment:proxy:staticfiles:
             /: dist
           aws:elasticbeanstalk:container:nodejs:
-            NodeVersion: 22
+            NODE_VERSION: 22
         EOF
       - cd eb-deploy
       - npm install --production
