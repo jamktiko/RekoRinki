@@ -5,21 +5,16 @@ phases:
     runtime-versions:
       nodejs: 22
     commands:
-      - echo "Installing dependencies for Angular app..."
       - cd frontend
       - npm install
-      - cd ..
-
+      
   build:
     commands:
-      - echo "Building Angular app..."
-      - cd frontend
       - npm run build --configuration=production
       - cd ..
-
+      
   post_build:
     commands:
-      - echo "Preparing Elastic Beanstalk deployment package..."
       - mkdir -p eb-deploy/dist
       - cp -r frontend/dist/browser/* eb-deploy/dist/
       - cp frontend/package.json frontend/server.js eb-deploy/
@@ -30,17 +25,14 @@ phases:
           aws:elasticbeanstalk:environment:proxy:staticfiles:
             /: dist
           aws:elasticbeanstalk:container:nodejs:
-            NodeVersion: 20
+            NodeVersion: 22
         EOF
       - cd eb-deploy
       - npm install --production
       - zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/aws-sdk/*"
       - cd ..
-      - echo "Uploading deployment package to S3..."
       - aws s3 cp eb-deploy.zip s3://elasticbeanstalk-eu-north-1-996068820846/eb-deploy.zip --region eu-north-1
-      - echo "Creating new Elastic Beanstalk application version..."
       - aws elasticbeanstalk create-application-version --application-name "Reko-rinki" --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" --source-bundle S3Bucket="elasticbeanstalk-eu-north-1-996068820846",S3Key="eb-deploy.zip" --region eu-north-1
-      - echo "Updating Elastic Beanstalk environment..."
       - aws elasticbeanstalk update-environment --environment-name "Reko-rinki-env" --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" --region eu-north-1
 
 artifacts:
