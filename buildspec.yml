@@ -7,12 +7,12 @@ phases:
     commands:
       - cd frontend
       - npm install
-      
+
   build:
     commands:
       - npm run build --configuration=production
       - cd ..
-      
+
   post_build:
     commands:
       - mkdir -p eb-deploy/dist
@@ -20,20 +20,29 @@ phases:
       - cp frontend/package.json frontend/server.js eb-deploy/
       - mkdir -p eb-deploy/.ebextensions
       - |
-        cat <<EOF > eb-deploy/.ebextensions/node.config
+        cat <<EOF > eb-deploy/.ebextensions/node.config.yml
         option_settings:
+          aws:elasticbeanstalk:environment:proxy:staticfiles:
+            /: dist
           aws:elasticbeanstalk:container:nodejs:
-            NODE_VERSION: 22
+            NodeVersion: 22
         EOF
       - cd eb-deploy
       - npm install --production
       - zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/aws-sdk/*"
       - cd ..
       - aws s3 cp eb-deploy.zip s3://elasticbeanstalk-eu-north-1-996068820846/eb-deploy.zip --region eu-north-1
-      - aws elasticbeanstalk create-application-version --application-name "Reko-rinki" --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" --source-bundle S3Bucket="elasticbeanstalk-eu-north-1-996068820846",S3Key="eb-deploy.zip" --region eu-north-1
-      - aws elasticbeanstalk update-environment --environment-name "Reko-rinki-env" --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" --region eu-north-1
+      - aws elasticbeanstalk create-application-version \
+          --application-name "Reko-rinki" \
+          --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" \
+          --source-bundle S3Bucket="elasticbeanstalk-eu-north-1-996068820846",S3Key="eb-deploy.zip" \
+          --region eu-north-1
+      - aws elasticbeanstalk update-environment \
+          --environment-name "Reko-rinki-env" \
+          --version-label "$CODEBUILD_RESOLVED_SOURCE_VERSION" \
+          --region eu-north-1
 
 artifacts:
   files:
     - eb-deploy.zip
-    
+
