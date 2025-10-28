@@ -6,13 +6,13 @@ import { RouterLink } from '@angular/router';
 import { NotificationService } from '../notification.service';
 
 @Component({
-  selector: 'app-notifications',
+  selector: 'app-ilmoitukset',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.css',
+  templateUrl: './ilmoitukset.component.html',
+  styleUrl: './ilmoitukset.component.css',
 })
-export class NotificationsComponent {
+export class IlmoituksetComponent {
   notifications: AppNotification[] = [];
   filteredNotifications: AppNotification[] = [];
   searchTerm: string = '';

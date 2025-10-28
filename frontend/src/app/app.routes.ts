@@ -7,11 +7,11 @@ import { PaymentComponent } from './payment/payment.component';
 import { ProducersComponent } from './producers/producers.component';
 import { HomeComponent } from './home/home.component';
 import { ProfiiliComponent } from './profiili/profiili.component';
-import { NotificationsComponent } from './notifications/notifications.component';
+import { IlmoituksetComponent } from './ilmoitukset/ilmoitukset.component';
 import { IlmoitustuotteetComponent } from './ilmoitustuotteet/ilmoitustuotteet.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/notifications', pathMatch: 'full' },
+  { path: '', redirectTo: '/ilmoitukset', pathMatch: 'full' },
   {
     component: TuotteetComponent,
     path: 'tuotteet',
@@ -31,8 +31,8 @@ export const routes: Routes = [
   },
 
   {
-    component: NotificationsComponent,
-    path: 'notifications',
+    component: IlmoituksetComponent,
+    path: 'ilmoitukset',
   },
   {
     component: IlmoitustuotteetComponent,

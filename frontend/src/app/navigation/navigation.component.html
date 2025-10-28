@@ -89,7 +89,7 @@
 <header class="flex justify-between items-center bg-white px-4 md:px-8 py-3 shadow-md">
   <!-- Logo + nimi -->
   <div class="flex items-center space-x-2">
-    <button routerLink="/notifications" class="flex items-center space-x-2" (click)="isMenuOpen = false">
+    <button routerLink="/ilmoitukset" class="flex items-center space-x-2" (click)="isMenuOpen = false">
       <img src="/logo.png" alt="Reko logo" class="h-8 w-8 md:h-10 md:w-10">
       <span class="text-xl md:text-2xl font-paprika text-gray-800">REKO</span>
     </button>
@@ -97,7 +97,7 @@
 
   <!-- Desktop navigaatio -->
   <nav class="hidden md:flex space-x-6 lg:space-x-8 text-gray-700 font-medium">
-    <a routerLink="/notifications" class="hover:text-green-600 transition-colors">Etusivu</a>
+    <a routerLink="/ilmoitukset" class="hover:text-green-600 transition-colors">Etusivu</a>
     <a routerLink="/tuotteet" class="hover:text-green-600 transition-colors">Tuotteet</a>
     <a routerLink="/producers/id" class="hover:text-green-600 transition-colors">Tuottajat</a>
   </nav>
@@ -141,7 +141,7 @@
 <!-- Mobiilin avautuva navigaatio -->
 @if (isMenuOpen) {
 <nav class="md:hidden flex flex-col bg-white shadow-md border-t">
-  <a routerLink="/notifications" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+  <a routerLink="/ilmoitukset" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
     (click)="isMenuOpen = false">
     Etusivu
   </a>
