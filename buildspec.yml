@@ -22,8 +22,6 @@ phases:
       - |
         cat <<EOF > eb-deploy/.ebextensions/node.config
         option_settings:
-          aws:elasticbeanstalk:environment:proxy:staticfiles:
-            /: dist
           aws:elasticbeanstalk:container:nodejs:
             NODE_VERSION: 22
         EOF
