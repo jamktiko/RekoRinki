@@ -20,7 +20,7 @@ phases:
       - cp frontend/package.json frontend/server.js eb-deploy/
       - mkdir -p eb-deploy/.ebextensions
       - |
-        cat <<EOF > eb-deploy/.ebextensions/node.config.yml
+        cat <<EOF > eb-deploy/.ebextensions/node.config
         option_settings:
           aws:elasticbeanstalk:environment:proxy:staticfiles:
             /: dist
