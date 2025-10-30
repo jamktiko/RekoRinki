@@ -112,7 +112,7 @@
     <!-- Ostoskori -->
     <div class="relative">
       <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors">
-        <a routerLink="ostoskori" class="flex items-center">shopping_cart</a>
+        <a routerLink="/ostoskori" class="flex items-center">shopping_cart</a>
       </span>
       <!-- Ostoskorin numero -->
       @if (cstore.totalCount() > 0) {
@@ -125,16 +125,36 @@
 
     <!-- Profiili -->
     <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors hidden sm:block">
-      <a routerLink="profiili">account_circle</a>
+      <a routerLink="/profiili">account_circle</a>
     </span>
   </div>
 
   <!-- Mobiili menu-nappi -->
-  <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors" (click)="isMenuOpen = !isMenuOpen">
+  <!-- <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors" (click)="isMenuOpen = !isMenuOpen">
     <span class="material-symbols-outlined">
       {{ isMenuOpen ? 'close' : 'menu' }}
     </span>
+    @if (cstore.totalCount() > 0) {
+    <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+      {{ cstore.totalCount() }}
+    </div>
+    }
+  </button> -->
+
+  <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors relative"
+    (click)="isMenuOpen = !isMenuOpen">
+    <span class="material-symbols-outlined">
+      {{ isMenuOpen ? 'close' : 'menu' }}
+    </span>
+
+    @if (cstore.totalCount() > 0) {
+    <div class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full 
+             w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md">
+      {{ cstore.totalCount() }}
+    </div>
+    }
   </button>
+
 
 </header>
 
@@ -163,20 +183,20 @@
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="ostoskori"
+  <a routerLink="/ostoskori"
     class="flex items-center justify-between hover:bg-gray-100 border-green-600 transition-colors py-2"
     (click)="isMenuOpen = false">
     <span>Ostoskori</span>
-    @if (cstore.totalCount() > 0) {
+    <!-- @if (cstore.totalCount() > 0) {
     <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
       {{ cstore.totalCount() }}
     </div>
-    }
+    } -->
   </a>
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="profiili" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"
+  <a routerLink="/profiili" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"
     (click)="isMenuOpen = false">
     <span>Profiili</span>
   </a>
