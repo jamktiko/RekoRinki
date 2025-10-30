@@ -129,31 +129,21 @@
     </span>
   </div>
 
+
   <!-- Mobiili menu-nappi -->
-  <!-- <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors" (click)="isMenuOpen = !isMenuOpen">
-    <span class="material-symbols-outlined">
-      {{ isMenuOpen ? 'close' : 'menu' }}
-    </span>
-    @if (cstore.totalCount() > 0) {
-    <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-      {{ cstore.totalCount() }}
-    </div>
-    }
-  </button> -->
-
-  <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors relative"
-    (click)="isMenuOpen = !isMenuOpen">
+  <button class="md:hidden text-gray-700 hover:text-green-600 transition-colors relative" (click)="toggleMenu()">
     <span class="material-symbols-outlined">
       {{ isMenuOpen ? 'close' : 'menu' }}
     </span>
 
-    @if (cstore.totalCount() > 0) {
-    <div class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full 
-             w-5 h-5 flex items-center justify-center text-xs font-bold shadow-md">
+    @if (showCartAlert && cstore.totalCount() > 0) {
+    <div class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center 
+             text-xs font-bold ml-1 mt-[-6px]">
       {{ cstore.totalCount() }}
     </div>
     }
   </button>
+
 
 
 </header>
@@ -187,11 +177,11 @@
     class="flex items-center justify-between hover:bg-gray-100 border-green-600 transition-colors py-2"
     (click)="isMenuOpen = false">
     <span>Ostoskori</span>
-    <!-- @if (cstore.totalCount() > 0) {
-    <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+    @if (cstore.totalCount() > 0) {
+    <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mr-5">
       {{ cstore.totalCount() }}
     </div>
-    } -->
+    }
   </a>
 
   <a class="border border-gray-200"></a>
