@@ -102,18 +102,16 @@
     <a routerLink="/tuottajat/id" class="hover:text-green-600 transition-colors">Tuottajat</a>
   </nav>
 
+
   <!-- Ikonit -->
-  <div class="hidden md:flex flex items-center space-x-4 md:space-x-6 text-green-600">
-    <!-- Haku -->
-    <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors hidden sm:block">
-      search
-    </span>
+  <div class="hidden md:flex items-center justify-center space-x-6 text-green-600">
 
     <!-- Ostoskori -->
-    <div class="relative">
+    <a routerLink="/ostoskori" class="relative flex items-center">
       <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors">
-        <a routerLink="/ostoskori" class="flex items-center">shopping_cart</a>
+        shopping_cart
       </span>
+
       <!-- Ostoskorin numero -->
       @if (cstore.totalCount() > 0) {
       <div
@@ -121,13 +119,16 @@
         {{ cstore.totalCount() }}
       </div>
       }
-    </div>
+    </a>
 
     <!-- Profiili -->
-    <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors hidden sm:block">
-      <a routerLink="/profiili">account_circle</a>
-    </span>
+    <a routerLink="/profiili" class="flex items-center">
+      <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors">
+        account_circle
+      </span>
+    </a>
   </div>
+
 
 
   <!-- Mobiili menu-nappi -->

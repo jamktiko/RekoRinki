@@ -16,46 +16,6 @@ import { ProductStore } from '../productstore';
   styleUrl: './ilmoitus.component.css',
 })
 export class IlmoitusComponent {
-  // notificationId!: number;
-  // notification!: Notification | undefined;
-  // products: Product[] = [];
-  // relatedProducts: Product[] = [];
-
-  // constructor(
-  //   private route: ActivatedRoute,
-  //   private dbService: InMemoryDataService
-  // ) {}
-
-  // ngOnInit(): void {
-  //   // Haetaan id reitiltä
-  //   this.notificationId = Number(this.route.snapshot.paramMap.get('id'));
-
-  //   // Haetaan kaikki ilmoitukset ja tuotteet
-  //   const db = this.dbService.createDb();
-  //   this.products = db.products;
-  //   this.notification = db.notifications.find(
-  //     (n) => n.id === this.notificationId
-  //   );
-
-  //   // Suodatetaan vain kyseisen ilmoituksen tuotteet
-  //   if (this.notification) {
-  //     this.relatedProducts = this.products.filter((product) =>
-  //       this.notification!.productsID.includes(product.id)
-  //     );
-  //   }
-  // }
-
-  // addToCart(product: any) {
-  //   console.log('Lisätty koriin:', product);
-  //   // Ostoskorin logiikka tähän
-  // }
-
-  // // isExpanded-event käytetään siellä tuotelisatalla kun painetaan lisää-linkki
-  // toggleDescription(product: any, event: Event) {
-  //   event.preventDefault();
-  //   product.isExpanded = !product.isExpanded;
-  // }
-
   readonly cstore = inject(CartStore);
   readonly pstore = inject(ProductStore);
 

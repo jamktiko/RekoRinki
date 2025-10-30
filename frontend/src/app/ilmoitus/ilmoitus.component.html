@@ -7,7 +7,7 @@
   Tilauskomponentti (Ostoskori) → Paymentkomponentti (Maksu) → Vahvistus -->
 
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 sm:p-6 bg-gray-50 min-h-screen">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 sm:p-6 min-h-screen">
   <!-- VASEN SIVU - Tuotteet -->
   <div *ngIf="notification" class="bg-[#f1ece4] rounded-xl shadow-md w-full sm:max-w-[650px] mx-auto overflow-hidden">
     <!-- Kuva -->
@@ -26,52 +26,7 @@
     <div class="space-y-4 px-6 py-4">
       <p class="text-lg font-semibold text-gray-800">Tuotteet</p>
 
-      <div *ngFor="let product of relatedProducts" class="flex bg-gray-100 rounded-lg p-4 items-center">
-        <!-- Kuva -->
-        <div class="w-20 h-20 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center mr-4">
-          <ng-container *ngIf="product.image; else noImage">
-            <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" title="product name" />
-          </ng-container>
 
-          <ng-template #noImage>
-            <span class="material-symbols-outlined text-gray-400 text-5xl">
-              image
-            </span>
-          </ng-template>
-        </div>
-
-        <!-- Tuotetiedot -->
-        <div class="flex-1">
-          <p class="text-lg font-[Inder] text-gray-900 font-medium">
-            {{ product.name }}
-          </p>
-
-          <!-- Kuvaus, jossa näkyy vain osa tekstistä jos se on pitkä -->
-          <p class="text-sm text-gray-600 mt-1" *ngIf="product.description as desc">
-            {{
-            product.isExpanded
-            ? desc
-            : (desc.length > 100 ? (desc | slice: 0: 60) + '...' : desc)
-            }}
-            <a *ngIf="desc.length > 60" href="#" class="text-blue-600 hover:underline ml-1"
-              (click)="toggleDescription(product, $event)">
-              {{ product.isExpanded ? 'Näytä vähemmän' : 'Lisää' }}
-            </a>
-          </p>
-
-          <p class="text-xs text-gray-500 mt-2">
-            {{ product.price }} € / {{ product.amount }} g
-          </p>
-        </div>
-
-        <!-- Lisää koriin -nappi -->
-        <button (click)="addToCart(product)"
-          class="bg-green-400 hover:bg-green-500 text-black font-medium px-4 py-2 rounded-lg transition ml-4">
-          Lisää koriin
-        </button>
-
-
-      </div>
 
 
       <div *ngFor="let product of relatedProducts"
@@ -97,6 +52,19 @@
           <p class="text-[11px] sm:text-sm text-gray-600 leading-snug line-clamp-2">
             {{ product.description }}
           </p>
+
+          <!-- Kuvaus, jossa näkyy vain osa tekstistä jos se on pitkä -->
+          <!-- <p class="text-sm text-gray-600 mt-1" *ngIf="product.description as desc">
+            {{
+            product.isExpanded
+            ? desc
+            : (desc.length > 100 ? (desc | slice: 0: 60) + '...' : desc)
+            }}
+            <a *ngIf="desc.length > 60" href="#" class="text-blue-600 hover:underline ml-1"
+              (click)="toggleDescription(product, $event)">
+              {{ product.isExpanded ? 'Näytä vähemmän' : 'Lisää' }}
+            </a>
+          </p> -->
 
           <p class="text-[11px] sm:text-xs text-gray-500 mt-1">{{ product.price }} € / {{ product.amount }} g</p>
         </div>
