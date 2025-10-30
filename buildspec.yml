@@ -27,6 +27,40 @@ phases:
           aws:elasticbeanstalk:container:nodejs:
             NodeVersion: 22
         EOF
+      - |
+        cat <<EOF > eb-deploy/.ebextensions/01-cloudwatch-logs.config
+        files:
+          "/opt/aws/amazon-cloudwatch-agent/bin/config.json":
+            content: |
+              {
+                "logs": {
+                  "logs_collected": {
+                    "files": {
+                      "collect_list": [
+                        {
+                          "file_path": "/var/log/web.stdout.log",
+                          "log_group_name": "/elasticbeanstalk/Rekorinki",
+                          "log_stream_name": "i-055bc07db2d01faae-stdout"
+                        },
+                        {
+                          "file_path": "/var/log/web.stderr.log",
+                          "log_group_name": "/elasticbeanstalk/Rekorinki",
+                          "log_stream_name": "i-055bc07db2d01faae-stderr"
+                        },
+                        {
+                          "file_path": "/var/log/messages",
+                          "log_group_name": "/elasticbeanstalk/Rekorinki",
+                          "log_stream_name": "i-055bc07db2d01faae-syslog"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+        commands:
+          "01-start-cloudwatch-agent":
+            command: "/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s"
+        EOF
       - cd eb-deploy
       - npm install --production
       - zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/aws-sdk/*"
