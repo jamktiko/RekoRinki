@@ -7,11 +7,12 @@ import { NotificationService } from '../notification.service';
 import { ProductService } from '../product.service';
 import { CartStore } from '../cartstore';
 import { ProductStore } from '../productstore';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-ilmoitus',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatSnackBarModule],
   templateUrl: './ilmoitus.component.html',
   styleUrl: './ilmoitus.component.css',
 })
@@ -25,7 +26,8 @@ export class IlmoitusComponent {
   constructor(
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    private productService: ProductService
+    private productService: ProductService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -72,5 +74,14 @@ export class IlmoitusComponent {
     console.log('Lisätty koriin:', p);
     this.cstore.addToCart(p);
     this.pstore.reduceAmount(p.id);
+
+    // 🧩 Näytetään vahvistusilmoitus
+    console.log('SnackBar avataan nyt');
+    this.snackBar.open(`${p.name} lisätty ostoskoriin!`, 'Sulje', {
+      duration: 3000, // näkyy 3 sekuntia
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['success-snackbar'], // voit muokata tyylillä
+    });
   }
 }

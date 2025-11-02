@@ -151,35 +151,35 @@
 
 <!-- Mobiilin avautuva navigaatio -->
 @if (isMenuOpen) {
-<nav class="md:hidden flex flex-col bg-white shadow-md border-t">
-  <a routerLink="/ilmoitukset" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+<nav class="md:hidden flex flex-col shadow-md border-t hover:w-auto">
+  <a routerLink="/ilmoitukset" class="block w-full hover:bg-gray-100 transition-colors py-2 px-5 border-green-600"
     (click)="isMenuOpen = false">
     Etusivu
   </a>
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="/tuotteet" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+  <a routerLink="/tuotteet" class="block w-full hover:bg-gray-100 transition-colors py-2 px-5 border-green-600"
     (click)="isMenuOpen = false">
     Tuotteet
   </a>
+
   <a class="border border-gray-200"></a>
 
-  <a routerLink="/tuottajat/id" class="hover:bg-gray-100 border-green-600 transition-colors py-2"
+  <a routerLink="/tuottajat/id" class="block w-full hover:bg-gray-100 transition-colors py-2 px-5 border-green-600"
     (click)="isMenuOpen = false">
     Tuottajat
   </a>
 
   <!-- Mobiili-ikonit -->
-
   <a class="border border-gray-200"></a>
 
   <a routerLink="/ostoskori"
-    class="flex items-center justify-between hover:bg-gray-100 border-green-600 transition-colors py-2"
+    class="flex items-center justify-between hover:bg-gray-100 transition-colors py-2 px-5 border-green-600 w-full"
     (click)="isMenuOpen = false">
     <span>Ostoskori</span>
     @if (cstore.totalCount() > 0) {
-    <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mr-5">
+    <div class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
       {{ cstore.totalCount() }}
     </div>
     }
@@ -187,9 +187,9 @@
 
   <a class="border border-gray-200"></a>
 
-  <a routerLink="/profiili" class="items-center hover:bg-gray-100 border-green-600 transition-colors py-2"
+  <a routerLink="/profiili" class="block w-full hover:bg-gray-100 transition-colors py-2 px-5 border-green-600"
     (click)="isMenuOpen = false">
-    <span>Profiili</span>
+    Profiili
   </a>
 </nav>
 }
