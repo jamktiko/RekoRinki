@@ -24,6 +24,7 @@ jobs:
 
       - name: Build Angular app
         working-directory: ./frontend
+<<<<<<< HEAD
         run: npm run build --configuration=production
 
       - name: Prepare EB deployment package
@@ -43,16 +44,51 @@ jobs:
           cd eb-deploy
           npm install --production
           zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/aws-sdk/*"
+=======
+        run: npm run build -- --configuration=production
+
+      - name: Prepare EB deployment package
+        run: |
+          mkdir -p eb-deploy
+          cp -r frontend/dist/frontend eb-deploy/dist
+          cp frontend/package.json eb-deploy/
+          # Luodaan yksinkertainen server.js, joka palvelee Angularin buildia
+          echo "const express = require('express');
+          const path = require('path');
+          const app = express();
+          app.use(express.static(path.join(__dirname, 'dist')));
+          app.get('*', (req, res) => {
+            res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+          });
+          const port = process.env.PORT || 8080;
+          app.listen(port, () => console.log('Server running on port ' + port));" > eb-deploy/server.js
+          
+          mkdir -p eb-deploy/.ebextensions
+          echo "option_settings:
+            aws:elasticbeanstalk:environment:proxy:staticfiles:
+              /: dist" > eb-deploy/.ebextensions/static.config.yml
+
+          cd eb-deploy
+          zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/*"
+>>>>>>> origin/kehityshaara
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+<<<<<<< HEAD
           application_name: 'Reko-rinki'
           environment_name: 'Reko-rinki-env'
+=======
+          application_name: 'RekoRinki'
+          environment_name: 'RekoRinki-env'
+>>>>>>> origin/kehityshaara
           version_label: ${{ github.sha }}
           region: eu-north-1
           deployment_package: eb-deploy.zip
           use_existing_version_if_available: false
+<<<<<<< HEAD
           
+=======
+>>>>>>> origin/kehityshaara

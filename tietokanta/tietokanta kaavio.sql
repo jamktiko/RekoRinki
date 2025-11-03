@@ -20,7 +20,7 @@ USE `RekoRinki` ;
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Asiakas` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kayttajatunnus` VARCHAR(20) NOT NULL,
-  `salasana` VARCHAR(50) NOT NULL,
+  `salasana` VARCHAR(255) NOT NULL,
   `etunimi` VARCHAR(50) NOT NULL,
   `sukunimi` VARCHAR(50) NOT NULL,
   `puhelinnro` VARCHAR(15) NOT NULL,
@@ -44,7 +44,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tuottaja` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `kayttajatunnus` VARCHAR(50) NOT NULL,
-  `salasana` VARCHAR(50) NOT NULL,
+  `salasana` VARCHAR(255) NOT NULL,
   `etunimi` VARCHAR(50) NOT NULL,
   `sukunimi` VARCHAR(50) NOT NULL,
   `puhelinnro` VARCHAR(15) NOT NULL,
@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Ilmoitukset` (
   `kuvaus` VARCHAR(200) NOT NULL,
   `voimassaolo_paattyy` TIMESTAMP NOT NULL,
   `kuva` VARCHAR(200),
+  `nimi` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`ilmoitusID`),
   INDEX `tuottajaID` (`tuottajaID` ASC) VISIBLE,
   CONSTRAINT `ilmoitukset_ibfk_1`
@@ -139,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Tilaus` (
   `asiakasID` INT NOT NULL,
   `tuottajaID` INT NOT NULL,
   `ilmoitusID` INT NOT NULL,
-  `status` ENUM('odottaa', 'vahvistettu ', 'toimituksessa', 'suoritettu') NOT NULL DEFAULT 'odottaa',
+  `status` ENUM('odottaa', 'vahvistettu', 'toimituksessa', 'suoritettu') NOT NULL DEFAULT 'odottaa',
   `tilauspaiva` DATE NOT NULL,
   `summa` DECIMAL(10,2) NOT NULL,
   `Reitit_id` INT NOT NULL,
