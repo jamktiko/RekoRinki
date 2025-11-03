@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS `RekoRinki`.`Ilmoitukset` (
   `kuvaus` VARCHAR(200) NOT NULL,
   `voimassaolo_paattyy` TIMESTAMP NOT NULL,
   `kuva` VARCHAR(200),
+  `nimi` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`ilmoitusID`),
   INDEX `tuottajaID` (`tuottajaID` ASC) VISIBLE,
   CONSTRAINT `ilmoitukset_ibfk_1`
