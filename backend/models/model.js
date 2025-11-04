@@ -1,41 +1,40 @@
-const Sequelize = require('sequelize');
-const Model = Sequelize.Model;
-const conn = require('./dbconnection');
+import { Sequelize, DataTypes, Model } from '@sequelize/core';
+import conn from './dbconnection.js';
 class Asiakas extends Model {}
 Asiakas.init(
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
     },
     kayttajatunnus: {
-      type: Sequelize.STRING(20),
+      type: DataTypes.STRING(20),
       allowNull: false,
       unique: true,
     },
     salasana: {
-      type: Sequelize.STRING(255),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     etunimi: {
-      type: Sequelize.STRING(50),
+      type: DataTypes.STRING(50),
       allowNull: false,
     },
     sukunimi: {
-      type: Sequelize.STRING(50),
+      type: DataTypes.STRING(50),
       allowNull: false,
     },
     puhelinnro: {
-      type: Sequelize.STRING(15),
+      type: DataTypes.STRING(15),
       allowNull: false,
       validate: {
         is: /^\+?[1-9]\d{1,14}$/,
       },
     },
     sahkoposti: {
-      type: Sequelize.STRING(255),
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
       validate: {
@@ -43,23 +42,23 @@ Asiakas.init(
       },
     },
     katuosoite: {
-      type: Sequelize.STRING(100),
+      type: DataTypes.STRING(100),
       allowNull: false,
     },
     postinumero: {
-      type: Sequelize.STRING(5),
+      type: DataTypes.STRING(5),
       allowNull: false,
     },
     postitoimipaikka: {
-      type: Sequelize.STRING(40),
+      type: DataTypes.STRING(40),
       allowNull: false,
     },
     paikkakunta: {
-      type: Sequelize.STRING(40),
+      type: DataTypes.STRING(40),
       allowNull: false,
     },
     kuva: {
-      type: Sequelize.STRING(200),
+      type: DataTypes.STRING(200),
       allowNull: true,
     },
   },
@@ -69,67 +68,36 @@ class Tuottaja extends Model {}
 Tuottaja.init(
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
     },
     kayttajatunnus: {
-      type: Sequelize.STRING(20),
+      type: DataTypes.STRING(20),
       allowNull: false,
       unique: true,
     },
-    salasana: {
-      type: Sequelize.STRING(255),
-      allowNull: false,
-    },
-    etunimi: {
-      type: Sequelize.STRING(50),
-      allowNull: false,
-    },
-    sukunimi: {
-      type: Sequelize.STRING(50),
-      allowNull: false,
-    },
+    salasana: { type: DataTypes.STRING(255), allowNull: false },
+    etunimi: { type: DataTypes.STRING(50), allowNull: false },
+    sukunimi: { type: DataTypes.STRING(50), allowNull: false },
     puhelinnro: {
-      type: Sequelize.STRING(15),
+      type: DataTypes.STRING(15),
       allowNull: false,
-      validate: {
-        is: /^\+?[1-9]\d{1,14}$/,
-      },
+      validate: { is: /^\+?[1-9]\d{1,14}$/ },
     },
     sahkoposti: {
-      type: Sequelize.STRING(255),
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
-      validate: {
-        isEmail: true,
-      },
+      validate: { isEmail: true },
     },
-    katuosoite: {
-      type: Sequelize.STRING(100),
-      allowNull: false,
-    },
-    postinumero: {
-      type: Sequelize.STRING(5),
-      allowNull: false,
-    },
-    postitoimipaikka: {
-      type: Sequelize.STRING(40),
-      allowNull: false,
-    },
-    paikkakunta: {
-      type: Sequelize.STRING(40),
-      allowNull: false,
-    },
-    lisatiedot: {
-      type: Sequelize.STRING(500),
-      allowNull: false,
-    },
-    kuva: {
-      type: Sequelize.STRING(200),
-      allowNull: true,
-    },
+    katuosoite: { type: DataTypes.STRING(100), allowNull: false },
+    postinumero: { type: DataTypes.STRING(5), allowNull: false },
+    postitoimipaikka: { type: DataTypes.STRING(40), allowNull: false },
+    paikkakunta: { type: DataTypes.STRING(40), allowNull: false },
+    lisatiedot: { type: DataTypes.STRING(500), allowNull: false },
+    kuva: { type: DataTypes.STRING(200), allowNull: true },
   },
   { sequelize: conn, modelName: 'Tuottaja', freezeTableName: true }
 );
@@ -137,36 +105,21 @@ class Ilmoitukset extends Model {}
 Ilmoitukset.init(
   {
     ilmoitusID: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
-    tuottajaID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    lisatiedot: {
-      type: Sequelize.STRING(255),
-      allowNull: false,
-    },
+    tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
+    lisatiedot: { type: DataTypes.STRING(255), allowNull: false },
     julkaisupaiva: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.NOW,
+      defaultValue: DataTypes.NOW,
     },
-    kuvaus: {
-      type: Sequelize.STRING(200),
-      allowNull: false,
-    },
-    voimassaolo_paattyy: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
-    kuva: {
-      type: Sequelize.STRING(200),
-      allowNull: true,
-    },
+    kuvaus: { type: DataTypes.STRING(200), allowNull: false },
+    voimassaolo_paattyy: { type: DataTypes.DATE, allowNull: false },
+    kuva: { type: DataTypes.STRING(200), allowNull: true },
   },
   { sequelize: conn, modelName: 'Ilmoitukset', freezeTableName: true }
 );
@@ -174,84 +127,37 @@ class Tuotteet extends Model {}
 Tuotteet.init(
   {
     tuoteID: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
     },
-    tuottajaID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    nimi: {
-      type: Sequelize.STRING(100),
-      allowNull: false,
-    },
-    yksikko: {
-      type: Sequelize.STRING(20),
-      allowNull: false,
-    },
-    kuvaus: {
-      type: Sequelize.STRING(255),
-      allowNull: false,
-    },
-    tuotesaldo: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    yksikkohinta: {
-      type: Sequelize.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    tuote_on_aktiivinen: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-    },
+    tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
+    nimi: { type: DataTypes.STRING(100), allowNull: false },
+    yksikko: { type: DataTypes.STRING(20), allowNull: false },
+    kuvaus: { type: DataTypes.STRING(255), allowNull: false },
+    tuotesaldo: { type: DataTypes.INTEGER, allowNull: false },
+    yksikkohinta: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    tuote_on_aktiivinen: { type: DataTypes.BOOLEAN, allowNull: false },
   },
-  {
-    sequelize: conn,
-    modelName: 'Tuotteet',
-    freezeTableName: true,
-  }
+  { sequelize: conn, modelName: 'Tuotteet', freezeTableName: true }
 );
 class Reitit extends Model {}
 Reitit.init(
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
-    jakopaiva_aika: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
-    jakopaikka: {
-      type: Sequelize.STRING(100),
-      allowNull: false,
-    },
-    katuosoite: {
-      type: Sequelize.STRING(100),
-      allowNull: false,
-    },
-    postinumero: {
-      type: Sequelize.STRING(5),
-      allowNull: false,
-    },
-    paikkakunta: {
-      type: Sequelize.STRING(50),
-      allowNull: false,
-    },
-    lisatieto: {
-      type: Sequelize.STRING(255),
-      allowNull: false,
-    },
-    Tuottaja_id: {
-      type: Sequelize.INTEGER,
-    },
+    jakopaiva_aika: { type: DataTypes.DATE, allowNull: false },
+    jakopaikka: { type: DataTypes.STRING(100), allowNull: false },
+    katuosoite: { type: DataTypes.STRING(100), allowNull: false },
+    postinumero: { type: DataTypes.STRING(5), allowNull: false },
+    paikkakunta: { type: DataTypes.STRING(50), allowNull: false },
+    lisatieto: { type: DataTypes.STRING(255), allowNull: false },
+    Tuottaja_id: { type: DataTypes.INTEGER },
   },
   { sequelize: conn, modelName: 'Reitit', freezeTableName: true }
 );
@@ -259,25 +165,16 @@ class Tilaus extends Model {}
 Tilaus.init(
   {
     tilausnro: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
-    asiakasID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    tuottajaID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    ilmoitusID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
+    asiakasID: { type: DataTypes.INTEGER, allowNull: false },
+    tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
+    ilmoitusID: { type: DataTypes.INTEGER, allowNull: false },
     status: {
-      type: Sequelize.ENUM(
+      type: DataTypes.ENUM(
         'odottaa',
         'vahvistettu',
         'toimituksessa',
@@ -286,22 +183,10 @@ Tilaus.init(
       allowNull: false,
       defaultValue: 'odottaa',
     },
-    tilauspaiva: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
-    summa: {
-      type: Sequelize.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    Reitit_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    kuva: {
-      type: Sequelize.STRING(200),
-      allowNull: true,
-    },
+    tilauspaiva: { type: DataTypes.DATE, allowNull: false },
+    summa: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    Reitit_id: { type: DataTypes.INTEGER, allowNull: false },
+    kuva: { type: DataTypes.STRING(200), allowNull: true },
   },
   { sequelize: conn, modelName: 'Tilaus', freezeTableName: true }
 );
@@ -309,34 +194,17 @@ class Ilmoitus_has_Tuotteet extends Model {}
 Ilmoitus_has_Tuotteet.init(
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
-    tuoteID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    tuottajaID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    ilmoitusID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    maara: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    yksikkohinta: {
-      type: Sequelize.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    kuva: {
-      type: Sequelize.STRING(200),
-    },
+    tuoteID: { type: DataTypes.INTEGER, allowNull: false },
+    tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
+    ilmoitusID: { type: DataTypes.INTEGER, allowNull: false },
+    maara: { type: DataTypes.INTEGER, allowNull: false },
+    yksikkohinta: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    kuva: { type: DataTypes.STRING(200) },
   },
   { sequelize: conn, modelName: 'Ilmoitus_has_Tuotteet', freezeTableName: true }
 );
@@ -344,44 +212,25 @@ class Tilaus_has_Tuotteet extends Model {}
 Tilaus_has_Tuotteet.init(
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
-    tuoteID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    tuottajaID: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    tilausID: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
-    maara: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    yksikkohinta: {
-      type: Sequelize.DECIMAL(10, 2),
-      allowNull: false,
-    },
+    tuoteID: { type: DataTypes.INTEGER, allowNull: false },
+    tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
+    tilausID: { type: DataTypes.INTEGER },
+    maara: { type: DataTypes.INTEGER, allowNull: false },
+    yksikkohinta: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
   },
   { sequelize: conn, modelName: 'Tilaus_has_Tuotteet', freezeTableName: true }
 );
 class Reitit_has_Ilmoitukset extends Model {}
 Reitit_has_Ilmoitukset.init(
   {
-    reitit_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-    },
+    reitit_id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true },
     Ilmoitukset_ilmoitusID: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
     },
@@ -392,113 +241,42 @@ Reitit_has_Ilmoitukset.init(
     freezeTableName: true,
   }
 );
-Asiakas.hasMany(Tilaus, {
-  foreignKey: 'asiakasID',
-  sourceKey: 'id',
-});
-Tilaus.belongsTo(Asiakas, {
-  foreignKey: 'asiakasID',
-  targetKey: 'id',
-});
-Tuottaja.hasMany(Ilmoitukset, {
-  foreignKey: 'tuottajaID',
-  sourceKey: 'id',
-});
-Ilmoitukset.belongsTo(Tuottaja, {
-  foreignKey: 'tuottajaID',
-  targetKey: 'id',
-});
-Tuottaja.hasMany(Tuotteet, {
-  foreignKey: 'tuottajaID',
-  sourceKey: 'id',
-});
-Tuotteet.belongsTo(Tuottaja, {
-  foreignKey: 'tuottajaID',
-  targetKey: 'id',
-});
-Tuottaja.hasMany(Reitit, {
-  foreignKey: 'Tuottaja_id',
-  sourceKey: 'id',
-});
-Reitit.belongsTo(Tuottaja, {
-  foreignKey: 'Tuottaja_id',
-  targetKey: 'id',
-});
-Tuottaja.hasMany(Tilaus, {
-  foreignKey: 'tuottajaID',
-  sourceKey: 'id',
-});
-Tilaus.belongsTo(Tuottaja, {
-  foreignKey: 'tuottajaID',
-  targetKey: 'id',
-});
-Ilmoitukset.hasMany(Tilaus, {
-  foreignKey: 'ilmoitusID',
-  sourceKey: 'ilmoitusID',
-});
-Tilaus.belongsTo(Ilmoitukset, {
-  foreignKey: 'ilmoitusID',
-  targetKey: 'ilmoitusID',
-});
-Reitit.hasMany(Tilaus, {
-  foreignKey: 'Reitit_id',
-  sourceKey: 'id',
-});
-Tilaus.belongsTo(Reitit, {
-  foreignKey: 'Reitit_id',
-  targetKey: 'id',
-});
-Tuotteet.hasMany(Ilmoitus_has_Tuotteet, {
-  foreignKey: 'tuoteID',
-  sourceKey: 'tuoteID',
-});
-Ilmoitus_has_Tuotteet.belongsTo(Tuotteet, {
-  foreignKey: 'tuoteID',
-  targetKey: 'tuoteID',
-});
-Ilmoitukset.hasMany(Ilmoitus_has_Tuotteet, {
-  foreignKey: 'ilmoitusID',
-  sourceKey: 'ilmoitusID',
-});
-Ilmoitus_has_Tuotteet.belongsTo(Ilmoitukset, {
-  foreignKey: 'ilmoitusID',
-  targetKey: 'ilmoitusID',
-});
-Tuottaja.hasMany(Ilmoitus_has_Tuotteet, {
-  foreignKey: 'tuottajaID',
-  sourceKey: 'id',
-});
-Ilmoitus_has_Tuotteet.belongsTo(Tuottaja, {
-  foreignKey: 'tuottajaID',
-  targetKey: 'id',
-});
-Tilaus.hasMany(Tilaus_has_Tuotteet, {
-  foreignKey: 'tilausID',
-  sourceKey: 'tilausnro',
-});
-Tilaus_has_Tuotteet.belongsTo(Tilaus, {
-  foreignKey: 'tilausID',
-  targetKey: 'tilausnro',
-});
-Tuottaja.hasMany(Tilaus_has_Tuotteet, {
-  foreignKey: 'tuottajaID',
-  sourceKey: 'id',
-});
-Tilaus_has_Tuotteet.belongsTo(Tuottaja, {
-  foreignKey: 'tuottajaID',
-  targetKey: 'id',
-});
+// ---------------------- Assosiaatiot ----------------------
+Asiakas.hasMany(Tilaus, { foreignKey: 'asiakasID' });
+Tilaus.belongsTo(Asiakas, { foreignKey: 'asiakasID' });
+Tuottaja.hasMany(Ilmoitukset, { foreignKey: 'tuottajaID' });
+Ilmoitukset.belongsTo(Tuottaja, { foreignKey: 'tuottajaID' });
+Tuottaja.hasMany(Tuotteet, { foreignKey: 'tuottajaID' });
+Tuotteet.belongsTo(Tuottaja, { foreignKey: 'tuottajaID' });
+Tuottaja.hasMany(Reitit, { foreignKey: 'Tuottaja_id' });
+Reitit.belongsTo(Tuottaja, { foreignKey: 'Tuottaja_id' });
+Tuottaja.hasMany(Tilaus, { foreignKey: 'tuottajaID' });
+Tilaus.belongsTo(Tuottaja, { foreignKey: 'tuottajaID' });
+Ilmoitukset.hasMany(Tilaus, { foreignKey: 'ilmoitusID' });
+Tilaus.belongsTo(Ilmoitukset, { foreignKey: 'ilmoitusID' });
+Reitit.hasMany(Tilaus, { foreignKey: 'Reitit_id' });
+Tilaus.belongsTo(Reitit, { foreignKey: 'Reitit_id' });
+Tuotteet.hasMany(Ilmoitus_has_Tuotteet, { foreignKey: 'tuoteID' });
+Ilmoitus_has_Tuotteet.belongsTo(Tuotteet, { foreignKey: 'tuoteID' });
+Ilmoitukset.hasMany(Ilmoitus_has_Tuotteet, { foreignKey: 'ilmoitusID' });
+Ilmoitus_has_Tuotteet.belongsTo(Ilmoitukset, { foreignKey: 'ilmoitusID' });
+Tuottaja.hasMany(Ilmoitus_has_Tuotteet, { foreignKey: 'tuottajaID' });
+Ilmoitus_has_Tuotteet.belongsTo(Tuottaja, { foreignKey: 'tuottajaID' });
+Tilaus.hasMany(Tilaus_has_Tuotteet, { foreignKey: 'tilausID' });
+Tilaus_has_Tuotteet.belongsTo(Tilaus, { foreignKey: 'tilausID' });
+Tuottaja.hasMany(Tilaus_has_Tuotteet, { foreignKey: 'tuottajaID' });
+Tilaus_has_Tuotteet.belongsTo(Tuottaja, { foreignKey: 'tuottajaID' });
 Reitit.belongsToMany(Ilmoitukset, {
   through: Reitit_has_Ilmoitukset,
-  foreignKey: 'Reitit_id',
+  foreignKey: 'reitit_id',
   otherKey: 'Ilmoitukset_ilmoitusID',
 });
 Ilmoitukset.belongsToMany(Reitit, {
   through: Reitit_has_Ilmoitukset,
   foreignKey: 'Ilmoitukset_ilmoitusID',
-  otherKey: 'Reitit_id',
+  otherKey: 'reitit_id',
 });
-module.exports = {
+export {
   Asiakas,
   Tuottaja,
   Ilmoitukset,
@@ -509,5 +287,3 @@ module.exports = {
   Tilaus_has_Tuotteet,
   Reitit_has_Ilmoitukset,
 };
-
-// test
