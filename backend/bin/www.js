@@ -6,7 +6,6 @@
 import app from '../app.js';
 import debugLib from 'debug';
 import http from 'http';
-
 const debug = debugLib('restapi:server');
 /**
  * Get port from environment and store in Express.

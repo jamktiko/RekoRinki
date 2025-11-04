@@ -120,6 +120,7 @@ Ilmoitukset.init(
     kuvaus: { type: DataTypes.STRING(200), allowNull: false },
     voimassaolo_paattyy: { type: DataTypes.DATE, allowNull: false },
     kuva: { type: DataTypes.STRING(200), allowNull: true },
+    nimi: { type: DataTypes.STRING(255), allowNull: false },
   },
   { sequelize: conn, modelName: 'Ilmoitukset', freezeTableName: true }
 );
