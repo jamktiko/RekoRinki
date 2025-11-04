@@ -509,5 +509,3 @@ module.exports = {
   Tilaus_has_Tuotteet,
   Reitit_has_Ilmoitukset,
 };
-
-// test
