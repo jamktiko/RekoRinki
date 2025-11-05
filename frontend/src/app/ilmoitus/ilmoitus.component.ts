@@ -75,11 +75,11 @@ export class IlmoitusComponent {
     this.cstore.addToCart(p);
     this.pstore.reduceAmount(p.id);
 
-    // 🧩 Näytetään vahvistusilmoitus
+    // Näytetään vahvistusilmoitus
     console.log('SnackBar avataan nyt');
-    this.snackBar.open(`${p.name} lisätty ostoskoriin!`, 'Sulje', {
+    this.snackBar.open(`${p.name} lisätty ostoskoriin!`, '', {
       duration: 3000, // näkyy 3 sekuntia
-      horizontalPosition: 'center',
+      horizontalPosition: 'start',
       verticalPosition: 'bottom',
       panelClass: ['success-snackbar'], // voit muokata tyylillä
     });
