@@ -1,18 +1,22 @@
-<div class="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-  <h2 class="text-2xl font-semibold mb-6">Kirjaudu sisään</h2>
+<div class="flex flex-col items-center justify-center min-h-[80vh] bg-white px-4 mt-5">
+  <!-- Otsikko -->
+  <h2 class="text-3xl md:text-4xl font-semibold mb-16 md:mb-20 mt-[-40px] text-center">
+    Kirjaudu sisään
+  </h2>
 
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full max-w-sm">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg transition-all">
     <!-- Sähköposti -->
-    <mat-form-field appearance="outline" class="w-full">
+    <mat-form-field appearance="fill" class="w-full">
       <mat-label>Sähköposti</mat-label>
       <input matInput formControlName="email" type="email" placeholder="Sähköposti" class="text-sm" />
     </mat-form-field>
 
     <!-- Salasana -->
-    <mat-form-field appearance="outline" class="w-full">
+    <mat-form-field appearance="fill" class="w-full">
       <mat-label>Salasana</mat-label>
       <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Salasana"
-        class="text-sm" />
+        class="text-sm bg-white" />
       <button mat-icon-button matSuffix type="button" (click)="hide = !hide" class="focus:outline-none">
         <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
@@ -20,17 +24,17 @@
 
     <!-- Kirjaudu sisään -nappi -->
     <button mat-raised-button color="primary" type="submit"
-      class="w-full bg-green-400 hover:bg-green-500 text-white font-semibold py-2 rounded-lg transition">
+      class="w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-2 rounded-sm transition">
       Kirjaudu sisään
     </button>
   </form>
 
   <!-- Lisälinkit -->
-  <a href="#" class="text-sm mt-4 font-medium text-black hover:underline">
+  <a href="#" class="text-sm mt-8 font-medium text-black hover:underline">
     Salasana unohtunut?
   </a>
 
-  <div class="mt-2 text-sm">
+  <div class="mt-2 text-sm text-center">
     Uusi käyttäjä?
     <a href="#" class="font-semibold text-black hover:underline">
       Rekisteröidy
