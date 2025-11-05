@@ -32,3 +32,6 @@ body {
 /* .success-snackbar button {
   @apply text-green-900 font-semibold ml-4;
 } */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
