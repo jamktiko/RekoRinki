@@ -63,7 +63,6 @@ Asiakas.init(
     },
   },
   { sequelize: conn, modelName: 'Asiakas', freezeTableName: true }
-  { sequelize: conn, modelName: 'Asiakas', freezeTableName: true }
 );
 class Tuottaja extends Model {}
 Tuottaja.init(
@@ -101,7 +100,6 @@ Tuottaja.init(
     kuva: { type: DataTypes.STRING(200), allowNull: true },
   },
   { sequelize: conn, modelName: 'Tuottaja', freezeTableName: true }
-  { sequelize: conn, modelName: 'Tuottaja', freezeTableName: true }
 );
 class Ilmoitukset extends Model {}
 Ilmoitukset.init(
@@ -123,7 +121,6 @@ Ilmoitukset.init(
     voimassaolo_paattyy: { type: DataTypes.DATE, allowNull: false },
     kuva: { type: DataTypes.STRING(200), allowNull: true },
   },
-  { sequelize: conn, modelName: 'Ilmoitukset', freezeTableName: true }
   { sequelize: conn, modelName: 'Ilmoitukset', freezeTableName: true }
 );
 class Tuotteet extends Model {}
