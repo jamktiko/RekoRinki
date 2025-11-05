@@ -69,9 +69,9 @@
   CREATE TABLE IF NOT EXISTS `RekoRinki`.`Ilmoitukset` (
     `ilmoitusID` INT NOT NULL AUTO_INCREMENT,
     `tuottajaID` INT NOT NULL,
-      title VARCHAR(100) NOT NULL,
+      `title` VARCHAR(100) NOT NULL,
       `nimi` VARCHAR(255) NOT NULL,
-    maakunta ENUM('Ahvenanmaa', 'Etelä-Karjala', 'Etelä-Pohjanmaa', 'Etelä-Savo', 'Kainuu', 'Kanta-Häme', 'Keski-Pohjanmaa', 'Keski-Suomi', 'Kymenlaakso', 'Lappi', 'Pohjois-Karjala','Pohjanmaa', 'Pohjois-Pohjanmaa', 'Pohjois-Savo', 'Päijät-Häme', 'Pirkanmaa', 'Satakunta', 'Uusimaa', 'Varsinais-Suomi') NOT NULL;
+    `maakunta` ENUM('Ahvenanmaa', 'Etelä-Karjala', 'Etelä-Pohjanmaa', 'Etelä-Savo', 'Kainuu', 'Kanta-Häme', 'Keski-Pohjanmaa', 'Keski-Suomi', 'Kymenlaakso', 'Lappi', 'Pohjois-Karjala','Pohjanmaa', 'Pohjois-Pohjanmaa', 'Pohjois-Savo', 'Päijät-Häme', 'Pirkanmaa', 'Satakunta', 'Uusimaa', 'Varsinais-Suomi') NOT NULL;
     `lisatiedot` VARCHAR(255) NOT NULL,
     `julkaisupaiva` TIMESTAMP NOT NULL,
     `kuvaus` VARCHAR(200) NOT NULL,
