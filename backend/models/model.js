@@ -111,6 +111,17 @@ Ilmoitukset.init(
       primaryKey: true,
     },
     tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
+    title: {
+      type: DataTypes.String(200),
+      allowNull: false,
+    },
+    siainti: {
+      type: DataTypes.STRING(50),
+    },
+    nimi: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
     lisatiedot: { type: DataTypes.STRING(255), allowNull: false },
     julkaisupaiva: {
       type: DataTypes.DATE,
@@ -120,7 +131,6 @@ Ilmoitukset.init(
     kuvaus: { type: DataTypes.STRING(200), allowNull: false },
     voimassaolo_paattyy: { type: DataTypes.DATE, allowNull: false },
     kuva: { type: DataTypes.STRING(200), allowNull: true },
-    nimi: { type: DataTypes.STRING(255), allowNull: false },
   },
   { sequelize: conn, modelName: 'Ilmoitukset', freezeTableName: true }
 );
