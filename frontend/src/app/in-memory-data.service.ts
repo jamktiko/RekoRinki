@@ -78,7 +78,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'Takaamme tuoreuden ja laadun jokaisessa marjassa!',
         ],
         producerID: 1,
-        producers: 'Nisulan tila',
+        producers: 'Nisulan tila', // kannassa oleva sarake nimi
         producersImge: '/pexels-jk04-2933243.jpg',
         date: '22.9.2025 - 28.9.2025',
         productsID: [1, 2, 3], // → Mansikka, Vadelma, Pensasmustikka
