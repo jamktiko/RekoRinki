@@ -111,6 +111,17 @@ Ilmoitukset.init(
       primaryKey: true,
     },
     tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
+    title: {
+      type: DataTypes.String(200),
+      allowNull: false,
+    },
+    siainti: {
+      type: DataTypes.STRING(50),
+    },
+    nimi: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
     lisatiedot: { type: DataTypes.STRING(255), allowNull: false },
     julkaisupaiva: {
       type: DataTypes.DATE,
