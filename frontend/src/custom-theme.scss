@@ -1,36 +1,64 @@
+// // ✅ Custom Theming for Angular Material
+// // For more information: https://material.angular.io/guide/theming
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
+// @use '@angular/material' as mat;
+
+// // Include the common styles for Angular Material.
+// @include mat.core();
+
+// // Define the theme object.
+// $ang-signalstore_teht8-theme: mat.define-theme(
+//   (
+//     color: (
+//       // theme-type: dark,
+//       primary: mat.$green-palette,
+//       tertiary: mat.$green-palette,
+//     ),
+//     density: (
+//       scale: 0,
+//     ),
+//   )
+// );
+
+// // Include theme styles for core and each component used in your app.
+// :root {
+//   @include mat.all-component-themes($ang-signalstore_teht8-theme);
+// }
+
+// // (optional) typography utilities
+// // @include mat.typography-hierarchy($ang-signalstore_teht8-theme);
+
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+// Aktivoi Materialin core-tyylit
 @include mat.core();
 
-// Define the theme object.
-$ang-signalstore_teht8-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
-  ),
-  density: (
-    scale: 0,
+// Määritä oma vihreä väriteema
+$my-theme: mat.define-theme(
+  (
+    color: (
+      primary: mat.$green-palette,
+    ),
   )
-));
+);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
+// Ota teema käyttöön sovellukselle
 :root {
-  @include mat.all-component-themes($ang-signalstore_teht8-theme);
+  @include mat.all-component-themes($my-theme);
 }
 
-// Comment out the line below if you want to use the pre-defined typography utility classes.
-// For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
-// @include mat.typography-hierarchy($ang-signalstore_teht8-theme);
+/* Muuta painikkeen väri Tailwindin sävyillä */
+.mat-mdc-raised-button.mat-primary {
+  background-color: #22c55e !important; // bg-green-500
+  color: black !important;
+  transition: background-color 0.2s ease-in-out;
+}
 
-// Comment out the line below if you want to use the deprecated `color` inputs.
-// @include mat.color-variants-backwards-compatibility($ang-signalstore_teht8-theme);
+/* Hover-efekti */
+.mat-mdc-raised-button.mat-primary:hover {
+  background-color: #16a34a !important; // bg-green-600
+}
+
+.mat-mdc-form-field.mat-mdc-form-field-type-mat-input .mdc-text-field--filled {
+  background-color: white;
+}
