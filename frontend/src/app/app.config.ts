@@ -28,6 +28,6 @@ export const appConfig: ApplicationConfig = {
       })
     ),
 
-    provideRouter(routes, withComponentInputBinding()), provideAnimationsAsync(),
+    provideRouter(routes, withComponentInputBinding()), provideAnimationsAsync(), provideAnimationsAsync(),
   ],
 };
