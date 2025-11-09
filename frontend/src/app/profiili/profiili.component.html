@@ -16,7 +16,7 @@
 
     <!-- Virheilmoitukset sähköposti -->
     <p *ngIf="emailControl?.touched && emailControl?.invalid" class="text-sm text-red-600 mt-[-10px] mb-[-5px]">
-      <!-- <span *ngIf="emailControl?.errors?.['required']">Sähköposti on pakollinen.</span> -->
+      <span *ngIf="emailControl?.errors?.['required']">Sähköposti on pakollinen.</span>
       <span *ngIf="emailControl?.errors?.['email']">Anna kelvollinen sähköpostiosoite.</span>
     </p>
 
@@ -25,17 +25,21 @@
       <mat-label>Salasana</mat-label>
       <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Salasana"
         class="text-sm bg-white" />
-      <!-- <button mat-icon-button matSuffix matSuffix type="button" (click)="hide = !hide" class="focus:outline-none">
-        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-      </button> -->
     </mat-form-field>
 
 
     <!-- Virheilmoitukset salasana -->
-    <p *ngIf="passwordControl?.touched && passwordControl?.invalid" class="text-sm text-red-600 mt-[-10px] mb-[-5px]">
-      <!-- <span *ngIf="passwordControl?.errors?.['required']">Salasana on pakollinen.</span> -->
+    <!-- <p *ngIf="passwordControl?.touched && passwordControl?.invalid" class="text-sm text-red-600 mt-[-10px] mb-[-5px]">
+      <span *ngIf="passwordControl?.errors?.['required']">Salasana on pakollinen.</span>
       <span *ngIf="passwordControl?.errors?.['minlength']">Salasanan on oltava vähintään 6 merkkiä.</span>
+    </p> -->
+    <p *ngIf="passwordControl?.touched && passwordControl?.invalid" class="text-sm text-red-600 mt-[-10px] mb-[-5px]">
+      <span *ngIf="passwordControl?.errors?.['required']">Salasana on pakollinen.</span>
+      <span *ngIf="passwordControl?.errors?.['minlength']">Salasanan on oltava vähintään 6 merkkiä pitkä.</span>
+      <span *ngIf="passwordControl?.errors?.['pattern']"> Salasanassa täytyy olla vähintään yksi iso kirjain ja
+        erikoismerkki</span>
     </p>
+
 
     <!-- Kirjaudu sisään -nappi (spinnerillä) -->
     <button mat-raised-button color="primary" type="submit"
