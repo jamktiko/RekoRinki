@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from '@sequelize/core';
-import conn from './dbconnection.js';
+import conn from '../dbconnection.js';
 class Asiakas extends Model {}
 Asiakas.init(
   {
@@ -112,11 +112,32 @@ Ilmoitukset.init(
     },
     tuottajaID: { type: DataTypes.INTEGER, allowNull: false },
     title: {
-      type: DataTypes.String(200),
+      type: DataTypes.STRING(200),
       allowNull: false,
     },
-    siainti: {
-      type: DataTypes.STRING(50),
+    maakunta: {
+      type: DataTypes.ENUM(
+        'Ahvenanmaa',
+        'Etelä-Karjala',
+        'Etelä-Pohjanmaa',
+        'Etelä-Savo',
+        'Kainuu',
+        'Kanta-Häme',
+        'Keski-Pohjanmaa',
+        'Keski-Suomi',
+        'Kymenlaakso',
+        'Lappi',
+        'Pohjois-Karjala',
+        'Pohjanmaa',
+        'Pohjois-Pohjanmaa',
+        'Pohjois-Savo',
+        'Päijät-Häme',
+        'Pirkanmaa',
+        'Satakunta',
+        'Uusimaa',
+        'Varsinais-Suomi'
+      ),
+      allowNULL: false,
     },
     nimi: {
       type: DataTypes.STRING(255),
