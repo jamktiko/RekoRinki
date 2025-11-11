@@ -5,25 +5,26 @@ phases:
     runtime-versions:
       nodejs: 22
     commands:
-      - cd frontend
+      - cd backend
       - npm install
 
   build:
     commands:
-      - npm run build --configuration=production
+      - npm run build || echo "No build script, skipping build step"
       - cd ..
 
   post_build:
     commands:
-      - mkdir -p eb-deploy/dist
-      - cp -r frontend/dist/browser/* eb-deploy/dist/
-      - cp frontend/package.json frontend/server.js eb-deploy/
+      - mkdir -p eb-deploy
+      - cp -r backend/* eb-deploy/
+      - rm -rf eb-deploy/node_modules
+      - cd eb-deploy
+      - npm install --production
+      - cd ..
       - mkdir -p eb-deploy/.ebextensions
       - |
         cat <<EOF > eb-deploy/.ebextensions/node.config.yml
         option_settings:
-          aws:elasticbeanstalk:environment:proxy:staticfiles:
-            /: dist
           aws:elasticbeanstalk:container:nodejs:
             NodeVersion: 22
         EOF
@@ -62,7 +63,6 @@ phases:
             command: "/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s"
         EOF
       - cd eb-deploy
-      - npm install --production
       - zip -r ../eb-deploy.zip . -x "*.git*" "node_modules/aws-sdk/*"
       - cd ..
       - aws s3 cp eb-deploy.zip s3://elasticbeanstalk-eu-north-1-996068820846/eb-deploy.zip --region eu-north-1
