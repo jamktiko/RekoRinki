@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - cd frontend
+      - npm install
+
+  build:
+    commands:
+      - npm run build --configuration=production
+      - cd ..
+
+  post_build:
+    commands:
+      - echo "Uploading built frontend to S3..."
+      - aws s3 sync frontend/dist/browser s3://reko-frontend-bucket/ --delete --region eu-north-1
+      - echo "Invalidating CloudFront cache..."
+    # - aws cloudfront create-invalidation --distribution-id E123ABC456XYZ --paths "/*"
+      # (vaihda yllä oleva distribution ID omaksi)
+
+artifacts:
+  files:
+    - frontend/dist/browser/**/*
