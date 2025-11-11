@@ -69,6 +69,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
         id: 1,
         title: 'Muurame Jyväskylä',
+        AltText: 'maissipelto',
         location: 'Keski-Suomi',
         notificationsImage: '/pexels-alejandro-barron-21404-96715.jpg',
         description: [
@@ -92,6 +93,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
         id: 2,
         title: 'Seppälä Jyväskylä',
+        AltText: 'marjat',
         location: 'Keski-Suomi',
         notificationsImage: '/pexels-suju-1228530.jpg',
         description: [
@@ -113,6 +115,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
         id: 3,
         title: 'Tori Jyväskylä',
+        AltText: 'lammas',
         location: 'Keski-Suomi',
         notificationsImage: '/pexels-katlovessteve-678448.jpg',
         description: [
@@ -134,6 +137,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
         id: 4,
         title: 'Laukka Jyväskylä',
+        AltText: 'vadelma',
         location: 'Keski-Suomi',
         notificationsImage: '/pexels-pixabay-59999.jpg',
         description: [
@@ -155,6 +159,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
         id: 5,
         title: 'Tourula Jyväskylä',
+        AltText: 'mansikka',
         location: 'Keski-Suomi',
         notificationsImage: '/pexels-suzyhazelwood-1258264.jpg',
         description: [
@@ -177,6 +182,7 @@ export class InMemoryDataService implements InMemoryDbService {
       {
         id: 6,
         title: 'Huhtasuo Jyväskylä',
+        AltText: 'mustikka',
         location: 'Keski-Suomi',
         notificationsImage: '/pexels-pixabay-45908.jpg',
         description: [
