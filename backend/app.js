@@ -7,13 +7,16 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import './dbconnection.js';
 import indexRouter from './routes/index.js';
+import hakuRouter from './routes/haku.js';
 dotenv.config();
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: ['http://localhost:4200', 'https://d63upw3bx0q64.cloudfront.net'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
@@ -23,4 +26,5 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
+app.use('/', hakuRouter);
 export default app;
