@@ -19,6 +19,7 @@ try {
   console.log('Yhteys tietokantaan toimii!');
 } catch (error) {
   console.error('MySQL yhteysvirhe:');
+  console.error(error);
 }
 
 export default con;
