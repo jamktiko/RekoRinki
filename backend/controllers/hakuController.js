@@ -1,14 +1,28 @@
+import { Op, Sequelize } from '@sequelize/core';
 import { Ilmoitukset } from '../models/model.js';
-import { op } from 'sequelize';
+
 const haku = async (searchTerm = '') => {
-  searchTerm = searchTerm.trim().toLowerCase();
-  return Ilmoitukset({
-    where: {
-      [OP.or]: [
-        { title: { [Op.iLike]: `%${searchTerm}%` } },
-        { maakunta: { [Op.iLike]: `%${searchTerm}%` } },
-      ],
-    },
-  });
+  searchTerm = String(searchTerm || '')
+    .trim()
+    .toLowerCase();
+
+  try {
+    const ilmoitukset = await Ilmoitukset.findAll({
+      where: {
+        [Op.or]: [
+          { title: { [Op.like]: `%${searchTerm}%` } },
+          Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('maakunta')), {
+            [Op.like]: `%${searchTerm}%`,
+          }),
+        ],
+      },
+    });
+
+    return ilmoitukset;
+  } catch (error) {
+    console.error('Haku error:', error);
+    throw error;
+  }
 };
+
 export default haku;

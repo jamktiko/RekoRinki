@@ -1,5 +1,4 @@
 import express from 'express';
-
 import haeKaikki from '../controllers/indexController.js';
 const router = express.Router();
 router.get('/ilmoitukset', async (req, res) => {

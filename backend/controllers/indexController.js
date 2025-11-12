@@ -11,4 +11,3 @@ const haeKaikki = async () => {
   }
 };
 export default haeKaikki;
-// testi
