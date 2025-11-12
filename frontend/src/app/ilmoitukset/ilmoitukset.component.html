@@ -70,7 +70,9 @@
 
         <!-- Kuva osio -->
         <div class="h-44 sm:h-48 bg-gray-200 flex items-center justify-center">
-          <img [src]="notification.notificationsImage" [alt]="notification.AltText" class="w-full h-full object-cover"
+
+
+          <img [src]="notification.notificationsImage" alt="tuotekuva" class="w-full h-full object-cover"
             title="ilmoitukset" onerror="this.style.display='none'">
 
           <div *ngIf="!notification.notificationsImage" class="text-gray-500 text-center p-4">
