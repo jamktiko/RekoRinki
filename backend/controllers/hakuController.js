@@ -8,6 +8,7 @@ const haku = async (searchTerm = '') => {
 
   try {
     const ilmoitukset = await Ilmoitukset.findAll({
+      attributes: ['title', 'maakunta', 'kuva', 'kuvaus'],
       where: {
         [Op.or]: [
           { title: { [Op.like]: `%${searchTerm}%` } },

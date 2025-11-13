@@ -1,11 +1,10 @@
 import express from 'express';
 import haku from '../controllers/hakuController.js';
 const router = express.Router();
-router.get('/haku/:maakunta', async (req, res) => {
+router.get('/haku/:hakuSana', async (req, res) => {
   try {
-    const maakunta = req.params.maakunta;
-    const hakuTulokset = await haku(maakunta);
-
+    const hakuSana = req.params.hakuSana;
+    const hakuTulokset = await haku(hakuSana);
     res.json(hakuTulokset);
   } catch (error) {
     res.status(500).json({ virhe: error });
