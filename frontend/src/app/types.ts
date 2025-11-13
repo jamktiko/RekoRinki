@@ -3,7 +3,8 @@ export interface Product {
   id: number; // tuotteen tunnus
   name: string; // tuotteen nimi
   price: number; // tuotteen hinta
-  amount: number; // tuotteen lukumäärä
+  amount: number; // tuotteen määrä gramma eli 500 g
+  inventory?: number; //  varatossa oleva tuotteen määrä/kpl
   totalprice: number; // tuotteen hinta*lkm
   description?: string; // Tuotteen kuvaus
   image?: string; // Tuotteen kuva

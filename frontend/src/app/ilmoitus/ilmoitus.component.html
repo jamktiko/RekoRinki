@@ -11,7 +11,7 @@
   <!-- VASEN SIVU - Tuotteet -->
   <div *ngIf="notification" class="bg-[#f1ece4] rounded-xl shadow-md w-full sm:max-w-[650px] mx-auto overflow-hidden">
     <!-- Kuva -->
-    <img [src]="notification.notificationsImage" [alt]="notification.title" title="notificationsImage"
+    <img [src]="notification.notificationsImage" alt="Tuotekuva" title="notificationsImage"
       class="w-full h-64 object-cover">
 
     <!-- Otsikko -->
@@ -26,16 +26,13 @@
     <div class="space-y-4 px-6 py-4">
       <p class="text-lg font-semibold text-gray-800">Tuotteet</p>
 
-
-
-
       <div *ngFor="let product of relatedProducts"
         class="flex items-center bg-gray-100 rounded-lg p-4 gap-3 sm:gap-4 overflow-hidden">
         <!-- Kuva -->
         <div
           class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
           <ng-container *ngIf="product.image; else noImage">
-            <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover" title="product name" />
+            <img [src]="product.image" alt="Tuotekuva" class="w-full h-full object-cover" title="product name" />
           </ng-container>
 
           <ng-template #noImage>
@@ -53,32 +50,43 @@
             {{ product.description }}
           </p>
 
-          <!-- Kuvaus, jossa näkyy vain osa tekstistä jos se on pitkä -->
-          <!-- <p class="text-sm text-gray-600 mt-1" *ngIf="product.description as desc">
-            {{
-            product.isExpanded
-            ? desc
-            : (desc.length > 100 ? (desc | slice: 0: 60) + '...' : desc)
-            }}
-            <a *ngIf="desc.length > 60" href="#" class="text-blue-600 hover:underline ml-1"
-              (click)="toggleDescription(product, $event)">
-              {{ product.isExpanded ? 'Näytä vähemmän' : 'Lisää' }}
-            </a>
-          </p> -->
-
           <p class="text-[11px] sm:text-xs text-gray-500 mt-1">{{ product.price }} € / {{ product.amount }} g</p>
+
+          <!-- Näytä määrä napin alla, jos > 0 -->
+          <!-- <div *ngIf="getCartQuantity(product.id) > 0" class="text-sm text-gray-900 mt-1">
+            {{ getCartQuantity(product.id) }} kpl ostoskorissa
+          </div> -->
         </div>
 
-        <!-- Lisää koriin -nappi -->
-        <button (click)="addToCart(product)"
-          class="bg-green-400 hover:bg-green-500 text-black text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 rounded-lg transition flex-shrink-0">
-          Lisää koriin
-        </button>
+
+        <div class="flex flex-col items-center">
+
+          <!-- Määrän säätö laatikko -->
+          <div
+            class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
+            <button (click)="removeOne(product)"
+              class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
+              [class.opacity-50]="getCartQuantity(product.id) <= 0">
+              <span class="text-gray-700 text-lg material-symbols-outlined">remove</span>
+              <!-- [class.cursor-not-allowed]="getCartQuantity(product.id) <= 0">, [disabled]="getCartQuantity(product.id) <= 0 -->
+            </button>
+
+            <span
+              class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300">
+              {{ getCartQuantity(product.id) }}
+            </span>
+
+            <button (click)="addOne(product)"
+              class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
+              <span class="text-gray-700 text-lg material-symbols-outlined">add</span>
+            </button>
+          </div>
+
+        </div>
+
       </div>
 
     </div>
-
-
 
 
 
@@ -86,7 +94,7 @@
     <div class="px-6 py-4" *ngIf="notification.description && notification.description.length > 0">
       <h3 class="text-lg font-semibold text-gray-800 mb-3">Kuvaus</h3>
       <div class="space-y-3">
-        <p *ngFor="let desc of notification.description" class="text-gray-700 text-base font-[Inder] leading-relaxed">
+        <p *ngFor="let desc of notification.description" class="text-gray-800 text-base leading-relaxed">
           {{ desc }}
         </p>
       </div>
@@ -113,7 +121,7 @@
     <!-- Tuottajan tiedot -->
     <div class="text-center px-6 pt-4">
       <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ notification.producers }}</h2>
-      <p class="text-gray-600 text-sm mb-2">Jakopäivä: {{ notification.date }}</p>
+      <p class="text-gray-800 text-sm mb-2">Jakopäivä: {{ notification.date }}</p>
       <p class="text-gray-800 leading-relaxed text-left"
         *ngIf="notification.description && notification.description.length > 0">
         {{ notification.description[0] }}
