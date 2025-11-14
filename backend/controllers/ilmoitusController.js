@@ -5,7 +5,7 @@ try {
     where: { ilmoitusid: id},
     include: [{
       Model: Ilmoitukset,
- attributes: ['title', 'maakunta', 'kuva', 'kuvaus',],}
+ attributes: ['title', 'maakunta',' nimi', 'lisatiedot', 'julkaisupaiva', 'kuvaus', voimassaolo_'' 'kuva', 'kuvaus',],}
 });
 return haeIlmoitus;
 } catch(error) {
