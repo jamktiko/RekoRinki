@@ -307,6 +307,7 @@ Ilmoitukset.belongsToMany(Reitit, {
   foreignKey: 'Ilmoitukset_ilmoitusID',
   otherKey: 'reitit_id',
 });
+
 export {
   Asiakas,
   Tuottaja,
