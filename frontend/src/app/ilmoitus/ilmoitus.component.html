@@ -16,9 +16,9 @@
 
     <!-- Otsikko -->
     <div class="px-6 py-4">
-      <h2 class="text-2xl font-medium font-[Paprika] text-gray-900">
+      <h1 class="text-2xl font-medium font-[Paprika] text-gray-900">
         {{ notification.title }}, {{ notification.location }}
-      </h2>
+      </h1>
     </div>
 
 
@@ -31,13 +31,13 @@
         <!-- Kuva -->
         <div
           class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
-          <ng-container *ngIf="product.image; else noImage">
+          <ng-container *ngIf="product.image">
             <img [src]="product.image" alt="Tuotekuva" class="w-full h-full object-cover" title="product name" />
           </ng-container>
 
-          <ng-template #noImage>
+          <!-- <ng-template #noImage>
             <span class="material-symbols-outlined text-gray-400 text-4xl sm:text-5xl">image</span>
-          </ng-template>
+          </ng-template> -->
         </div>
 
         <!-- Tuotetiedot -->
@@ -92,7 +92,7 @@
 
     <!-- Kuvaus -->
     <div class="px-6 py-4" *ngIf="notification.description && notification.description.length > 0">
-      <h3 class="text-lg font-semibold text-gray-800 mb-3">Kuvaus</h3>
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">Kuvaus</h2>
       <div class="space-y-3">
         <p *ngFor="let desc of notification.description" class="text-gray-800 text-base leading-relaxed">
           {{ desc }}
