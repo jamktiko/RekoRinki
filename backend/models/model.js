@@ -273,7 +273,6 @@ Reitit_has_Ilmoitukset.init(
     freezeTableName: true,
   }
 );
-// ---------------------- Assosiaatiot ----------------------
 Asiakas.hasMany(Tilaus, { foreignKey: 'asiakasID' });
 Tilaus.belongsTo(Asiakas, { foreignKey: 'asiakasID' });
 Tuottaja.hasMany(Ilmoitukset, { foreignKey: 'tuottajaID' });
@@ -308,6 +307,7 @@ Ilmoitukset.belongsToMany(Reitit, {
   foreignKey: 'Ilmoitukset_ilmoitusID',
   otherKey: 'reitit_id',
 });
+
 export {
   Asiakas,
   Tuottaja,
