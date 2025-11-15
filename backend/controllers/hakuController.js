@@ -1,11 +1,9 @@
 import { Op, Sequelize } from '@sequelize/core';
 import { Ilmoitukset } from '../models/model.js';
-
 const haku = async (searchTerm = '') => {
   searchTerm = String(searchTerm || '')
     .trim()
     .toLowerCase();
-
   try {
     const ilmoitukset = await Ilmoitukset.findAll({
       attributes: ['title', 'maakunta', 'kuva', 'kuvaus'],

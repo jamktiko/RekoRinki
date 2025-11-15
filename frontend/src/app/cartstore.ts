@@ -25,7 +25,8 @@ import {
   withState,
 } from '@ngrx/signals';
 import { Cart, Product } from './types';
-import { computed } from '@angular/core';
+import { computed, inject } from '@angular/core';
+import { NotificationService } from './notification.service';
 
 // aluksi ostoskori on tyhjä
 const initialState: Cart = {
@@ -47,13 +48,11 @@ export const CartStore = signalStore(
   // totalcount: lasketaan tuotteiden kokonaismäärä amount-avaimien arvoista
   // totalsum: lasketaan tuotteiden hintojen summa storessa totalprice-avaimien arvoista
 
-  withComputed(({ products }) => ({
-    // totalCount: lasketaan tuotteiden kokonaismäärä PAKETTEINA (500g per paketti)
+  withComputed(({ products }, nservice = inject(NotificationService)) => ({
+    // Olemassa olevat
     totalCount: computed(() =>
       products().reduce((sum, p) => sum + Math.ceil(p.amount / 500), 0)
     ),
-
-    // totalsum: lasketaan tuotteiden hintojen summa oikein
     totalsum: computed(() =>
       products().reduce((sum, p) => sum + (p.amount / 500) * p.price, 0)
     ),
@@ -163,6 +162,10 @@ export const CartStore = signalStore(
 
     removeItem(p: Product) {
       this.removeFromCart(p);
+    },
+
+    clearCart() {
+      patchState(store, { products: [] });
     },
   }))
 );
