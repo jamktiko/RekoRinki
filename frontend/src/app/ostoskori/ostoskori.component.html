@@ -1,9 +1,6 @@
 <!-- Tilauskomponentti (cart eli ostoskori) -->
 
 
-
-
-
 <div class="min-h-screen py-8">
   <div class="max-w-6xl mx-auto px-4">
     <!-- Otsikko -->
@@ -14,8 +11,8 @@
     <!-- Pääsisältö -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- VASEN - Tuotelista -->
-      <div class="lg:col-span-2 space-y-6 order-1">
-        <ng-container *ngFor="let product of cartProducts; trackBy: trackById">
+      <div class="lg:col-span-2 space-y-6">
+        <ng-container *ngFor="let product of getCartProductsWithDetails(); trackBy: trackByProduct">
           <!-- Klikattava tuotekortti -->
           <div
             class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 cursor-pointer bg-white hover:bg-gray-50"
@@ -26,13 +23,13 @@
                 <!-- Tuotekuva -->
                 <div
                   class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  <ng-container *ngIf="product.image; else noImage">
-                    <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover rounded-lg"
+                  <ng-container *ngIf="product.image">
+                    <img [src]="product.image" alt="Tuotekuva" class="w-full h-full object-cover rounded-lg"
                       title="product.name" />
                   </ng-container>
-                  <ng-template #noImage>
+                  <!-- <ng-template #noImage>
                     <span class="text-gray-400 text-2xl material-symbols-outlined">image</span>
-                  </ng-template>
+                  </ng-template> -->
                 </div>
 
                 <!-- Tuotetiedot -->
@@ -65,7 +62,7 @@
                 <!-- ROSKAKORI JA MÄÄRÄN SÄÄTÖ -->
                 <div class="flex items-center gap-3">
                   <!-- Roskakori - omassa laatikossa samalla tyylillä -->
-                  <button (click)="removeFromCart(product)"
+                  <button (click)="cstore.removeFromCart(product)"
                     class="w-8 h-8 flex items-center justify-center border-2 border-green-600 rounded-lg bg-white transition-colors hover:bg-red-50">
                     <span class="text-lg material-symbols-outlined hover:text-red-800">delete</span>
                   </button>
@@ -73,7 +70,7 @@
                   <!-- Määrän säätö laatikko -->
                   <div
                     class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-                    <button (click)="removeOne(product)"
+                    <button (click)="cstore.decrement(product.id); pstore.addAmount(product.id)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
                       [disabled]="product.amount <= 500" [class.opacity-50]="product.amount <= 500"
                       [class.cursor-not-allowed]="product.amount <= 500">
@@ -85,7 +82,7 @@
                       {{ product.amount / 500 | number:'1.0-0' }}
                     </span>
 
-                    <button (click)="addOne(product)"
+                    <button (click)="cstore.increment(product.id); pstore.reduceAmount(product.id)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
                       <span class="text-gray-700 text-lg material-symbols-outlined">add</span>
                     </button>
@@ -95,9 +92,9 @@
                 <!-- HINTA - KORJATTU SAMAAN TASOON -->
                 <div class="flex flex-col items-end justify-center">
                   <!-- Kokonaishinta samalla tasolla kuin -1+ laatikko -->
-                  <p class="text-lg font-semibold text-gray-900 whitespace-nowrap">
+                  <h2 class="text-lg font-semibold text-gray-900 whitespace-nowrap">
                     {{ getProductTotal(product) | number:'1.2-2' }} €
-                  </p>
+                  </h2>
                   <!-- Yksikköhinta samalla tasolla kuin /500g -->
                   <p class="text-xs text-gray-500 whitespace-nowrap">
                     {{ product.price }} €/500g
@@ -109,9 +106,30 @@
         </ng-container>
       </div>
 
+
+
+      <!--  -->
+
       <!-- OIKEA - Tilausyhteenveto -->
       <div class="lg:col-span-1 order-2 lg:order-2 bg-gray-50 rounded-lg p-6 h-fit lg:sticky lg:top-4"
-        *ngIf="cartProducts.length > 0">
+        *ngIf="cstore.products().length > 0">
+
+        <!-- Lisää tämä: Mat-Select desktopissa (lg:) laatikon yläpuolella -->
+        <div *ngIf="pulledPickupOptions?.length > 0" class="mb-4">
+          <h2 class="text-lg font-semibold text-gray-900 mb-2">Valitse noutopaikka</h2>
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Noutopaikka</mat-label>
+            <mat-select [(value)]="selectedPickup" (selectionChange)="onPickupChange($event.value)">
+              <mat-option *ngFor="let pickup of pulledPickupOptions" [value]="pickup.value">
+                {{ pickup.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+
+
         <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center lg:text-left">Tilaus</h3>
 
         <!-- Yhteensä -->
@@ -119,13 +137,13 @@
           class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200 text-gray-900 text-lg font-medium">
           <span>Yhteensä:</span>
           <span class="text-xl font-semibold">
-            {{ getTotalPrice() | number:'1.2-2' }} €
+            {{ cstore.totalsum() | number:'1.2-2' }} €
           </span>
         </div>
 
         <!-- Vahvistusnappi -->
         <button (click)="confirmOrder()"
-          class="w-full bg-green-600 text-black py-4 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg mb-4">
+          class="w-full bg-[#80c783] text-black py-4 px-6 rounded-lg hover:bg-green-500 transition-colors font-semibold text-lg mb-4">
           Vahvista tilaus
         </button>
 
@@ -138,14 +156,14 @@
     </div>
 
     <!-- TYHJÄ OSTOSKORI -->
-    <div *ngIf="cartProducts.length === 0" class="text-center py-16">
+    <div *ngIf="cstore.products().length === 0" class="text-center py-16">
       <div class="text-8xl mb-6">🛒</div>
       <h2 class="text-2xl font-bold text-gray-900 mb-4">Ostoskori on tyhjä</h2>
       <p class="text-gray-600 mb-8 max-w-md mx-auto">
         Lisää tuotteita ostoskoriin jatkaaksesi ostoksia.
       </p>
       <button [routerLink]="['/ilmoitukset']"
-        class="px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg">
+        class="px-8 py-4 bg-[#80c783] text-black rounded-lg hover:bg-green-500 transition-colors text-lg">
         Selaa tuotteita
       </button>
     </div>
