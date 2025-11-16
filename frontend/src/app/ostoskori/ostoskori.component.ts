@@ -82,7 +82,7 @@ export class OstoskoriComponent {
   // Siirry tuotteen ilmoitussivulle
   goToProductNotification(product: any): void {
     if (product.notificationID) {
-      this.router.navigate(['/ilmoitus/id', product.notificationID]);
+      this.router.navigate(['/ilmoitus/id', product.producerID]);
     } else {
       this.router.navigate(['/notifications']);
     }
@@ -141,12 +141,16 @@ export class OstoskoriComponent {
   // Metodi yhdistämään tuotteet ilmoitustiedoilla
   getCartProductsWithDetails() {
     return this.cstore.products().map((p) => {
-      const notif = this.notifications.find((n) => n.productsID.includes(p.id));
+      // Koska notificationID ja producerID ovat tuotteessa valmiina, käytetään suoraan
+      const notif = this.notifications.find(
+        (n) => n.producerID === p.producerID
+      );
       return {
         ...p,
-        producerName: notif?.producers,
-        notificationID: notif?.id,
-        producerID: notif?.producerID, // Lisää tämä
+        producerName: notif?.producers, // Näkyviin nimi, esim. "Nisulan tila"
+        notificationID: p.notificationID,
+        producerID: p.producerID,
+        uniqueId: p.uniqueId, // Lisätty uniikki tunniste
       };
     });
   }
@@ -159,6 +163,6 @@ export class OstoskoriComponent {
   // trackByProduct metodi kun kilkamaan yksi tuote kortti ostokorissa tunnistetaan id perusteella ja vain yhden tuoten voidaan
   // kilkaila
   trackByProduct(index: number, product: any): any {
-    return product.id; // Käytä tuotteen ID:tä tunnistamiseen
+    return product.uniqueId; // Käytä tuoteID ja tuottajaID tunnistamiseen
   }
 }
