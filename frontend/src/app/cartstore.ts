@@ -59,47 +59,6 @@ export const CartStore = signalStore(
   })),
   /* withMethods-funktio sisältää anonyymin funktion, joka sisältää 
    storen varsinaiset tietoa käsittelevät metodit */
-  // Tee metodit
-  // addToCart
-  // removeFromCart
-  // removeItem
-  // increment
-  // decrement
-
-  // withMethods(({ products, ...store }) => ({
-  //   addToCart(p: Product) {
-  //     const exists = products().some((item) => item.id === p.id);
-  //     if (!exists) {
-  //       const updatedProduct = [...products(), p];
-  //       patchState(store, { products: updatedProduct });
-  //     }
-  //     this.increment(p.id);
-  //   },
-  //   increment(id: number) {
-  //     const updatedProduct = products().map((p) =>
-  //       p.id === id ? { ...p, amount: p.amount + 1 } : p
-  //     );
-  //     patchState(store, { products: updatedProduct });
-  //   },
-  //   removeFromCart(p: Product) {
-  //     this.decrement(p.id);
-  //     this.removeItem(p);
-  //   },
-  //   removeItem(p: Product) {
-  //     const updatedProduct = products().filter(
-  //       (i) => i.id !== p.id || i.amount > 0
-  //     );
-
-  //     patchState(store, { products: updatedProduct });
-  //   },
-
-  //   decrement(id: number) {
-  //     const updatedProduct = products().map((p) =>
-  //       p.id === id ? { ...p, amount: p.amount - 1 } : p
-  //     );
-  //     patchState(store, { products: updatedProduct });
-  //   },
-  // }))
 
   withMethods(({ products, ...store }) => ({
     addToCart(p: Product) {
@@ -129,22 +88,37 @@ export const CartStore = signalStore(
       }
     },
 
-    increment(id: number) {
-      const updatedProduct = products().map((p) =>
-        p.id === id
+    // increment(id: number) {
+    //   const updatedProduct = products().map((p) =>
+    //     p.id === id
+    //       ? {
+    //           ...p,
+    //           amount: p.amount + 500, // Lisää 500g
+    //           totalprice: ((p.amount + 500) / 500) * p.price,
+    //         }
+    //       : p
+    //   );
+    //   patchState(store, { products: updatedProduct });
+    // },
+
+    // Esimerkki increment-metodista CartStoressa:
+    increment(uniqueId: string) {
+      const updatedProducts = products().map((p) =>
+        `${p.id}_${p.producerID}` === uniqueId
           ? {
               ...p,
-              amount: p.amount + 500, // Lisää 500g
+              amount: p.amount + 500,
               totalprice: ((p.amount + 500) / 500) * p.price,
             }
           : p
       );
-      patchState(store, { products: updatedProduct });
+      patchState(store, { products: updatedProducts });
     },
+    // Tee sama myös decrement, removeFromCart jne.
 
-    decrement(id: number) {
+    decrement(uniqueId: string) {
       const updatedProduct = products().map((p) =>
-        p.id === id && p.amount > 500 // Estä negatiivinen määrä
+        p.uniqueId === uniqueId && p.amount > 500 // Estä negatiivinen määrä
           ? {
               ...p,
               amount: p.amount - 500, // Vähennä 500g
@@ -155,13 +129,11 @@ export const CartStore = signalStore(
       patchState(store, { products: updatedProduct });
     },
 
-    removeFromCart(p: Product) {
-      const updatedProduct = products().filter((item) => item.id !== p.id);
+    removeFromCart(p: Product & { uniqueId: string }) {
+      const updatedProduct = products().filter(
+        (item) => item.uniqueId !== p.uniqueId
+      );
       patchState(store, { products: updatedProduct });
-    },
-
-    removeItem(p: Product) {
-      this.removeFromCart(p);
     },
 
     clearCart() {

@@ -31,6 +31,7 @@ export class TuotteetComponent {
       price: p.price,
       amount: 0,
       totalprice: p.price,
+      uniqueId: `${p.id}_${p.producerID}`,
     };
     // ostoskorin tila päivittyy cartstoreen
     this.cstore.addToCart(prod);

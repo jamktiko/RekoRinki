@@ -19,48 +19,6 @@ export class IlmoituksetComponent {
 
   constructor(private notificationService: NotificationService) {}
 
-  // ngOnInit() {
-  //   this.http
-  //     .get<Notification[]>('/api/notifications')
-  //     .subscribe((notifications) => {
-  //       this.notifications = notifications;
-  //       this.filteredNotifications = notifications; // Aluksi näytetään kaikki
-  //     });
-  // }
-
-  // // Haku-funktio
-  // onSearch(event: any) {
-  //   this.searchTerm = event.target.value.toLowerCase();
-  //   this.filterNotifications();
-  // }
-
-  // // Suodatus-funktio
-
-  // filterNotifications() {
-  //   if (!this.searchTerm) {
-  //     // Jos hakukenttä on tyhjä, näytetään KAIKKI ilmoitukset
-  //     this.filteredNotifications = this.notifications;
-  //   } else {
-  //     // Suodatetaan VAIN ne ilmoitukset jotka vastaavat hakua
-  //     this.filteredNotifications = this.notifications.filter(
-  //       (notification) =>
-  //         // Hae ilmoituksen nimen perusteella
-  //         notification.title.toLowerCase().includes(this.searchTerm) ||
-  //         // Hae tuottajan nimen perusteella (jos producer-kenttä on olemassa)
-  //         (notification.producers &&
-  //           notification.producers.toLowerCase().includes(this.searchTerm)) ||
-  //         // Hae myös sijainnin perusteella
-  //         notification.location.toLowerCase().includes(this.searchTerm)
-  //     );
-  //   }
-  // }
-
-  // // clear-funktion tyhjennuksen varten
-  // clearSearch() {
-  //   this.searchTerm = '';
-  //   this.filteredNotifications = this.notifications;
-  // }
-
   ngOnInit(): void {
     this.getNotifications();
   }
