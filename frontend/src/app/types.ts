@@ -9,8 +9,10 @@ export interface Product {
   description?: string; // Tuotteen kuvaus
   image?: string; // Tuotteen kuva
   isExpanded?: boolean; // tämä lisää "Näytä lisää" -logiikan tuen
-  // producerID: number;
   unit?: string; // Yksikkö (esim. 'g')
+  notificationID?: number; // ilmoitusID
+  producerID?: number;
+  uniqueId: string; // yhdistetty tunniste (tuoteID ja TuottajaID)
 }
 
 /* Ostoskorin ja tuotekokoelman tietotyypit on tehty tarkoituksella samanlaisiksi, jotta
