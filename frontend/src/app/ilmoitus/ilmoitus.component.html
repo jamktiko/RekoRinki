@@ -66,14 +66,14 @@
             class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
             <button (click)="removeOne(product)" aria-label="Poista yksi tuote"
               class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
-              [class.opacity-50]="getCartQuantity(product.id) <= 0">
+              [class.opacity-50]="getCartQuantity(product.uniqueId) <= 0">
               <span class="text-gray-700 text-lg material-symbols-outlined">remove</span>
               <!-- [class.cursor-not-allowed]="getCartQuantity(product.id) <= 0">, [disabled]="getCartQuantity(product.id) <= 0 -->
             </button>
 
             <span
               class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300">
-              {{ getCartQuantity(product.id) }}
+              {{ getCartQuantity(product.uniqueId) }}
             </span>
 
             <button (click)="addOne(product)" aria-label="Lisää yksi tuote"
