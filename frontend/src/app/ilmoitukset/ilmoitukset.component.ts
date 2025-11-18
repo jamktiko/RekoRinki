@@ -28,8 +28,11 @@ export class IlmoituksetComponent {
       next: (data) => {
         this.notifications = data;
         this.filteredNotifications = data;
+        console.log(data);
       },
-      error: (err) => console.error('Virhe ilmoitusten haussa:', err),
+      error: (err) => {
+        console.error('Virhe ilmoitusten haussa:', err);
+      },
     });
   }
 
