@@ -86,26 +86,21 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
     cy.contains('Näytä tuotteet').should('exist');
 
     // 2. Avataan toinen ilmoitus
-    // cy.contains('Näytä tuotteet').eq(1).click();
     cy.contains('button', 'Näytä tuotteet').click();
 
     // 3. Tuotesivulla näkyy otsikko (h1)
     cy.get('h1').should('be.visible');
 
-    // 4. Lisätään kaksi eri tuotetta ostoskoriin
-    // cy.contains('button', 'add').eq(0).click();
-    // cy.contains('button', 'add').eq(1).click();
-
     // 4 Lisää ensimmäinen tuote
-    cy.get('.flex.items-center.bg-gray-100') // hakee kaikki tuotteet
-      .first() // ensimmäinen tuote
-      .find('.material-symbols-outlined') // etsii add/remove spanit
+    cy.contains('Vadelma')
+      .closest('.flex')
+      .find('.material-symbols-outlined')
       .contains('add')
       .click();
 
     // 4 Lisää toinen tuote
-    cy.get('.flex.items-center.bg-gray-100')
-      .eq(1) // toinen tuote
+    cy.contains('Pensasmustikka')
+      .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
       .click();
@@ -115,12 +110,6 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
 
     // 6. Ostoskorissa näkyy ainakin kaksi "delete" -ikonia → 2 tuotetta lisätty
     cy.contains('button', 'delete').should('have.length.at.least', 1);
-    // Tarkistetaan, että ostoskorissa on vähintään kaksi "remove"-nappia → kaksi tuotetta lisätty
-    // cy.get('button').contains('remove').should('have.length.at.least', 2);
-    // cy.get('.flex.items-center.bg-gray-100') // tuotteet
-    //   .find('button')
-    //   .contains('remove')
-    //   .should('have.length.at.least', 1);
 
     // 7. Suurennetaan ensimmäisen tuotteen määrää
     cy.contains('button', 'add').first().click();
@@ -167,38 +156,36 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
     cy.get('h1').should('be.visible');
 
     // 4. Lisätään kaksi eri tuotetta ostoskoriin
-    cy.get('.flex.items-center.bg-gray-100')
-      .eq(0)
+    cy.contains('p', 'Mansikka')
+      .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
       .click();
-    cy.get('.flex.items-center.bg-gray-100')
-      .eq(1)
+
+    cy.contains('p', 'Vadelma')
+      .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
       .click();
 
     // 5. Nostetaan ensimmäisen tuotteen määrää kahdesti
-    cy.get('.flex.items-center.bg-gray-100')
-      .eq(0)
+    cy.contains('p', 'Mansikka')
+      .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
-      .click();
-    cy.get('.flex.items-center.bg-gray-100')
-      .eq(0)
-      .find('.material-symbols-outlined')
-      .contains('add')
+      .click()
       .click();
 
     // 6. Siirrytään ostoskoriin
     cy.get('a[routerLink="/ostoskori"]').first().click();
 
-    // 7. Varmistetaan, että ostoskorissa on kaksi tuotetta
-    cy.get('.border.border-gray-200').should('have.length', 2);
+    // 7. Varmistetaan, että ostoskorissa on kaksi eri tuotetta
+    cy.contains('Mansikka').should('exist');
+    cy.contains('Vadelma').should('exist');
 
     // 8. Poistetaan toinen tuote klikkaamalla delete-nappia
-    cy.get('.border.border-gray-200')
-      .eq(1)
+    cy.contains('h2', 'Vadelma')
+      .closest('div.border.border-gray-200')
       .find('.material-symbols-outlined')
       .contains('delete')
       .click();
