@@ -1,0 +1,68 @@
+{
+  "ilmoitusID": 1,
+  "tuottajaID": 1,
+  "title": "Maidon jakopiste Lapualle",
+  "maakunta": "Etelä-Pohjanmaa",
+  "nimi": "Maito ja munat myyntiin",
+  "lisatiedot": "Tilaa etukäteen verkossa",
+  "julkaisupaiva": "2025-11-10T12:33:25.000Z",
+  "kuvaus": "Tarjolla tuoretta maitoa ja kananmunia",
+  "voimassaolo_paattyy": "2025-11-17T12:33:25.000Z",
+  "kuva": null,
+  "ilmoitus_has_Tuotteets": [
+    {
+      "id": 1,
+      "tuoteID": 1,
+      "tuottajaID": 1,
+      "ilmoitusID": 1,
+      "maara": 100,
+      "yksikkohinta": "1.50",
+      "kuva": null,
+      "tuotteet": {
+        "tuoteID": 1,
+        "tuottajaID": 1,
+        "nimi": "Luomumaito 1L",
+        "yksikko": "litra",
+        "kuvaus": "Tuoretta luomumaitoa",
+        "tuotesaldo": 200,
+        "yksikkohinta": "1.50",
+        "tuote_on_aktiivinen": true
+      }
+    },
+    {
+      "id": 2,
+      "tuoteID": 2,
+      "tuottajaID": 1,
+      "ilmoitusID": 1,
+      "maara": 80,
+      "yksikkohinta": "3.80",
+      "kuva": null,
+      "tuotteet": {
+        "tuoteID": 2,
+        "tuottajaID": 1,
+        "nimi": "Kananmunat 10kpl",
+        "yksikko": "rasia",
+        "kuvaus": "Vapaan kanan munia",
+        "tuotesaldo": 150,
+        "yksikkohinta": "3.80",
+        "tuote_on_aktiivinen": true
+      }
+    }
+  ],
+  "reititsIlmoituksets": [
+    {
+      "reitit_id": 1,
+      "Ilmoitukset_ilmoitusID": 1,
+      "reitit": {
+        "id": 1,
+        "jakopaiva_aika": "2025-11-13T12:33:25.000Z",
+        "jakopaikka": "Lapuan tori",
+        "katuosoite": "Torikatu 1",
+        "postinumero": "62100",
+        "paikkakunta": "Lapua",
+        "lisatieto": "Jako klo 17–19",
+        "Tuottaja_id": 1
+      }
+    }
+  ]
+}
