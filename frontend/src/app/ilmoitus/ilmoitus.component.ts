@@ -23,14 +23,6 @@ export class IlmoitusComponent {
   notification!: AppNotification;
   relatedProducts: Product[] = [];
 
-  // tuotteet ostoskorissa (laajennettu tieto)
-  // cartProducts: (Product & {
-  //   notificationID?: number;
-  //   producerID?: number;
-  //   producerName?: string;
-  //   totalprice?: number;
-  // })[] = [];
-
   notifications: AppNotification[] = [];
 
   constructor(
@@ -63,9 +55,16 @@ export class IlmoitusComponent {
     this.productService.getProducts().subscribe({
       next: (data) => {
         if (this.notification && this.notification.productsID) {
-          this.relatedProducts = data.filter((product) =>
+          // Suodata tuotteet ilmoituksen productsID:n perusteella
+          const filtered = data.filter((product) =>
             this.notification.productsID.includes(product.id)
           );
+          // Luo uudet objektit oikealla producerID:llä ja uniqueId:llä
+          this.relatedProducts = filtered.map((p) => ({
+            ...p,
+            producerID: this.notification.producerID, // Aseta oikea producerID
+            uniqueId: `${p.id}_${this.notification.producerID}`, // Päivitä uniqueId
+          }));
         } else {
           this.relatedProducts = [];
         }
@@ -75,10 +74,10 @@ export class IlmoitusComponent {
   }
 
   // Palauttaa, montako kappaletta tästä tuotteesta on korissa
-  getCartQuantity(productId: number): number {
+  getCartQuantity(uniqueId: string): number {
     const productInCart = this.cstore
       .products()
-      .find((p) => p.id === productId);
+      .find((p) => p.uniqueId === uniqueId);
     if (productInCart) {
       // amount on grammoina, mutta 1 kpl = 500g, joten jaetaan ja pyöristetään ylöspäin
       return Math.ceil(productInCart.amount / 500);
@@ -88,8 +87,20 @@ export class IlmoitusComponent {
 
   // addToCart metodi ei ole käytössä nyt ehkä myöhemmin tarvitaan.
   addToCart(p: Product): void {
+    // Käytä komponentin 'notification' olion id:tä suoraan, koska käyttäjä on katsomassa tiettyä ilmoitusta
+    const notificationID = this.notification?.id ?? null;
+    const producerID = this.notification?.producerID ?? null;
+    // Lisää ominaisuudet tuotteeseen
+    const productWithNotification = {
+      ...p,
+      notificationID: notificationID,
+      producerID: producerID,
+      uniqueId: `${p.id}_${producerID}`, // uusi yhdistetty tunniste
+    };
     console.log('Lisätty koriin:', p);
-    this.cstore.addToCart(p);
+
+    // Lisää ostoskoriin tämä uusi objekti (tuote + ilmoitusID + producerID)
+    this.cstore.addToCart(productWithNotification);
 
     // vähennetään tuotteen määrää varastossa
     this.pstore.reduceAmount(p.id);
@@ -105,7 +116,7 @@ export class IlmoitusComponent {
   }
 
   //
-  addOne(product: Product): void {
+  addOne(product: Product & { uniqueId: string }): void {
     // Tarkista varasto: Älä lisää jos tyhjä
     const stockProduct = this.pstore
       .products()
@@ -121,10 +132,10 @@ export class IlmoitusComponent {
     }
 
     // Tarkista korin määrä: Jos 0, lisää uusi tuote; muuten kasvata
-    if (this.getCartQuantity(product.id) === 0) {
+    if (this.getCartQuantity(product.uniqueId) === 0) {
       this.cstore.addToCart(product); // Lisää uusi tuote korin
     } else {
-      this.cstore.increment(product.id); // Kasvata olemassa olevaa
+      this.cstore.increment(product.uniqueId); // Kasvata olemassa olevaa
     }
 
     // Vähennä varastoa
@@ -139,30 +150,9 @@ export class IlmoitusComponent {
     });
   }
 
-  // removeOne(product: Product): void {
-  //   // Tarkista korin määrä: Älä vähennä jos 0
-  //   if (this.getCartQuantity(product.id) <= 0) {
-  //     this.snackBar.open('Ei tuotetta korissa – ei voi vähentää!', '', {
-  //       duration: 3000,
-  //       horizontalPosition: 'start',
-  //       verticalPosition: 'bottom',
-  //       panelClass: ['error-snackbar'],
-  //     });
-  //     return;
-  //   }
-  //   // Vähennä korista ja lisää varastoon
-  //   this.cstore.decrement(product.id);
-  //   this.pstore.addAmount(product.id);
-  // }
-
-  // removeFromCart(product: Product): void {
-  //   this.cstore.removeFromCart(product);
-  //   // Voit lisätä varaston palautuksen täällä jos tarpeen, mutta nyt jätetään yksinkertaiseksi
-  // }
-
-  removeOne(product: Product): void {
+  removeOne(product: Product & { uniqueId: string }): void {
     // Tarkista korin määrä: Älä vähennä jos 0
-    const currentQuantity = this.getCartQuantity(product.id);
+    const currentQuantity = this.getCartQuantity(product.uniqueId);
     if (currentQuantity <= 0) {
       this.snackBar.open('Ei tuotetta korissa – ei voi vähentää!', '', {
         duration: 3000,
@@ -175,7 +165,7 @@ export class IlmoitusComponent {
 
     // Jos määrä > 1, vähennä; jos == 1, poista kokonaan
     if (currentQuantity > 1) {
-      this.cstore.decrement(product.id); // Vähennä määrää
+      this.cstore.decrement(product.uniqueId); // Vähennä määrää
     } else {
       this.cstore.removeFromCart(product); // Poista tuote kokonaan
     }

@@ -9,6 +9,12 @@ frontend/out-tsc/
 bazel-out/
 build/
 
+# Cypress
+frontend/cypress/videos/
+frontend/cypress/screenshots/
+frontend/cypress/cache/
+
+
 # 🧱 Node & package management
 frontend/node_modules/
 backend/node_modules/
