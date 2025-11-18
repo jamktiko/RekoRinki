@@ -3,24 +3,48 @@ import {
   Tuotteet,
   Reitit,
   Ilmoitus_has_Tuotteet,
-  Reitit_has_Ilmoitukset,
+  Tuottaja,
 } from '../models/model.js';
 
 const haeIlmoitus = async (ilmoitusID) => {
   try {
     const ilmoitus = await Ilmoitukset.findOne({
       where: { ilmoitusID: ilmoitusID },
+      attributes: [
+        'kuva',
+        'title',
+        'maakunta',
+        'julkaisupaiva',
+        'voimassaolo_paattyy',
+      ],
       include: [
         {
           model: Ilmoitus_has_Tuotteet,
-          include: [Tuotteet],
+          attributes: ['kuva', 'maara'],
+          include: [
+            {
+              model: Tuotteet,
+              attributes: ['nimi', 'kuvaus', 'yksikkohinta'],
+            },
+          ],
         },
         {
-          model: Reitit_has_Ilmoitukset,
-          include: [Reitit],
-          association: 'reititsIlmoituksets',
-          freezeAssociationName: true,
-          //ei ole reititIlmoitukset vaan se on reititsIlmoituksets, koska se on monen suhde moneen
+          model: Tuottaja,
+          attributes: ['kuva', 'etunimi', 'sukunimi'],
+        },
+        {
+          model: Reitit,
+          attributes: [
+            'jakopaiva_aika',
+            'jakopaikka',
+            'katuosoite',
+            'postinumero',
+            'paikkakunta',
+            'lisatieto',
+          ],
+          through: {
+            attributes: [],
+          },
         },
       ],
     });
