@@ -47,4 +47,5 @@ export interface AppNotification {
   pickupTimes?: string[]; // ← LISÄTTY NOUTO-AJAT
   place?: string;
   AltText?: string;
+  // nimi?: string;
 }
