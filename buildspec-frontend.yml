@@ -15,9 +15,7 @@ phases:
 
   post_build:
     commands:
-      - echo "Uploading built frontend to S3..."
       - aws s3 sync frontend/dist/browser s3://reko-frontend-bucket/ --delete --region eu-north-1
-      - echo "Invalidating CloudFront cache..."
       - aws cloudfront create-invalidation --distribution-id E246HFIVSS9HOP --paths "/*"
 
 artifacts:
