@@ -5,6 +5,7 @@ import {
   Ilmoitus_has_Tuotteet,
   Tuottaja,
 } from '../models/model.js';
+import { Op, Sequelize } from '@sequelize/core';
 
 const haeIlmoitus = async (ilmoitusID) => {
   try {
@@ -20,7 +21,16 @@ const haeIlmoitus = async (ilmoitusID) => {
       include: [
         {
           model: Ilmoitus_has_Tuotteet,
-          attributes: ['kuva', 'maara'],
+          attributes: [
+            'kuva',
+            'maara',
+            [
+              Sequelize.literal(`
+    CONCAT(\`ilmoitus_has_Tuotteets\`.\`ilmoitusID\`, '_', \`ilmoitus_has_Tuotteets\`.\`tuoteID\`)
+  `),
+              'uniqueId',
+            ],
+          ],
           include: [
             {
               model: Tuotteet,

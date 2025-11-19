@@ -1,4 +1,4 @@
-import { Ilmoitukset } from '../models/model.js';
+import { Ilmoitukset, Tuottaja } from '../models/model.js';
 const haeKaikki = async () => {
   try {
     const ilmoitukset = await Ilmoitukset.findAll({
@@ -12,7 +12,12 @@ const haeKaikki = async () => {
         'julkaisupaiva',
         'voimassaolo_paattyy',
       ],
-      include: [],
+      include: [
+        {
+          model: Tuottaja,
+          attributes: ['etunimi', 'sukunimi'],
+        },
+      ],
     });
 
     return ilmoitukset;
