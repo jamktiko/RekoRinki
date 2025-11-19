@@ -13,8 +13,8 @@ import { NotificationService } from '../notification.service';
   styleUrl: './ilmoitukset.component.css',
 })
 export class IlmoituksetComponent {
-  notifications: AppNotification[] = [];
-  filteredNotifications: AppNotification[] = [];
+  notifications: AppNotification[] | any = [];
+  filteredNotifications: AppNotification[] | any = [];
   searchTerm: string = '';
 
   constructor(private notificationService: NotificationService) {}
@@ -36,7 +36,7 @@ export class IlmoituksetComponent {
     });
   }
 
-  // Hakukenttä-funktio / minulla vielä puuttuu tuottajaien nimi
+  // Hakukenttä-funktio
   onSearch(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.searchTerm = target.value.trim().toLowerCase();
@@ -44,7 +44,7 @@ export class IlmoituksetComponent {
     this.filteredNotifications = this.notifications.filter(
       (n) =>
         n.title.toLowerCase().includes(this.searchTerm) ||
-        n.location.toLowerCase().includes(this.searchTerm)
+        n.maakunta.toLowerCase().includes(this.searchTerm)
     );
   }
 
