@@ -27,7 +27,7 @@ export const routes: Routes = [
   },
   {
     component: IlmoitusComponent,
-    path: 'ilmoitus/id/:id',
+    path: 'ilmoitus/:id',
   },
   {
     component: ProfiiliComponent,

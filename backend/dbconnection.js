@@ -1,5 +1,6 @@
 import { Sequelize } from '@sequelize/core';
 import { MySqlDialect } from '@sequelize/mysql';
+import AWS from 'aws-sdk';
 import dotenv from 'dotenv';
 import getDbCredentials from './config/database.js';
 dotenv.config();
@@ -22,6 +23,7 @@ try {
 } catch (error) {
   console.error('MySQL yhteysvirhe:');
   console.error(error);
+  // throw error;
 }
 
 export default con;
