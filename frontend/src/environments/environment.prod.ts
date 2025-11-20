@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
+  production: false,
   apiUrl: 'https://reko-rinki.eu-north-1.elasticbeanstalk.com/api',
 };

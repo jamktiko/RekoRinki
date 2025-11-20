@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { Product } from '../types';
 import { ActivatedRoute } from '@angular/router';
-// import { AppNotification } from '../types';
+import { AppNotification } from '../types';
 import { CommonModule } from '@angular/common';
-// import { NotificationService } from '../notification.service';
+import { NotificationService } from '../notification.service';
 import { ProductService } from '../product.service';
 import { CartStore } from '../cartstore';
 import { ProductStore } from '../productstore';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { NotificationService, AppNotification } from '../notification.service';
+// import { NotificationService, AppNotification } from '../notification.service';
 
 @Component({
   selector: 'app-ilmoitus',
@@ -21,16 +21,18 @@ export class IlmoitusComponent {
   readonly cstore = inject(CartStore);
   readonly pstore = inject(ProductStore);
 
-  // seriveissa oleva interface tyyppi
-  NotificationService = inject(NotificationService);
-  ilmoitukset: AppNotification[] = [];
-  loading = true;
-  error: string | null = null;
+  notification!: AppNotification;
+  relatedProducts: Product[] = [];
 
-  notification!: AppNotification | any;
-  relatedProducts: Product[] | any = [];
+  // tuotteet ostoskorissa (laajennettu tieto)
+  // cartProducts: (Product & {
+  //   notificationID?: number;
+  //   producerID?: number;
+  //   producerName?: string;
+  //   totalprice?: number;
+  // })[] = [];
 
-  notifications: AppNotification[] | any = [];
+  notifications: AppNotification[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,72 +45,42 @@ export class IlmoitusComponent {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.loadNotification(id);
-      // this.loadProducts();
-      this.fetchIlmoitukset();
+      this.loadProducts();
     }
-  }
-
-  // hae ilmoitusket data notification servicesta tiedosta
-  fetchIlmoitukset(): void {
-    this.notificationService.getNotifications().subscribe({
-      next: (data) => {
-        this.ilmoitukset = data;
-        this.loading = false;
-        console.log('Haetut ilmoitukset:', data);
-      },
-      error: (err) => {
-        console.error('Virhe ilmoitusten hakemisessa:', err);
-        this.error = 'Ilmoituksia ei voitu ladata.';
-        this.loading = false;
-      },
-    });
   }
 
   loadNotification(id: number): void {
     this.notificationService.getNotificationById(id).subscribe({
       next: (data) => {
-        console.log('BACKEND DATA:', data);
         this.notification = data;
-        this.relatedProducts = Array.isArray(data.ilmoitus_has_Tuotteets)
-          ? data.ilmoitus_has_Tuotteets.map((item: any) => ({
-              kuva: item.kuva,
-              nimi: item.tuotteet.nimi,
-              description: item.tuotteet.kuvaus,
-              price: item.tuotteet.yksikkohinta,
-              amount: item.maara,
-              uniqueId: item.uniqueId,
-            }))
-          : [];
-
-        console.log('TARKISTA TAULUKKO:', data.ilmoitus_has_Tuotteets);
-        console.log('MAPATUT TUOTTEET:', this.relatedProducts);
+        this.loadProducts(); // 💡 kutsutaan vasta kun notification on valmis
       },
       error: (err) => console.error('Virhe ilmoituksen haussa:', err),
     });
   }
 
   // loadProducts()-metodia suodattaa vain ne tuotteet, joiden ID on ilmoituksen producstID-listassa.
-  // loadProducts(): void {
-  //   this.productService.getProducts().subscribe({
-  //     next: (data) => {
-  //       if (this.notification && this.notification.productsID) {
-  //         // Suodata tuotteet ilmoituksen productsID:n perusteella
-  //         const filtered = data.filter((product) =>
-  //           this.notification.productsID.includes(product.id)
-  //         );
-  //         // Luo uudet objektit oikealla producerID:llä ja uniqueId:llä
-  //         this.relatedProducts = filtered.map((p) => ({
-  //           ...p,
-  //           producerID: this.notification.producerID, // Aseta oikea producerID
-  //           uniqueId: `${p.id}_${this.notification.producerID}`, // Päivitä uniqueId
-  //         }));
-  //       } else {
-  //         this.relatedProducts = [];
-  //       }
-  //     },
-  //     error: (err) => console.error('Virhe tuotteiden haussa:', err),
-  //   });
-  // }
+  loadProducts(): void {
+    this.productService.getProducts().subscribe({
+      next: (data) => {
+        if (this.notification && this.notification.productsID) {
+          // Suodata tuotteet ilmoituksen productsID:n perusteella
+          const filtered = data.filter((product) =>
+            this.notification.productsID.includes(product.id)
+          );
+          // Luo uudet objektit oikealla producerID:llä ja uniqueId:llä
+          this.relatedProducts = filtered.map((p) => ({
+            ...p,
+            producerID: this.notification.producerID, // Aseta oikea producerID
+            uniqueId: `${p.id}_${this.notification.producerID}`, // Päivitä uniqueId
+          }));
+        } else {
+          this.relatedProducts = [];
+        }
+      },
+      error: (err) => console.error('Virhe tuotteiden haussa:', err),
+    });
+  }
 
   // Palauttaa, montako kappaletta tästä tuotteesta on korissa
   getCartQuantity(uniqueId: string): number {

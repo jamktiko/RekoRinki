@@ -7,27 +7,19 @@
   Tilauskomponentti (Ostoskori) → Paymentkomponentti (Maksu) → Vahvistus -->
 
 
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 sm:p-6 min-h-screen">
   <!-- VASEN SIVU - Tuotteet -->
   <div *ngIf="notification" class="bg-[#f1ece4] rounded-xl shadow-md w-full sm:max-w-[650px] mx-auto overflow-hidden">
     <!-- Kuva -->
-    <img [src]="notification?.kuva" alt="Tuotekuva" title="notifications.kuva" class="w-full h-64 object-cover"
-      onerror="this.style.display='none'">
-
-    <div *ngIf="!notification?.kuva" class="text-gray-500 text-center p-4">
-      <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-        </path>
-      </svg>
-      <p class="text-sm">Ei kuvaa saatavilla</p>
-    </div>
+    <img [src]="notification.notificationsImage" alt="Tuotekuva" title="notificationsImage"
+      class="w-full h-64 object-cover">
 
     <!-- Otsikko -->
     <div class="px-6 py-4">
-      <h1 class="text-2xl font-medium font-[Paprika] text-gray-900">
-        {{ notification.title }}, {{ notification.maakunta }}
-      </h1>
+      <h2 class="text-2xl font-medium font-[Paprika] text-gray-900">
+        {{ notification.title }}, {{ notification.location }}
+      </h2>
     </div>
 
 
@@ -35,32 +27,24 @@
     <div class="space-y-4 px-6 py-4">
       <p class="text-lg font-semibold text-gray-800">Tuotteet</p>
 
-      <!-- <div *ngFor="let product of relatedProducts?.length > 0" -->
       <div *ngFor="let product of relatedProducts"
         class="flex items-center bg-gray-100 rounded-lg p-4 gap-3 sm:gap-4 overflow-hidden">
         <!-- Kuva -->
-        <div *ngIf="relatedProducts?.length > 0"
+        <div
           class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
+          <ng-container *ngIf="product.image; else noImage">
+            <img [src]="product.image" alt="Tuotekuva" class="w-full h-full object-cover" title="product name" />
+          </ng-container>
 
-          <!-- Näytä kuva jos se on -->
-          <img *ngIf="product.kuva" [src]="product.kuva" alt="Tuotekuva" class="w-full h-full object-cover"
-            [title]="product.nimi" />
-
-          <!-- Muuten näytä placeholder -->
-          <div *ngIf="!product.kuva" class="text-gray-500 text-center p-4 flex flex-colr justify-center">
-            <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-              </path>
-            </svg>
-            <p class="text-sm">Ei kuvaa saatavilla</p>
-          </div>
+          <ng-template #noImage>
+            <span class="material-symbols-outlined text-gray-400 text-4xl sm:text-5xl">image</span>
+          </ng-template>
         </div>
 
         <!-- Tuotetiedot -->
         <div class="flex-1 min-w-0">
           <p class="text-sm sm:text-lg font-[Inder] text-gray-900 font-medium truncate">
-            {{ product.nimi }}
+            {{ product.name }}
           </p>
 
           <p class="text-[11px] sm:text-sm text-gray-700 leading-snug line-clamp-2">
@@ -101,8 +85,6 @@
 
         </div>
 
-
-
       </div>
 
     </div>
@@ -110,13 +92,11 @@
 
 
     <!-- Kuvaus -->
-    <!-- <div class="px-6 py-4" *ngIf="notification.Kuvaus && notification.Kuvaus.length > 0"> -->
-    <div class="px-6 py-4">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">Kuvaus</h2>
+    <div class="px-6 py-4" *ngIf="notification.description && notification.description.length > 0">
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">Kuvaus</h3>
       <div class="space-y-3">
-        <!-- <p *ngFor="let desc of notification.Kuvaus" class="text-gray-800 text-base leading-relaxed"> -->
-        <p *ngFor="let ilmoitus of ilmoitukset" class="text-gray-800 text-base leading-relaxed">
-          {{ ilmoitus.kuvaus }}
+        <p *ngFor="let desc of notification.description" class="text-gray-800 text-base leading-relaxed">
+          {{ desc }}
         </p>
       </div>
     </div>
@@ -141,23 +121,16 @@
 
     <!-- Tuottajan tiedot -->
     <div class="text-center px-6 pt-4">
-      <!-- <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ notification.producers }}</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ notification.producers }}</h2>
       <p class="text-gray-800 text-sm mb-2">Jakopäivä: {{ notification.date }}</p>
       <p class="text-gray-800 leading-relaxed text-left"
         *ngIf="notification.description && notification.description.length > 0">
         {{ notification.description[0] }}
-      </p> -->
-      <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ notification.tuottaja.etunimi }} {{
-        notification.tuottaja.sukunimi }}</h2>
-      <p class="text-gray-800 text-sm mb-2">Jakopäivä: {{ notification.julkaisupaiva | date: 'dd.MM.yyyy HH:mm' }} - {{
-        notification.voimassaolo_paattyy | date: 'dd.MM.yyyy HH:mm' }}</p>
-      <p *ngFor="let product of relatedProducts" class="text-gray-800 leading-relaxed text-left">
-        {{ product.description }}
       </p>
     </div>
 
     <!-- Noutotiedot -->
-    <!-- <div class="bg-gray-100 mx-6 my-6 p-5 rounded-lg"
+    <div class="bg-gray-100 mx-6 my-6 p-5 rounded-lg"
       *ngIf="notification.pickupTimes && notification.pickupTimes.length > 0">
       <h3 class="text-lg font-bold text-gray-900 mb-3">NOUTO</h3>
       <div class="space-y-4">
@@ -166,47 +139,26 @@
           <p class="text-gray-600 text-sm">{{ notification.place }}, {{ notification.location }}</p>
         </div>
       </div>
-    </div> -->
-
-    <!-- Noutotiedot -->
-
-    <div class="bg-gray-100 mx-6 my-6 p-5 rounded-lg" *ngIf="notification?.reitits?.length > 0">
-      <h3 class="text-lg font-bold text-gray-900">NOUTO</h3>
-      <div class="space-y-4">
-        <div *ngFor="let reitti of notification.reitits" class="text-gray-800 ml-4 mt-3">
-          <p>{{ reitti.jakopaikka }}, {{ reitti.lisatieto }} </p>
-          <p>{{ reitti.katuosoite }}, {{ reitti.postinumero }} {{ reitti.paikkakunta }}</p>
-          <!-- <p>Päivä ja aika: {{ reitti.jakopaiva_aika | date: 'dd.MM.yyyy HH:mm' }}</p>
-          <p><strong>Paikka:</strong> </p>
-          <p><strong>Katuosoite:</strong> </p>
-          <p><strong>Postinumero & Paikkakunta:</strong> </p>
-          <p><strong>Lisätietoja:</strong> </p> -->
-        </div>
-      </div>
     </div>
 
-
-
-
     <!-- Yhteystiedot -->
-    <div class="px-6 pb-6" *ngIf="notification?.reitits?.length > 0">
+    <div class="px-6 pb-6">
       <h3 class="text-lg font-bold text-gray-900 mb-3">Yhteystiedot</h3>
-      <div class="space-y-2 text-gray-800" *ngFor="let reitti of notification.reitits">
+      <div class="space-y-2 text-gray-800">
         <p class="flex items-center">
           <span class="mr-2">📍</span>
           <!-- <span class="mr-2 ma material-symbols-outlined">location_on</span> -->
-          {{ reitti.jakopaikka }}
+          {{ notification.place }}, {{ notification.location }}
         </p>
         <p class="flex items-center">
           <span class="mr-2">📅</span>
-
-          {{ reitti.jakopaiva_aika | date: 'dd.MM.yyyy HH:mm' }}
+          Voimassa: {{ notification.date }}
         </p>
       </div>
     </div>
 
     <!-- Lisäkuvaus -->
-    <!-- <div class="px-6 pt-4 pb-6 border-t border-gray-200"
+    <div class="px-6 pt-4 pb-6 border-t border-gray-200"
       *ngIf="notification.description && notification.description.length > 1">
       <h3 class="text-lg font-bold text-gray-900 mb-3">Tilan tiedot</h3>
       <div class="space-y-3">
@@ -214,13 +166,6 @@
           {{ desc }}
         </p>
       </div>
-    </div> -->
-    <div class="ml-4">
-      <h3 class="text-lg font-bold text-gray-900 mb-3 ">Tilan tiedot</h3>
-      <p class="text-gray-800 leading-relaxed text-base">
-        Tervetuloa nauttimaan kesän makeimmista hedelmistä! Marjamme kasvavat puhtaassa Keski-Suomen luonnossa ja saavat
-        auringonvaloa riittämiin!
-      </p>
     </div>
   </div>
 </div>

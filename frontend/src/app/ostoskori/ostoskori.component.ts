@@ -106,7 +106,7 @@ export class OstoskoriComponent {
     this.nservice.getNotifications().subscribe({
       next: (data) => {
         this.notifications = data || [];
-        // Käytä getPickupOptions() vain kerran, esim. sijoittamalla sen tulos komponentin muuttujaan
+        // Käytä getPickupOptions()  //vain kerran, esim. sijoittamalla sen tulos komponentin muuttujaan
         this.pulledPickupOptions = this.computePickupOptions();
       },
       error: (err) => console.error('Virhe ilmoitusten haussa:', err),

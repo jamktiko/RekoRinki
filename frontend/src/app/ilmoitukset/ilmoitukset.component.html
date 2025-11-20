@@ -8,6 +8,16 @@
 
 <!-- tervetuloa Rekoon elementti -->
 
+<!-- Notifications komponentissa eli ETUSIVU missä näkyy ne ilmoitukset.
+ kun painetaan ilmoitusken kortti mennän ilmoitustuotteet komponentti,
+ missä näkyy ne tuotteet, jotka ovat myyjassa -->
+
+<!-- Notifications komponentti logiikka -->
+<!-- Notificationskomponentti → IlmoitusTuotteetkomponentti → 
+  Tilauskomponentti (Ostoskori) → Paymentkomponentti (Maksu) → Vahvistus -->
+
+<!-- tervetuloa Rekoon elementti -->
+
 <body>
   <header class="flex items-center justify-center bg-[#80c783] w-full h-[80px] px-4">
     <h1 class="text-black text-l sm:text-xl md:text-[24px] font-paprika text-center">
@@ -63,10 +73,10 @@
     <!-- Ilmoituskortit -->
     <div
       class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 p-3 sm:p-4 lg:p-6 bg-gray-50 min-h-screen">
-      @for (notification of filteredNotifications; track notification.ilmoitusID) {
+      @for (notification of filteredNotifications; track notification.id) {
       <div
         class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer flex flex-col h-full"
-        [routerLink]="['/ilmoitus', notification.ilmoitusID]" routerLinkActive="active" tabindex="0">
+        [routerLink]="['/ilmoitus/id', notification.id]" routerLinkActive="active" tabindex="0">
 
         <!-- Kuva osio -->
         <div class="h-44 sm:h-48 bg-gray-200 flex items-center justify-center">
