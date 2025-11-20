@@ -2,6 +2,9 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from '@aws-sdk/client-secrets-manager';
+import dotenv from 'dotenv';
+dotenv.config();
+
 const isDev = process.env.NODE_ENV !== 'production';
 const client = new SecretsManagerClient({ region: 'eu-north-1' });
 async function getDbCredentials() {
