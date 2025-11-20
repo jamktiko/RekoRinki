@@ -9,6 +9,7 @@ const client = new SecretsManagerClient({ region: 'eu-north-1' });
 
 async function getDbCredentials() {
   const isDev = process.env.NODE_ENV !== 'production'; // moved inside
+  console.log(isDev);
 
   if (isDev) {
     return {
