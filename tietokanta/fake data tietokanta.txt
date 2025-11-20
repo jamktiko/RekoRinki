@@ -1,7 +1,7 @@
 USE RekoRinki;
 
 -- ----------------------------------------
--- 1. ASIAKAS (sinun + uudet)
+-- 1. ASIAKAS
 -- ----------------------------------------
 INSERT INTO Asiakas (kayttajatunnus, salasana, etunimi, sukunimi, puhelinnro, sahkoposti, katuosoite, postinumero, postitoimipaikka, paikkakunta, kuva)
 VALUES
@@ -17,7 +17,7 @@ VALUES
 ('emiliaV', 'salasana123', 'Emilia', 'Vuorinen', '0459988776', 'emilia.vuorinen@example.com', 'Katajatie 19', '28100', 'Pori', 'Pori', NULL);
 
 -- ----------------------------------------
--- 2. TUOTTAJAT (sinun + uudet)
+-- 2. TUOTTAJAT 
 -- ----------------------------------------
 INSERT INTO Tuottaja (kayttajatunnus, salasana, etunimi, sukunimi, puhelinnro, sahkoposti, katuosoite, postinumero, postitoimipaikka, paikkakunta, lisatiedot, kuva)
 VALUES
@@ -31,7 +31,7 @@ VALUES
 ('perunatP', 'salasana123', 'Pirjo', 'Salmi', '0443311990', 'pirjo.salmi@perunatila.fi', 'Peltoaukio 11', '61300', 'Kurikka', 'Kurikka', 'Perunaa ja juureksia', NULL);
 
 -- ----------------------------------------
--- 3. TUOTTEET (sinun + uudet)
+-- 3. TUOTTEET
 -- ----------------------------------------
 INSERT INTO Tuotteet (tuottajaID, nimi, yksikko, kuvaus, tuotesaldo, yksikkohinta, tuote_on_aktiivinen)
 VALUES
@@ -48,7 +48,7 @@ VALUES
 (6, 'Jauhoinen peruna 5kg', 'säkki', 'Perinteinen jauhoinen ruokaperuna', 70, 4.20, 1);
 
 -- ----------------------------------------
--- 4. ILMOITUKSET (sinun + uudet)
+-- 4. ILMOITUKSET
 -- ----------------------------------------
 INSERT INTO Ilmoitukset (tuottajaID, title, nimi, maakunta, lisatiedot, julkaisupaiva, kuvaus, voimassaolo_paattyy, kuva)
 VALUES
@@ -62,7 +62,7 @@ VALUES
 (6, 'Perunasato 2025', 'Syysperunaa säkeittäin', 'Etelä-Pohjanmaa', 'Myynti jatkuu niin kauan kuin riittää', NOW(), 'Jauhoista perunaa perunatilalta', DATE_ADD(NOW(), INTERVAL 10 DAY), NULL);
 
 -- ----------------------------------------
--- 5. REITIT (sinun + uudet)
+-- 5. REITIT
 -- ----------------------------------------
 INSERT INTO Reitit (jakopaiva_aika, jakopaikka, katuosoite, postinumero, paikkakunta, lisatieto, Tuottaja_id)
 VALUES
@@ -76,7 +76,7 @@ VALUES
 (DATE_ADD(NOW(), INTERVAL 5 DAY), 'Kurikan aukio', 'Asemakatu 5', '61300', 'Kurikka', 'Jako klo 18–19', 6);
 
 -- ----------------------------------------
--- 6. ILMOITUS_HAS_TUOTTEET (sinun + uudet)
+-- 6. ILMOITUS_HAS_TUOTTEET
 -- ----------------------------------------
 INSERT INTO Ilmoitus_has_Tuotteet (tuoteID, tuottajaID, ilmoitusID, maara, yksikkohinta)
 VALUES
@@ -93,7 +93,7 @@ VALUES
 (9, 6, 6, 50, 4.20);
 
 -- ----------------------------------------
--- 7. TILAUS (sinun + uudet)
+-- 7. TILAUS
 -- ----------------------------------------
 INSERT INTO Tilaus (asiakasID, tuottajaID, ilmoitusID, status, tilauspaiva, summa, Reitit_id)
 VALUES
@@ -107,7 +107,7 @@ VALUES
 (8, 6, 6, 'toimituksessa', CURDATE(), 12.60, 6);
 
 -- ----------------------------------------
--- 8. TILAUS_HAS_TUOTTEET (sinun + uudet)
+-- 8. TILAUS_HAS_TUOTTEET
 -- ----------------------------------------
 INSERT INTO Tilaus_has_Tuotteet (tuoteID, tuottajaID, tilausID, maara, yksikkohinta)
 VALUES
@@ -123,7 +123,7 @@ VALUES
 (9, 6, 6, 3, 4.20);
 
 -- ----------------------------------------
--- 9. REITIT_HAS_ILMOITUKSET (sinun + uudet)
+-- 9. REITIT_HAS_ILMOITUKSET
 -- ----------------------------------------
 INSERT INTO Reitit_has_Ilmoitukset (Reitit_id, Ilmoitukset_ilmoitusID)
 VALUES
