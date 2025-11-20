@@ -20,7 +20,8 @@ async function getDbCredentials() {
     };
   }
 
-  const secretName = process.env.DB_SECRET_ARN;
+  // const secretName = process.env.DB_SECRET_ARN;
+  const dbSecret = JSON.parse(process.env.DB_SECRET_ARN);
   console.log(secretName);
   // const data = await client.send(
   //   new GetSecretValueCommand({ SecretId: secretName })
