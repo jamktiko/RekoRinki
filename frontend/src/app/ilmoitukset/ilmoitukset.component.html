@@ -66,7 +66,7 @@
       @for (notification of filteredNotifications; track notification.ilmoitusID) {
       <div
         class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer flex flex-col h-full"
-        [routerLink]="['/ilmoitus/id', notification.id]" routerLinkActive="active" tabindex="0">
+        [routerLink]="['/ilmoitus', notification.ilmoitusID]" routerLinkActive="active" tabindex="0">
 
         <!-- Kuva osio -->
         <div class="h-44 sm:h-48 bg-gray-200 flex items-center justify-center">

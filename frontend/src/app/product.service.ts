@@ -7,20 +7,21 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 // tietotyyppi
 import { Product } from './types';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   // valepalvelimen osoite
-  serverurl = 'api/products';
+  serverurl = environment.apiUrl;
 
   // liitetään eli injektoidaan HttpClient-olio tähän luokkaan konstruktorin argumenttina (Dependency injection)
   constructor(private http: HttpClient) {}
 
   // Tehdään palvelimelle pyyntö jolla haetaan products-taulukko observablena
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.serverurl);
+  getProducts(): Observable<any> {
+    return this.http.get<any>(this.serverurl);
     //virheenkäsittely voitaisiin tehdä tähän
   }
 }

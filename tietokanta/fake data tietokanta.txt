@@ -1,23 +1,37 @@
 USE RekoRinki;
+
+-- ----------------------------------------
+-- 1. ASIAKAS
+-- ----------------------------------------
 INSERT INTO Asiakas (kayttajatunnus, salasana, etunimi, sukunimi, puhelinnro, sahkoposti, katuosoite, postinumero, postitoimipaikka, paikkakunta, kuva)
 VALUES
 ('maijaK', 'salasana123', 'Maija', 'Korhonen', '0401234567', 'maija.k@example.com', 'Kukkatie 3', '00100', 'Helsinki', 'Helsinki', NULL),
 ('pekkaP', 'salasana123', 'Pekka', 'Pekkonen', '0501112223', 'pekka.p@example.com', 'Metsäpolku 7', '33100', 'Tampere', 'Tampere', NULL),
 ('liisaL', 'salasana123', 'Liisa', 'Lehtinen', '0456677889', 'liisa.l@example.com', 'Jokitie 15', '90100', 'Oulu', 'Oulu', NULL),
 ('mikkoM', 'salasana123', 'Mikko', 'Miettinen', '0441239876', 'mikko.m@example.com', 'Asematie 2', '80100', 'Joensuu', 'Joensuu', NULL),
-('annaA', 'salasana123', 'Anna', 'Ahonen', '0465559990', 'anna.a@example.com', 'Puistokatu 10', '20100', 'Turku', 'Turku', NULL);
+('annaA', 'salasana123', 'Anna', 'Ahonen', '0465559990', 'anna.a@example.com', 'Puistokatu 10', '20100', 'Turku', 'Turku', NULL),
+
+-- Uudet
+('sariN', 'salasana123', 'Sari', 'Niemelä', '0415567788', 'sari.niemela@example.com', 'Rantapolku 12', '15100', 'Lahti', 'Lahti', NULL),
+('teroH', 'salasana123', 'Tero', 'Havunen', '0503322110', 'tero.havunen@example.com', 'Kivimäentie 5', '50100', 'Mikkeli', 'Mikkeli', NULL),
+('emiliaV', 'salasana123', 'Emilia', 'Vuorinen', '0459988776', 'emilia.vuorinen@example.com', 'Katajatie 19', '28100', 'Pori', 'Pori', NULL);
 
 -- ----------------------------------------
--- 2. Tuottajat
+-- 2. TUOTTAJAT 
 -- ----------------------------------------
 INSERT INTO Tuottaja (kayttajatunnus, salasana, etunimi, sukunimi, puhelinnro, sahkoposti, katuosoite, postinumero, postitoimipaikka, paikkakunta, lisatiedot, kuva)
 VALUES
 ('tuottaja1', 'salasana123', 'Kalle', 'Karhunen', '0407778889', 'kalle.karhunen@farm.fi', 'Maitotie 1', '62100', 'Lapua', 'Lapua', 'Maitotuotteita ja kananmunia', NULL),
 ('tuottaja2', 'salasana123', 'Tiina', 'Taimi', '0509876543', 'tiina.taimi@farm.fi', 'Puutarhatie 4', '40200', 'Jyväskylä', 'Jyväskylä', 'Vihanneksia ja yrttejä', NULL),
-('tuottaja3', 'salasana123', 'Jari', 'Jokinen', '0451112233', 'jari.jokinen@farm.fi', 'Lammastie 8', '91100', 'Ii', 'Ii', 'Lammastuotteita ja villaa', NULL);
+('tuottaja3', 'salasana123', 'Jari', 'Jokinen', '0451112233', 'jari.jokinen@farm.fi', 'Lammastie 8', '91100', 'Ii', 'Ii', 'Lammastuotteita ja villaa', NULL),
+
+-- Uudet
+('marjatilaH', 'salasana123', 'Helmi', 'Rautio', '0401122334', 'helmi.rautio@marjatila.fi', 'Marjakuja 7', '37600', 'Valkeakoski', 'Valkeakoski', 'Marjoja ja hilloja', NULL),
+('hunajaJ', 'salasana123', 'Jarmo', 'Kallonen', '0506677889', 'jarmo.kallonen@hunaja.fi', 'Mehiläispolku 3', '70800', 'Kuopio', 'Kuopio', 'Hunajaa ja mehiläisvahatuotteita', NULL),
+('perunatP', 'salasana123', 'Pirjo', 'Salmi', '0443311990', 'pirjo.salmi@perunatila.fi', 'Peltoaukio 11', '61300', 'Kurikka', 'Kurikka', 'Perunaa ja juureksia', NULL);
 
 -- ----------------------------------------
--- 3. Tuotteet
+-- 3. TUOTTEET
 -- ----------------------------------------
 INSERT INTO Tuotteet (tuottajaID, nimi, yksikko, kuvaus, tuotesaldo, yksikkohinta, tuote_on_aktiivinen)
 VALUES
@@ -26,28 +40,43 @@ VALUES
 (2, 'Tomaatti', 'kg', 'Kotimainen tomaatti', 120, 4.20, 1),
 (2, 'Salaatti', 'kpl', 'Tuore jääsalaatti', 80, 2.00, 1),
 (3, 'Lampaanliha', 'kg', 'Luomulampaan lihaa', 60, 14.50, 1),
-(3, 'Villalanka', 'kerä', 'Käsinkehrätty lampaanvillalanka', 100, 8.90, 1);
+(3, 'Villalanka', 'kerä', 'Käsinkehrätty lampaanvillalanka', 100, 8.90, 1),
+
+-- Uudet (tuottajaID 4–6)
+(4, 'Metsämansikat 500g', 'rasia', 'Tuoreita käsin poimittuja metsämansikoita', 40, 6.50, 1),
+(5, 'Raakahunaja 500g', 'purkki', 'Käsittelemätöntä kotimaista raakahunajaa', 55, 7.90, 1),
+(6, 'Jauhoinen peruna 5kg', 'säkki', 'Perinteinen jauhoinen ruokaperuna', 70, 4.20, 1);
 
 -- ----------------------------------------
--- 4. Ilmoitukset
+-- 4. ILMOITUKSET
 -- ----------------------------------------
 INSERT INTO Ilmoitukset (tuottajaID, title, nimi, maakunta, lisatiedot, julkaisupaiva, kuvaus, voimassaolo_paattyy, kuva)
 VALUES
 (1, 'Maidon jakopiste Lapualle', 'Maito ja munat myyntiin', 'Etelä-Pohjanmaa', 'Tilaa etukäteen verkossa', NOW(), 'Tarjolla tuoretta maitoa ja kananmunia', DATE_ADD(NOW(), INTERVAL 7 DAY), NULL),
 (2, 'Kasvisten noutopäivä Jyväskylässä', 'Tuoreet vihannekset ja yrtit', 'Keski-Suomi', 'Nouto torilta', NOW(), 'Tuoretta tomaattia ja salaattia', DATE_ADD(NOW(), INTERVAL 5 DAY), NULL),
-(3, 'Lammastuotteita myyntiin Oulussa', 'Lammastuotteet ja villaa', 'Pohjois-Pohjanmaa', 'Nouto Iin torilta', NOW(), 'Lampaanlihaa ja villalankaa', DATE_ADD(NOW(), INTERVAL 10 DAY), NULL);
+(3, 'Lammastuotteita myyntiin Oulussa', 'Lammastuotteet ja villaa', 'Pohjois-Pohjanmaa', 'Nouto Iin torilta', NOW(), 'Lampaanlihaa ja villalankaa', DATE_ADD(NOW(), INTERVAL 10 DAY), NULL),
+
+-- Uudet (tuottajaID 4–6)
+(4, 'Tuoreita metsämansikoita', 'Metsämansikkasato myyntiin', 'Pirkanmaa', 'Nouto tilalta', NOW(), 'Kesän ensimmäiset metsämansikat', DATE_ADD(NOW(), INTERVAL 6 DAY), NULL),
+(5, 'Raakahunajaa Kuopiosta', 'Tuore hunajasato', 'Pohjois-Savo', 'Rajoitettu erä', NOW(), 'Luomulaatuista hunajaa suoraan tarhalta', DATE_ADD(NOW(), INTERVAL 4 DAY), NULL),
+(6, 'Perunasato 2025', 'Syysperunaa säkeittäin', 'Etelä-Pohjanmaa', 'Myynti jatkuu niin kauan kuin riittää', NOW(), 'Jauhoista perunaa perunatilalta', DATE_ADD(NOW(), INTERVAL 10 DAY), NULL);
 
 -- ----------------------------------------
--- 5. Reitit
+-- 5. REITIT
 -- ----------------------------------------
 INSERT INTO Reitit (jakopaiva_aika, jakopaikka, katuosoite, postinumero, paikkakunta, lisatieto, Tuottaja_id)
 VALUES
 (DATE_ADD(NOW(), INTERVAL 3 DAY), 'Lapuan tori', 'Torikatu 1', '62100', 'Lapua', 'Jako klo 17–19', 1),
 (DATE_ADD(NOW(), INTERVAL 4 DAY), 'Jyväskylän tori', 'Asemakatu 10', '40100', 'Jyväskylä', 'Jako klo 16–18', 2),
-(DATE_ADD(NOW(), INTERVAL 5 DAY), 'Oulun tori', 'Torikatu 2', '90100', 'Oulu', 'Jako klo 18–20', 3);
+(DATE_ADD(NOW(), INTERVAL 5 DAY), 'Oulun tori', 'Torikatu 2', '90100', 'Oulu', 'Jako klo 18–20', 3),
+
+-- Uudet (tuottajaID 4–6)
+(DATE_ADD(NOW(), INTERVAL 3 DAY), 'Valkeakosken tori', 'Torikatu 8', '37600', 'Valkeakoski', 'Jako klo 17–18', 4),
+(DATE_ADD(NOW(), INTERVAL 4 DAY), 'Kuopion satama', 'Satamakatu 2', '70100', 'Kuopio', 'Jako klo 16–17', 5),
+(DATE_ADD(NOW(), INTERVAL 5 DAY), 'Kurikan aukio', 'Asemakatu 5', '61300', 'Kurikka', 'Jako klo 18–19', 6);
 
 -- ----------------------------------------
--- 6. Ilmoitus_has_Tuotteet
+-- 6. ILMOITUS_HAS_TUOTTEET
 -- ----------------------------------------
 INSERT INTO Ilmoitus_has_Tuotteet (tuoteID, tuottajaID, ilmoitusID, maara, yksikkohinta)
 VALUES
@@ -56,19 +85,29 @@ VALUES
 (3, 2, 2, 60, 4.20),
 (4, 2, 2, 50, 2.00),
 (5, 3, 3, 40, 14.50),
-(6, 3, 3, 70, 8.90);
+(6, 3, 3, 70, 8.90),
+
+-- Uudet
+(7, 4, 4, 30, 6.50),
+(8, 5, 5, 25, 7.90),
+(9, 6, 6, 50, 4.20);
 
 -- ----------------------------------------
--- 7. Tilaus
+-- 7. TILAUS
 -- ----------------------------------------
 INSERT INTO Tilaus (asiakasID, tuottajaID, ilmoitusID, status, tilauspaiva, summa, Reitit_id)
 VALUES
 (1, 1, 1, 'vahvistettu', CURDATE(), 23.00, 1),
 (2, 2, 2, 'odottaa', CURDATE(), 12.40, 2),
-(3, 3, 3, 'suoritettu', CURDATE(), 43.20, 3);
+(3, 3, 3, 'suoritettu', CURDATE(), 43.20, 3),
+
+-- Uudet tilaukset
+(6, 4, 4, 'odottaa', CURDATE(), 13.00, 4),
+(7, 5, 5, 'vahvistettu', CURDATE(), 15.80, 5),
+(8, 6, 6, 'toimituksessa', CURDATE(), 12.60, 6);
 
 -- ----------------------------------------
--- 8. Tilaus_has_Tuotteet
+-- 8. TILAUS_HAS_TUOTTEET
 -- ----------------------------------------
 INSERT INTO Tilaus_has_Tuotteet (tuoteID, tuottajaID, tilausID, maara, yksikkohinta)
 VALUES
@@ -76,13 +115,23 @@ VALUES
 (2, 1, 1, 3, 3.80),
 (3, 2, 2, 2, 4.20),
 (4, 2, 2, 2, 2.00),
-(5, 3, 3, 2, 14.50);
+(5, 3, 3, 2, 14.50),
+
+-- Uudet
+(7, 4, 4, 2, 6.50),
+(8, 5, 5, 2, 7.90),
+(9, 6, 6, 3, 4.20);
 
 -- ----------------------------------------
--- 9. Reitit_has_Ilmoitukset
+-- 9. REITIT_HAS_ILMOITUKSET
 -- ----------------------------------------
 INSERT INTO Reitit_has_Ilmoitukset (Reitit_id, Ilmoitukset_ilmoitusID)
 VALUES
 (1, 1),
 (2, 2),
-(3, 3);
+(3, 3),
+
+-- Uudet
+(4, 4),
+(5, 5),
+(6, 6);
