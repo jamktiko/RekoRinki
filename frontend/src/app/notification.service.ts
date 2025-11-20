@@ -35,6 +35,7 @@ export interface AppNotification {
 })
 export class NotificationService {
   private serverUrl = environment.apiUrl;
+  // private serverUrl = '';
   private backendUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
