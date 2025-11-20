@@ -7,8 +7,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AppNotification } from './types';
+// import { AppNotification } from './types';
 import { environment } from 'src/environments/environment';
+
+// Määrittele ilmoituksen tyyppi
+export interface AppNotification {
+  ilmoitusID: number;
+  title: string;
+  maakunta: string;
+  nimi: string;
+  kuva: string | null;
+  kuvaus: string;
+  julkaisupaiva: string;
+  voimassaolo_paattyy: string;
+  tuottaja: {
+    etunimi: string;
+    sukunimi: string;
+    kuva?: string | null;
+  };
+  // Lisää muut tarvittavat kentät kuten ilmoitus_has_Tuotteets ja reitit tms.
+  ilmoitus_has_Tuotteets?: any[];
+  reitis?: any[];
+}
 
 @Injectable({
   providedIn: 'root',
@@ -26,12 +46,12 @@ export class NotificationService {
   //   return this.http.get<AppNotification[]>(`${this.serverUrl}/notifications`);
   // }
   getNotifications(): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}`);
+    return this.http.get<any>(`${this.serverUrl}`);
   }
   // Lisää id:n osoitteen perään ja hakee yksittäisen ilmoituksen, kuten:
   // https://reko-rinki.eu-north-1.elasticbeanstalk.com/api/123
-  getNotificationById(id: number): Observable<AppNotification> {
-    const url = `${this.serverUrl}/notifications/${id}`;
-    return this.http.get<AppNotification>(url);
+  getNotificationById(id: number): Observable<any> {
+    const url = `${this.serverUrl}/ilmoitus/${id}`;
+    return this.http.get<any>(url);
   }
 }

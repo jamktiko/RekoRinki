@@ -1,13 +1,15 @@
 import { Sequelize } from '@sequelize/core';
 import { MySqlDialect } from '@sequelize/mysql';
 import dotenv from 'dotenv';
+import getDbCredentials from './config/database.js';
 dotenv.config();
+const db = await getDbCredentials();
 const con = new Sequelize({
-  database: process.env.DB_DATABASE || 'rekorinki',
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 3306,
+  database: db.dbname || 'rekorinki',
+  user: db.username,
+  password: db.password,
+  host: db.host || 'localhost',
+  port: db.port || 3306,
   dialect: MySqlDialect,
   logging: false,
   define: {
@@ -20,6 +22,7 @@ try {
 } catch (error) {
   console.error('MySQL yhteysvirhe:');
   console.error(error);
+  // throw error;
 }
 
 export default con;
