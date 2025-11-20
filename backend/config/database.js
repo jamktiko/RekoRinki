@@ -10,7 +10,7 @@ async function getDbCredentials() {
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
+      port: Number(process.env.DB_PORT),
       dbname: process.env.DB_NAME,
     };
   }
@@ -21,7 +21,7 @@ async function getDbCredentials() {
   );
   const secret = JSON.parse(data.SecretString);
   const host = process.env.DB_HOST;
-  const port = process.env.DB_PORT || 5432;
+  const port = Number(process.env.DB_PORT) || 5432;
   const dbname = process.env.DB_NAME;
   return {
     username: secret.username,
