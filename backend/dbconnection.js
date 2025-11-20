@@ -1,6 +1,5 @@
 import { Sequelize } from '@sequelize/core';
 import { MySqlDialect } from '@sequelize/mysql';
-import AWS from 'aws-sdk';
 import dotenv from 'dotenv';
 import getDbCredentials from './config/database.js';
 dotenv.config();
