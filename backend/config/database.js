@@ -20,6 +20,7 @@ async function getDbCredentials() {
     new GetSecretValueCommand({ SecretId: secretName })
   );
   const secret = JSON.parse(data.SecretString);
+  console.log(secret);
   const host = process.env.DB_HOST;
   const port = Number(process.env.DB_PORT) || 5432;
   const dbname = process.env.DB_NAME;
