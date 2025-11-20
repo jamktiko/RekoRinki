@@ -22,14 +22,14 @@ async function getDbCredentials() {
 
   const secretName = process.env.DB_SECRET_ARN;
   console.log(secretName);
-  const data = await client.send(
-    new GetSecretValueCommand({ SecretId: secretName })
-  );
-  const secret = JSON.parse(data.SecretString);
+  // const data = await client.send(
+  //   new GetSecretValueCommand({ SecretId: secretName })
+  // );
+  // const secret = JSON.parse(data.SecretString);
 
   return {
-    username: secret.username,
-    password: secret.password,
+    username: secretName.username,
+    password: secretName.password,
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT) || 5432,
     dbname: process.env.DB_NAME,
