@@ -2,15 +2,20 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from '@aws-sdk/client-secrets-manager';
-const isDev = process.env.NODE_ENV !== 'production';
+import dotenv from 'dotenv';
+dotenv.config();
 const client = new SecretsManagerClient({ region: 'eu-north-1' });
+
 async function getDbCredentials() {
+  const isDev = process.env.NODE_ENV !== 'development';
+  console.log(isDev);
+
   if (isDev) {
     return {
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
+      port: Number(process.env.DB_PORT),
       dbname: process.env.DB_NAME,
     };
   }
@@ -20,15 +25,13 @@ async function getDbCredentials() {
     new GetSecretValueCommand({ SecretId: secretName })
   );
   const secret = JSON.parse(data.SecretString);
-  const host = process.env.DB_HOST;
-  const port = process.env.DB_PORT || 5432;
-  const dbname = process.env.DB_NAME;
+
   return {
     username: secret.username,
     password: secret.password,
-    host: host,
-    port: port,
-    dbname: dbname,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT) || 5432,
+    dbname: process.env.DB_NAME,
   };
 }
 
