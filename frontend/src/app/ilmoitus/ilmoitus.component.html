@@ -126,6 +126,18 @@
       <p class="text-gray-800 leading-relaxed text-left"
         *ngIf="notification.description && notification.description.length > 0">
         {{ notification.description[0] }}
+      </p> -->
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">{{ notification.tuottaja.etunimi }} {{
+        notification.tuottaja.sukunimi }}</h2>
+      <div *ngIf="notification?.reitits?.length > 0" class="text-gray-800 text-sm mb-2">
+        <div *ngFor="let reitti of notification.reitits">
+          <p>Jakopäivä: {{ reitti.jakopaiva_aika | date: 'dd.MM.yyyy' }}</p>
+        </div>
+
+      </div>
+
+      <p *ngFor=" let product of relatedProducts" class="text-gray-800 leading-relaxed text-left">
+        {{ product.description }}
       </p>
     </div>
 
@@ -137,6 +149,23 @@
         <div *ngFor="let time of notification.pickupTimes" class="text-gray-800">
           <p class="font-medium">{{ time }}</p>
           <p class="text-gray-600 text-sm">{{ notification.place }}, {{ notification.location }}</p>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Noutotiedot -->
+
+    <div class="bg-gray-100 mx-6 my-6 p-5 rounded-lg" *ngIf="notification?.reitits?.length > 0">
+      <h3 class="text-lg font-bold text-gray-900">NOUTO</h3>
+      <div class="space-y-4">
+        <div *ngFor="let reitti of notification.reitits" class="text-gray-800 ml-4 mt-3">
+          <p>{{ reitti.lisatieto }}, {{ reitti.jakopaikka }}</p>
+          <p>{{ reitti.katuosoite }}, {{ reitti.postinumero }} {{ reitti.paikkakunta }}</p>
+          <!-- <p>Päivä ja aika: {{ reitti.jakopaiva_aika | date: 'dd.MM.yyyy HH:mm' }}</p>
+          <p><strong>Paikka:</strong> </p>
+          <p><strong>Katuosoite:</strong> </p>
+          <p><strong>Postinumero & Paikkakunta:</strong> </p>
+          <p><strong>Lisätietoja:</strong> </p> -->
         </div>
       </div>
     </div>
@@ -152,7 +181,8 @@
         </p>
         <p class="flex items-center">
           <span class="mr-2">📅</span>
-          Voimassa: {{ notification.date }}
+
+          {{ reitti.jakopaiva_aika | date: 'dd.MM.yyyy' }}
         </p>
       </div>
     </div>
