@@ -48,8 +48,8 @@ export class NotificationService {
 
   // Lisää id:n osoitteen perään ja hakee yksittäisen ilmoituksen, kuten:
   // https://reko-rinki.eu-north-1.elasticbeanstalk.com/api/123
-  getNotificationById(id: number): Observable<AppNotification> {
-    const url = `${this.serverUrl}/notifications/${id}`;
+  getNotificationById(id: number): Observable<any> {
+    const url = `${this.serverUrl}/ilmoitus/${id}`;
     return this.http.get<any>(url);
   }
 }
