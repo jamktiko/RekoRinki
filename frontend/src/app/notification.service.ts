@@ -35,20 +35,16 @@ export interface AppNotification {
 })
 export class NotificationService {
   private serverUrl = environment.apiUrl;
-  // private serverUrl = '';
-  private backendUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
   // Lähettää HTTP GET -pyynnön this.serverUrl-osoitteeseen, eli esim.
   // kehityksessa: http://localhost:3000/api
   // tuotantossa: https://reko-rinki.eu-north-1.elasticbeanstalk.com/api
-  // getNotifications(): Observable<AppNotification[]> {
-  //   return this.http.get<AppNotification[]>(`${this.serverUrl}/notifications`);
-  // }
   getNotifications(): Observable<any> {
     return this.http.get<any>(`${this.serverUrl}`);
   }
+
   // Lisää id:n osoitteen perään ja hakee yksittäisen ilmoituksen, kuten:
   // https://reko-rinki.eu-north-1.elasticbeanstalk.com/api/123
   getNotificationById(id: number): Observable<any> {
