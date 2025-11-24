@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000', // esim. paikallinen backend
+  apiUrl: 'https://reko-rinki.eu-north-1.elasticbeanstalk.com', // esim. paikallinen backend
 };
