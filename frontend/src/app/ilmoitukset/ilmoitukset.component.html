@@ -94,8 +94,10 @@
             <p class="text-gray-800 text-lg">{{ notification.producers }}</p>
             <p class="text-gray-800 text-lg">{{ notification.julkaisupaiva }}</p> -->
             <p class="text-gray-800 text-lg">{{ notification.maakunta }}</p>
-            <p class="text-gray-800 text-lg">{{ notification.nimi }}</p>
-            <p class="text-gray-800 text-lg">{{ notification.julkaisupaiva }}</p>
+            <p class="text-gray-800 text-lg">{{ notification.tuottaja.etunimi }} {{ notification.tuottaja.sukunimi }}
+            </p>
+            <p class="text-gray-800 text-lg">{{ notification.julkaisupaiva | date: 'dd.MM.yyyy' }} - {{
+              notification.voimassaolo_paattyy | date: 'dd.MM.yyyy' }}</p>
           </div>
 
           <div class="mt-3">
