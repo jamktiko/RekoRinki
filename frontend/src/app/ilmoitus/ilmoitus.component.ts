@@ -23,7 +23,7 @@ export class IlmoitusComponent {
 
   // seriveissa oleva interface tyyppi
   NotificationService = inject(NotificationService);
-  ilmoitukset: AppNotification[];
+  ilmoitukset: AppNotification[] = [];
   loading = true;
   error: string | null = null;
 
