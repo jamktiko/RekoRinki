@@ -3,17 +3,7 @@
  missä näkyy ne tuotteet, jotka ovat myyjassa -->
 
 <!-- Notifications komponentti logiikka -->
-<!-- Notificationskomponentti → IlmoitusTuotteetkomponentti → 
-  Tilauskomponentti (Ostoskori) → Paymentkomponentti (Maksu) → Vahvistus -->
-
-<!-- tervetuloa Rekoon elementti -->
-
-<!-- Notifications komponentissa eli ETUSIVU missä näkyy ne ilmoitukset.
- kun painetaan ilmoitusken kortti mennän ilmoitustuotteet komponentti,
- missä näkyy ne tuotteet, jotka ovat myyjassa -->
-
-<!-- Notifications komponentti logiikka -->
-<!-- Notificationskomponentti → IlmoitusTuotteetkomponentti → 
+<!-- Notificationskomponentti → IlmoitusTuotteetkomponentti →
   Tilauskomponentti (Ostoskori) → Paymentkomponentti (Maksu) → Vahvistus -->
 
 <!-- tervetuloa Rekoon elementti -->
@@ -31,8 +21,8 @@
     <div class="p-6 bg-white shadow-sm flex justify-center">
       <label for="searchInput" class="sr-only">Hae Rekosta</label>
 
-      <input id="searchInput" type="text" placeholder="Hae Rekosta..." class="w-full max-w-md px-6 py-3 border border-gray-300 rounded-full 
-           focus:outline-none focus:ring-2 focus:ring-blue-500 
+      <input id="searchInput" type="text" placeholder="Hae Rekosta..." class="w-full max-w-md px-6 py-3 border border-gray-300 rounded-full
+           focus:outline-none focus:ring-2 focus:ring-blue-500
            focus:border-transparent shadow-sm" (input)="onSearch($event)" [value]="searchTerm" #searchInput />
 
       <!-- Clear-nappi -->
@@ -73,10 +63,10 @@
     <!-- Ilmoituskortit -->
     <div
       class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 p-3 sm:p-4 lg:p-6 bg-gray-50 min-h-screen">
-      @for (notification of filteredNotifications; track notification.id) {
+      @for (notification of filteredNotifications; track notification.ilmoitusID) {
       <div
         class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer flex flex-col h-full"
-        [routerLink]="['/ilmoitus/id', notification.id]" routerLinkActive="active" tabindex="0">
+        [routerLink]="['/ilmoitus', notification.ilmoitusID]" routerLinkActive="active" tabindex="0">
 
         <!-- Kuva osio -->
         <div class="h-44 sm:h-48 bg-gray-200 flex items-center justify-center">
