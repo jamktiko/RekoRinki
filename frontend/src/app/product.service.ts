@@ -21,8 +21,8 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   // Tehdään palvelimelle pyyntö jolla haetaan products-taulukko observablena
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.serverurl}/products`);
+  getProducts(): Observable<any> {
+    return this.http.get<any>(`${this.serverurl}`);
     //virheenkäsittely voitaisiin tehdä tähän
   }
 }
