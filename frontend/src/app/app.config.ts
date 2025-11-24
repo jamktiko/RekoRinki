@@ -22,11 +22,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
 
     // Tämä rivi poistetaan, kun siirrytään oikeaan backend-API:in.
-    importProvidersFrom(
-      HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
-        delay: 500,
-      })
-    ),
+    // importProvidersFrom(
+    //   HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
+    //     delay: 500,
+    //   })
+    // ),
 
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
