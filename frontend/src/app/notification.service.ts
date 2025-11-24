@@ -7,28 +7,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AppNotification } from './types';
+// import { AppNotification } from './types';
 import { environment } from 'src/environments/environment';
 
 // Määrittele ilmoituksen tyyppi
-// export interface AppNotification {
-//   ilmoitusID: number;
-//   title: string;
-//   maakunta: string;
-//   nimi: string;
-//   kuva: string | null;
-//   kuvaus: string;
-//   julkaisupaiva: string;
-//   voimassaolo_paattyy: string;
-//   tuottaja: {
-//     etunimi: string;
-//     sukunimi: string;
-//     kuva?: string | null;
-//   };
-//   // Lisää muut tarvittavat kentät kuten ilmoitus_has_Tuotteets ja reitit tms.
-//   ilmoitus_has_Tuotteets?: any[];
-//   reitis?: any[];
-// }
+export interface AppNotification {
+  ilmoitusID: number;
+  title: string;
+  maakunta: string;
+  nimi: string;
+  kuva: string | null;
+  kuvaus: string;
+  julkaisupaiva: string;
+  voimassaolo_paattyy: string;
+  tuottaja: {
+    etunimi: string;
+    sukunimi: string;
+    kuva?: string | null;
+  };
+  // Lisää muut tarvittavat kentät kuten ilmoitus_has_Tuotteets ja reitit tms.
+  ilmoitus_has_Tuotteets?: any[];
+  reitis?: any[];
+}
 
 @Injectable({
   providedIn: 'root',

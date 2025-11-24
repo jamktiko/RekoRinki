@@ -13,53 +13,11 @@ import { NotificationService } from '../notification.service';
   styleUrl: './ilmoitukset.component.css',
 })
 export class IlmoituksetComponent {
-  notifications: AppNotification[] = [];
-  filteredNotifications: AppNotification[] = [];
+  notifications: AppNotification[] | any = [];
+  filteredNotifications: AppNotification[] | any = [];
   searchTerm: string = '';
 
   constructor(private notificationService: NotificationService) {}
-
-  // ngOnInit() {
-  //   this.http
-  //     .get<Notification[]>('/api/notifications')
-  //     .subscribe((notifications) => {
-  //       this.notifications = notifications;
-  //       this.filteredNotifications = notifications; // Aluksi näytetään kaikki
-  //     });
-  // }
-
-  // // Haku-funktio
-  // onSearch(event: any) {
-  //   this.searchTerm = event.target.value.toLowerCase();
-  //   this.filterNotifications();
-  // }
-
-  // // Suodatus-funktio
-
-  // filterNotifications() {
-  //   if (!this.searchTerm) {
-  //     // Jos hakukenttä on tyhjä, näytetään KAIKKI ilmoitukset
-  //     this.filteredNotifications = this.notifications;
-  //   } else {
-  //     // Suodatetaan VAIN ne ilmoitukset jotka vastaavat hakua
-  //     this.filteredNotifications = this.notifications.filter(
-  //       (notification) =>
-  //         // Hae ilmoituksen nimen perusteella
-  //         notification.title.toLowerCase().includes(this.searchTerm) ||
-  //         // Hae tuottajan nimen perusteella (jos producer-kenttä on olemassa)
-  //         (notification.producers &&
-  //           notification.producers.toLowerCase().includes(this.searchTerm)) ||
-  //         // Hae myös sijainnin perusteella
-  //         notification.location.toLowerCase().includes(this.searchTerm)
-  //     );
-  //   }
-  // }
-
-  // // clear-funktion tyhjennuksen varten
-  // clearSearch() {
-  //   this.searchTerm = '';
-  //   this.filteredNotifications = this.notifications;
-  // }
 
   ngOnInit(): void {
     this.getNotifications();
@@ -75,7 +33,7 @@ export class IlmoituksetComponent {
     });
   }
 
-  // Hakukenttä-funktio / minulla vielä puuttuu tuottajaien nimi
+  // Hakukenttä-funktio
   onSearch(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.searchTerm = target.value.trim().toLowerCase();
@@ -83,7 +41,7 @@ export class IlmoituksetComponent {
     this.filteredNotifications = this.notifications.filter(
       (n) =>
         n.title.toLowerCase().includes(this.searchTerm) ||
-        n.location.toLowerCase().includes(this.searchTerm)
+        n.maakunta.toLowerCase().includes(this.searchTerm)
     );
   }
 
@@ -91,9 +49,5 @@ export class IlmoituksetComponent {
   clearSearch(): void {
     this.searchTerm = '';
     this.filteredNotifications = this.notifications;
-  }
-
-  trackById(index: number, notification: AppNotification) {
-    return notification.id;
   }
 }
