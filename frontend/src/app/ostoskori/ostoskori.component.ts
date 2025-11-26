@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { ProductStore } from '../productstore';
 import { CartStore } from '../cartstore';
-import { AppNotification, Product } from '../types';
+import { AppNotification, IlmoitusTiedot, Product } from '../types';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../notification.service';
 import { Router, RouterLink } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { OstoskoriService } from '../ostoskori.service';
 
 @Component({
   selector: 'app-ostoskori',
@@ -23,12 +24,11 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './ostoskori.component.css',
 })
 export class OstoskoriComponent {
-  readonly cstore = inject(CartStore);
-  readonly pstore = inject(ProductStore);
+  readonly ostoskoriService = inject(OstoskoriService);
   public nservice = inject(NotificationService);
   public router = inject(Router); // LISÄTTY: Router injektointi
 
-  notifications: AppNotification[] = [];
+  notifications: IlmoitusTiedot[] = [];
 
   // pulledPickupOptions -muuttuja, joka päivittyy ilmoitusten latauksen yhteydessä, jotta template kutsuu datan kerran.
   pulledPickupOptions: { value: string; viewValue: string }[] = [];
@@ -60,14 +60,11 @@ export class OstoskoriComponent {
     // Hae noutotiedot näistä ilmoituksista
     const pickups: { value: string; viewValue: string }[] = [];
     notificationIds.forEach((id) => {
-      const notif = this.notifications.find((n) => n.id === id);
-      if (notif && notif.pickupTimes) {
-        notif.pickupTimes.forEach((time) => {
-          // Tämä yhdistää tiedot ilmoitus-komponentista ilman että ne kopioitetaan
-          pickups.push({
-            value: `${notif.place}, ${time}`, // Esim. "K-Supermarket Muurame, Torstaina 22.9, klo 10-12"
-            viewValue: `${notif.place}, ${time}`, // Näytettävä teksti
-          });
+      const notif = this.notifications.find((n) => n.ilmoitusID === id);
+      if (notif) {
+        pickups.push({
+          value: `${notif.maakunta} - ${notif.julkaisupaiva}`,
+          viewValue: `${notif.maakunta} - ${notif.julkaisupaiva}`,
         });
       }
     });
@@ -80,11 +77,13 @@ export class OstoskoriComponent {
   }
 
   // Siirry tuotteen ilmoitussivulle
-  goToProductNotification(product: any): void {
+  goToProductNotification(
+    product: Product & { notificationID?: number; producerID?: number }
+  ): void {
     if (product.notificationID) {
-      this.router.navigate(['/ilmoitus/id', product.producerID]);
+      this.router.navigate(['/ilmoitus', product.notificationID]);
     } else {
-      this.router.navigate(['/notifications']);
+      this.router.navigate(['/ilmoitukset']);
     }
   }
 
@@ -93,7 +92,7 @@ export class OstoskoriComponent {
     // 1. Näytä vahvistusikkuna
     this.showConfirmation = true;
     // 2. Tyhjennä ostoskori
-    this.cstore.clearCart();
+    this.ostoskoriService.clearCart();
   }
 
   // LISÄTTY: Sulje tilausvahvistus
@@ -103,56 +102,88 @@ export class OstoskoriComponent {
 
   // lataa ilmoituskia
   loadNotifications(): void {
+    console.log('Loading notifications in cart component...');
     this.nservice.getNotifications().subscribe({
       next: (data) => {
-        this.notifications = data || [];
-        // Käytä getPickupOptions() vain kerran, esim. sijoittamalla sen tulos komponentin muuttujaan
-        this.pulledPickupOptions = this.computePickupOptions();
+        console.log('Notifications loaded in cart:', data);
+        // this.notifications = data || [];
+        this.notifications = Array.isArray(data) ? data : [];
+        console.log('Notifications set to:', this.notifications);
+        console.log(data);
       },
-      error: (err) => console.error('Virhe ilmoitusten haussa:', err),
+      error: (err) => {
+        console.error('Virhe ilmoitusten haussa:', err);
+        this.notifications = [];
+      },
     });
   }
 
   // computePickupOptions metodi kerätä ja yhdistää noutotiedot (pickup options) korin tuotteista
   // saatujen ilmoitus-ID:iden perusteella
-  computePickupOptions(): { value: string; viewValue: string }[] {
-    const notificationIds = [
-      ...new Set(
-        this.getCartProductsWithDetails()
-          .map((p) => p.notificationID)
-          .filter((id) => id)
-      ),
-    ];
-    const pickups: { value: string; viewValue: string }[] = [];
-    notificationIds.forEach((id) => {
-      const notif = this.notifications.find((n) => n.id === id);
-      if (notif && notif.pickupTimes) {
-        notif.pickupTimes.forEach((time) => {
-          pickups.push({
-            value: `${notif.place}, ${time}`,
-            viewValue: `${notif.place}, ${time}`,
-          });
-        });
-      }
-    });
-    return pickups;
-  }
+  // computePickupOptions(): { value: string; viewValue: string }[] {
+  //   const notificationIds = [
+  //     ...new Set(
+  //       this.getCartProductsWithDetails()
+  //         .map((p) => p.notificationID)
+  //         .filter((id) => id)
+  //     ),
+  //   ];
+  //   const pickups: { value: string; viewValue: string }[] = [];
+  //   notificationIds.forEach((id) => {
+  //     const notif = this.notifications.find((n) => n.id === id);
+  //     if (notif && notif.pickupTimes) {
+  //       notif.pickupTimes.forEach((time) => {
+  //         pickups.push({
+  //           value: `${notif.place}, ${time}`,
+  //           viewValue: `${notif.place}, ${time}`,
+  //         });
+  //       });
+  //     }
+  //   });
+  //   return pickups;
+  // }
 
   // Metodi yhdistämään tuotteet ilmoitustiedoilla
   getCartProductsWithDetails() {
-    return this.cstore.products().map((p) => {
-      // Koska notificationID ja producerID ovat tuotteessa valmiina, käytetään suoraan
-      const notif = this.notifications.find(
-        (n) => n.producerID === p.producerID
+    console.log('Notifications in cart component:', this.notifications);
+    console.log(
+      'Notification IDs:',
+      this.notifications.map((n) => n.ilmoitusID)
+    );
+    return this.ostoskoriService.getItems().map((p) => {
+      // Parse producerID from uniqueId (e.g., "1_2" → producerID: 2)
+      const producerID = parseInt(p.uniqueId.split('_')[1]);
+      const notificationID = parseInt(p.uniqueId.split('_')[0]); // Oletetaan, että tämä on notificationID (jos ei, muuta tarvittaessa)
+
+      console.log(
+        'Processing product:',
+        p.uniqueId,
+        'notificationID:',
+        notificationID,
+        'producerID:',
+        producerID
       );
+
+      const notif = this.notifications.find(
+        (n) => n.ilmoitusID === notificationID
+      );
+      console.log('Found notification:', notif);
+
+      const producerName =
+        notif?.tuottaja?.etunimi && notif?.tuottaja?.sukunimi
+          ? `${notif.tuottaja.etunimi} ${notif.tuottaja.sukunimi}`
+          : `Tuottaja ${producerID}`; // ← Fallback: Näytä ID, jos nimi ei löydy
+      // const producerName =
+      //   notif?.tuottaja?.etunimi + ' ' + notif?.tuottaja?.sukunimi;
       return {
         ...p,
-        producerName: notif?.producers, // Näkyviin nimi, esim. "Nisulan tila"
-        notificationID: p.notificationID,
-        producerID: p.producerID,
-        uniqueId: p.uniqueId, // Lisätty uniikki tunniste
+        producerName: producerName,
+        notificationID: notificationID,
+        producerID: producerID,
+        uniqueId: p.uniqueId,
       };
     });
+    console.log();
   }
 
   // laske sen hinta

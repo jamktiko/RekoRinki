@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { Product } from '../types';
+import {
+  YhdenIlmoitusReitti,
+  YhdenIlmoitusTiedot,
+  YhdenIlmoitusTuotteet,
+} from '../types';
 import { ActivatedRoute } from '@angular/router';
-// import { AppNotification } from '../types';
 import { CommonModule } from '@angular/common';
-// import { NotificationService } from '../notification.service';
-import { ProductService } from '../product.service';
-import { CartStore } from '../cartstore';
-import { ProductStore } from '../productstore';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { NotificationService, AppNotification } from '../notification.service';
+import { NotificationService } from '../notification.service';
+import { OstoskoriService } from '../ostoskori.service';
 
 @Component({
   selector: 'app-ilmoitus',
@@ -18,24 +18,23 @@ import { NotificationService, AppNotification } from '../notification.service';
   styleUrl: './ilmoitus.component.css',
 })
 export class IlmoitusComponent {
-  readonly cstore = inject(CartStore);
-  readonly pstore = inject(ProductStore);
+  readonly ostoskoriservice = inject(OstoskoriService);
 
   // seriveissa oleva interface tyyppi
-  NotificationService = inject(NotificationService);
-  ilmoitukset: AppNotification[] = [];
+  // NotificationService = inject(NotificationService);
+  // ilmoitukset: AppNotification[] = [];
+
+  notification!: YhdenIlmoitusTiedot;
+  relatedProducts: YhdenIlmoitusTuotteet[] = [];
+  reitit: YhdenIlmoitusReitti[] = [];
   loading = true;
   error: string | null = null;
 
-  notification!: AppNotification | any;
-  relatedProducts: Product[] | any = [];
-
-  notifications: AppNotification[] | any = [];
+  // notifications: AppNotification[] | any = [];
 
   constructor(
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    private productService: ProductService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -44,46 +43,46 @@ export class IlmoitusComponent {
     if (id) {
       this.loadNotification(id);
       // this.loadProducts();
-      this.fetchIlmoitukset();
+      // this.fetchIlmoitukset();
     }
   }
 
   // hae ilmoitusket data notification servicesta tiedosta
-  fetchIlmoitukset(): void {
-    this.notificationService.getNotifications().subscribe({
-      next: (data) => {
-        this.ilmoitukset = data;
-        this.loading = false;
-        console.log('Haetut ilmoitukset:', data);
+  // fetchIlmoitukset(): void {
+  //   this.notificationService.getNotifications().subscribe({
+  //     next: (data) => {
+  //       this.ilmoitukset = data;
+  //       this.loading = false;
+  //       console.log('Haetut ilmoitukset:', data);
+  //     },
+  //     error: (err) => {
+  //       console.error('Virhe ilmoitusten hakemisessa:', err);
+  //       this.error = 'Ilmoituksia ei voitu ladata.';
+  //       this.loading = false;
+  //     },
+  //   });
+  // }
+
+  loadNotification(id: number) {
+    this.notificationService.getNotificationById(id).subscribe({
+      next: (data: YhdenIlmoitusTiedot) => {
+        // koko ilmoitus sellaisenaan
+        this.notification = data;
+
+        // tuotteet suoraan backendistä
+        this.relatedProducts = data.ilmoitus_has_Tuotteets;
+
+        // reitit suoraan backendistä
+        this.reitit = data.reitits;
+
+        // debug
+        console.log('Ilmoitus:', data);
       },
       error: (err) => {
-        console.error('Virhe ilmoitusten hakemisessa:', err);
-        this.error = 'Ilmoituksia ei voitu ladata.';
+        console.error('Virhe ilmoituksen haussa:', err);
+        this.error = 'Ilmoitusta ei voitu ladata.';
         this.loading = false;
       },
-    });
-  }
-
-  loadNotification(id: number): void {
-    this.notificationService.getNotificationById(id).subscribe({
-      next: (data) => {
-        console.log('BACKEND DATA:', data);
-        this.notification = data;
-        this.relatedProducts = Array.isArray(data.ilmoitus_has_Tuotteets)
-          ? data.ilmoitus_has_Tuotteets.map((item: any) => ({
-              kuva: item.kuva,
-              nimi: item.tuotteet.nimi,
-              description: item.tuotteet.kuvaus,
-              price: item.tuotteet.yksikkohinta,
-              amount: item.maara,
-              uniqueId: item.uniqueId,
-            }))
-          : [];
-
-        console.log('TARKISTA TAULUKKO:', data.ilmoitus_has_Tuotteets);
-        console.log('MAPATUT TUOTTEET:', this.relatedProducts);
-      },
-      error: (err) => console.error('Virhe ilmoituksen haussa:', err),
     });
   }
 
@@ -112,8 +111,8 @@ export class IlmoitusComponent {
 
   // Palauttaa, montako kappaletta tästä tuotteesta on korissa
   getCartQuantity(uniqueId: string): number {
-    const productInCart = this.cstore
-      .products()
+    const productInCart = this.ostoskoriservice
+      .getItems()
       .find((p) => p.uniqueId === uniqueId);
     if (productInCart) {
       // amount on grammoina, mutta 1 kpl = 500g, joten jaetaan ja pyöristetään ylöspäin
@@ -123,63 +122,74 @@ export class IlmoitusComponent {
   }
 
   // addToCart metodi ei ole käytössä nyt ehkä myöhemmin tarvitaan.
-  addToCart(p: Product): void {
-    // Käytä komponentin 'notification' olion id:tä suoraan, koska käyttäjä on katsomassa tiettyä ilmoitusta
-    const notificationID = this.notification?.id ?? null;
-    const producerID = this.notification?.producerID ?? null;
-    // Lisää ominaisuudet tuotteeseen
-    const productWithNotification = {
-      ...p,
-      notificationID: notificationID,
-      producerID: producerID,
-      uniqueId: `${p.id}_${producerID}`, // uusi yhdistetty tunniste
-    };
-    console.log('Lisätty koriin:', p);
+  // addToCart(p: Product): void {
+  //   // Käytä komponentin 'notification' olion id:tä suoraan, koska käyttäjä on katsomassa tiettyä ilmoitusta
+  //   const notificationID = this.notification?.id ?? null;
+  //   const producerID = this.notification?.producerID ?? null;
+  //   // Lisää ominaisuudet tuotteeseen
+  //   const productWithNotification = {
+  //     ...p,
+  //     notificationID: notificationID,
+  //     producerID: producerID,
+  //     uniqueId: `${p.id}_${producerID}`, // uusi yhdistetty tunniste
+  //   };
+  //   console.log('Lisätty koriin:', p);
 
-    // Lisää ostoskoriin tämä uusi objekti (tuote + ilmoitusID + producerID)
-    this.cstore.addToCart(productWithNotification);
+  //   // Lisää ostoskoriin tämä uusi objekti (tuote + ilmoitusID + producerID)
+  //   this.cstore.addToCart(productWithNotification);
 
-    // vähennetään tuotteen määrää varastossa
-    this.pstore.reduceAmount(p.id);
+  //   // vähennetään tuotteen määrää varastossa
+  //   this.pstore.reduceAmount(p.id);
 
-    // Näytetään vahvistusilmoitus
-    console.log('SnackBar avataan nyt');
-    this.snackBar.open(`${p.name} lisätty ostoskoriin!`, '', {
-      duration: 3000, // näkyy 3 sekuntia
-      horizontalPosition: 'start',
-      verticalPosition: 'bottom',
-      panelClass: ['success-snackbar'], // voit muokata tyylillä
-    });
-  }
+  //   // Näytetään vahvistusilmoitus
+  //   console.log('SnackBar avataan nyt');
+  //   this.snackBar.open(`${p.name} lisätty ostoskoriin!`, '', {
+  //     duration: 3000, // näkyy 3 sekuntia
+  //     horizontalPosition: 'start',
+  //     verticalPosition: 'bottom',
+  //     panelClass: ['success-snackbar'], // voit muokata tyylillä
+  //   });
+  // }
 
+  // addToCart(p: YhdenIlmoitusTiedot): void {
+  //   const productWithNotification = {
+  //     ...p,
+  //     uniqueId: p.uniqueId,
+  //   };
+  //   this.cstore.addToCart(productWithNotification);
+
+  //   this.snackBar.open(`${p.name} lisätty ostoskoriin!`, '', {
+  //     duration: 3000,
+  //     horizontalPosition: 'start',
+  //     verticalPosition: 'bottom',
+  //     panelClass: ['success-snackbar'],
+  //   });
+  // }
   //
-  addOne(product: Product & { uniqueId: string }): void {
+  addOne(product: YhdenIlmoitusTuotteet): void {
     // Tarkista varasto: Älä lisää jos tyhjä
-    const stockProduct = this.pstore
-      .products()
-      .find((p) => p.id === product.id);
-    if (!stockProduct || stockProduct.amount <= 0) {
-      this.snackBar.open('Varasto tyhjä – ei voi lisätä!', '', {
-        duration: 3000,
-        horizontalPosition: 'start',
-        verticalPosition: 'bottom',
-        panelClass: ['error-snackbar'],
-      });
-      return;
-    }
+    // const stockProduct = this.pstore
+    //   .products()
+    //   .find((p) => p.id === product.tuoteID);
+    // if (!stockProduct || stockProduct.amount <= 0) {
+    //   this.snackBar.open('Varasto tyhjä – ei voi lisätä!', '', {
+    //     duration: 3000,
+    //     horizontalPosition: 'start',
+    //     verticalPosition: 'bottom',
+    //     panelClass: ['error-snackbar'],
+    //   });
+    //   return;
+    // }
 
     // Tarkista korin määrä: Jos 0, lisää uusi tuote; muuten kasvata
     if (this.getCartQuantity(product.uniqueId) === 0) {
-      this.cstore.addToCart(product); // Lisää uusi tuote korin
+      this.ostoskoriservice.addToCart(product); // Lisää uusi tuote korin eli Käyttää palvelua (mapaa itse)
     } else {
-      this.cstore.increment(product.uniqueId); // Kasvata olemassa olevaa
+      this.ostoskoriservice.addToCart(product); // Kasvata olemassa olevaa ja Sama metodi hoitaa lisäyksen (palvelu tarkistaa olemassaolon)
     }
 
-    // Vähennä varastoa
-    this.pstore.reduceAmount(product.id);
-
     // Näytä onnistumisilmoitus
-    this.snackBar.open(`${product.name} lisätty ostoskoriin!`, '', {
+    this.snackBar.open(`${product.tuotteet.nimi} lisätty ostoskoriin!`, '', {
       duration: 3000,
       horizontalPosition: 'start',
       verticalPosition: 'bottom',
@@ -187,7 +197,7 @@ export class IlmoitusComponent {
     });
   }
 
-  removeOne(product: Product & { uniqueId: string }): void {
+  removeOne(product: YhdenIlmoitusTuotteet & { uniqueId: string }): void {
     // Tarkista korin määrä: Älä vähennä jos 0
     const currentQuantity = this.getCartQuantity(product.uniqueId);
     if (currentQuantity <= 0) {
@@ -202,20 +212,21 @@ export class IlmoitusComponent {
 
     // Jos määrä > 1, vähennä; jos == 1, poista kokonaan
     if (currentQuantity > 1) {
-      this.cstore.decrement(product.uniqueId); // Vähennä määrää
+      this.ostoskoriservice.decrement(product.uniqueId); // Vähennä määrää
     } else {
-      this.cstore.removeFromCart(product); // Poista tuote kokonaan
+      this.ostoskoriservice.removeFromCart(product.uniqueId); // Poista tuote kokonaan
     }
 
-    // Lisää varastoon takaisin
-    this.pstore.addAmount(product.id);
-
     // Näytä onnistumisilmoitus
-    this.snackBar.open(`${product.name} vähennetty ostoskorista!`, '', {
-      duration: 3000,
-      horizontalPosition: 'start',
-      verticalPosition: 'bottom',
-      panelClass: ['success-snackbar'],
-    });
+    this.snackBar.open(
+      `${product.tuotteet.nimi} vähennetty ostoskorista!`,
+      '',
+      {
+        duration: 3000,
+        horizontalPosition: 'start',
+        verticalPosition: 'bottom',
+        panelClass: ['success-snackbar'],
+      }
+    );
   }
 }
