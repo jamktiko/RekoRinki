@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartStore } from '../cartstore';
+import { OstoskoriService } from '../ostoskori.service';
 
 @Component({
   selector: 'app-navigaatio',
@@ -11,7 +12,7 @@ import { CartStore } from '../cartstore';
 })
 export class NavigaatioComponent {
   // komponentilla ei ole omaa tilaa, vaan tila on storessa
-  readonly cstore = inject(CartStore);
+  readonly ostoskoriService = inject(OstoskoriService);
 
   isMenuOpen = false;
   showCartAlert = false; // tuotemäärä näkyminen menu kuvakeella
@@ -20,7 +21,7 @@ export class NavigaatioComponent {
   // ngDoCheck() huomaa sen ja asettaa showCartAlert = true
   ngDoCheck() {
     // jos ostoskoriin lisätään jotain
-    if (this.cstore.totalCount() > 0 && !this.isMenuOpen) {
+    if (this.ostoskoriService.getTotalCount() > 0 && !this.isMenuOpen) {
       this.showCartAlert = true;
     }
   }

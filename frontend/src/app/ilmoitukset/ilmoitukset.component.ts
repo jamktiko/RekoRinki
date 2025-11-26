@@ -4,6 +4,7 @@ import { AppNotification } from '../types';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NotificationService } from '../notification.service';
+import { IlmoitusTiedot, KaikkiIlmoitusTiedot } from '../types';
 
 @Component({
   selector: 'app-ilmoitukset',
@@ -13,8 +14,8 @@ import { NotificationService } from '../notification.service';
   styleUrl: './ilmoitukset.component.css',
 })
 export class IlmoituksetComponent {
-  notifications: AppNotification[] | any = [];
-  filteredNotifications: AppNotification[] | any = [];
+  notifications: IlmoitusTiedot[] = [];
+  filteredNotifications: IlmoitusTiedot[] = [];
   searchTerm: string = '';
 
   constructor(private notificationService: NotificationService) {}
@@ -28,6 +29,7 @@ export class IlmoituksetComponent {
       next: (data) => {
         this.notifications = data;
         this.filteredNotifications = data;
+        console.log('Kaikki ilmoitukset:', data);
       },
       error: (err) => console.error('Virhe ilmoitusten haussa:', err),
     });
@@ -49,5 +51,9 @@ export class IlmoituksetComponent {
   clearSearch(): void {
     this.searchTerm = '';
     this.filteredNotifications = this.notifications;
+  }
+
+  trackById(index: number, item: IlmoitusTiedot) {
+    return item.ilmoitusID;
   }
 }
