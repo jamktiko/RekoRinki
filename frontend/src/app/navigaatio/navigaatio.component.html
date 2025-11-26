@@ -20,10 +20,10 @@
       <span class="material-symbols-outlined cursor-pointer hover:text-green-800 transition-colors">
         shopping_cart
       </span>
-      @if (cstore.totalCount() > 0) {
+      @if (ostoskoriService.getTotalCount() > 0) {
       <div
         class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-        {{ cstore.totalCount() }}
+        {{ ostoskoriService.getTotalCount() }}
       </div>
       }
     </a>
@@ -40,10 +40,10 @@
     <a routerLink="/ostoskori"
       class="relative flex items-center justify-center align-middle hover:text-green-800 transition-colors">
       <span class="material-symbols-outlined text-[25px] leading-none align-middle">shopping_cart</span>
-      @if (cstore.totalCount() > 0) {
+      @if (ostoskoriService.getTotalCount() > 0) {
       <div
         class="absolute -top-1 -right-2 bg-red-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-bold">
-        {{ cstore.totalCount() }}
+        {{ ostoskoriService.getTotalCount() }}
       </div>
       }
     </a>

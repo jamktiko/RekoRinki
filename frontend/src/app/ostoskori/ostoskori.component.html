@@ -41,13 +41,13 @@
                     {{ product.producerName }}
                   </p>
 
-                  <div class="flex flex-wrap gap-3 text-xs text-gray-500 mt-1">
+                  <!-- <div class="flex flex-wrap gap-3 text-xs text-gray-500 mt-1">
                     <p *ngIf="product.id"><span class="font-medium">TuoteID:</span> {{ product.id }}</p>
                     <p *ngIf="product.notificationID"><span class="font-medium">IlmoitusID:</span> {{
                       product.notificationID }}</p>
                     <p *ngIf="product.producerID"><span class="font-medium">TuottajaID:</span> {{ product.producerID }}
                     </p>
-                  </div>
+                  </div> -->
 
                   <!-- MÄÄRÄ GRAMMOINA -->
                   <p class="text-gray-700 mt-2 text-sm">
@@ -62,7 +62,7 @@
                 <!-- ROSKAKORI JA MÄÄRÄN SÄÄTÖ -->
                 <div class="flex items-center gap-3">
                   <!-- Roskakori - omassa laatikossa samalla tyylillä -->
-                  <button (click)="cstore.removeFromCart(product)"
+                  <button (click)="ostoskoriService.removeFromCart(product.uniqueId)"
                     class="w-8 h-8 flex items-center justify-center border-2 border-green-600 rounded-lg bg-white transition-colors hover:bg-red-50">
                     <span class="text-lg material-symbols-outlined hover:text-red-800">delete</span>
                   </button>
@@ -70,7 +70,7 @@
                   <!-- Määrän säätö laatikko -->
                   <div
                     class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-                    <button (click)="cstore.decrement(product.uniqueId); pstore.addAmount(product.id)"
+                    <button (click)="ostoskoriService.decrement(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
                       [disabled]="product.amount <= 500" [class.opacity-50]="product.amount <= 500"
                       [class.cursor-not-allowed]="product.amount <= 500">
@@ -82,7 +82,7 @@
                       {{ product.amount / 500 | number:'1.0-0' }}
                     </span>
 
-                    <button (click)="cstore.increment(product.uniqueId); pstore.reduceAmount(product.id)"
+                    <button (click)="ostoskoriService.increment(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
                       <span class="text-gray-700 text-lg material-symbols-outlined">add</span>
                     </button>
@@ -112,7 +112,7 @@
 
       <!-- OIKEA - Tilausyhteenveto -->
       <div class="lg:col-span-1 order-2 lg:order-2 bg-gray-50 rounded-lg p-6 h-fit lg:sticky lg:top-4"
-        *ngIf="cstore.products().length > 0">
+        *ngIf="ostoskoriService.getItems().length > 0">
 
         <!-- Lisää tämä: Mat-Select desktopissa (lg:) laatikon yläpuolella -->
         <div *ngIf="pulledPickupOptions?.length > 0" class="mb-4">
@@ -137,7 +137,7 @@
           class="flex justify-between items-center mb-6 pb-4 border-b border-gray-200 text-gray-900 text-lg font-medium">
           <span>Yhteensä:</span>
           <span class="text-xl font-semibold">
-            {{ cstore.totalsum() | number:'1.2-2' }} €
+            {{ ostoskoriService.getTotalSum() | number:'1.2-2' }} €
           </span>
         </div>
 
@@ -156,7 +156,7 @@
     </div>
 
     <!-- TYHJÄ OSTOSKORI -->
-    <div *ngIf="cstore.products().length === 0" class="text-center py-16">
+    <div *ngIf="ostoskoriService.getItems().length === 0" class="text-center py-16">
       <div class="text-8xl mb-6">🛒</div>
       <h2 class="text-2xl font-bold text-gray-900 mb-4">Ostoskori on tyhjä</h2>
       <p class="text-gray-600 mb-8 max-w-md mx-auto">
