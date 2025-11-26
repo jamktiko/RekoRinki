@@ -8,6 +8,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 // import { AppNotification } from './types';
+import {
+  KaikkiIlmoitusTiedot,
+  IlmoitusTiedot,
+  YhdenIlmoitusReitti,
+  YhdenIlmoitusTiedot,
+  YhdenIlmoitusTuotteet,
+} from './types';
 import { environment } from 'src/environments/environment';
 
 // Määrittele ilmoituksen tyyppi
@@ -41,14 +48,14 @@ export class NotificationService {
   // Lähettää HTTP GET -pyynnön this.serverUrl-osoitteeseen, eli esim.
   // kehityksessa: http://localhost:3000/api
   // tuotantossa: https://reko-rinki.eu-north-1.elasticbeanstalk.com/api
-  getNotifications(): Observable<any> {
-    return this.http.get<any>(`${this.serverUrl}`);
+  getNotifications(): Observable<IlmoitusTiedot[]> {
+    return this.http.get<IlmoitusTiedot[]>(`${this.serverUrl}`);
   }
 
   // Lisää id:n osoitteen perään ja hakee yksittäisen ilmoituksen, kuten:
   // https://reko-rinki.eu-north-1.elasticbeanstalk.com/api/123
-  getNotificationById(id: number): Observable<any> {
+  getNotificationById(id: number): Observable<YhdenIlmoitusTiedot> {
     const url = `${this.serverUrl}/ilmoitus/${id}`;
-    return this.http.get<any>(url);
+    return this.http.get<YhdenIlmoitusTiedot>(url);
   }
 }
