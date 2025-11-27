@@ -1,0 +1,269 @@
+<div class="register-container">
+  <h1>Rekisteröidy</h1>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+    <!-- Etunimi -->
+    <div
+      class="form-group"
+      [ngClass]="{ 'has-error': submitted && registerForm.get('firstName')?.invalid }"
+    >
+      <label for="firstName">Etunimi*</label>
+      <input id="firstName" type="text" formControlName="firstName" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('firstName')?.hasError('required')
+        "
+        class="error"
+      >
+        Etunimi on pakollinen tieto.
+      </div>
+    </div>
+
+    <!-- Sukunimi -->
+    <div
+      class="form-group"
+      [ngClass]="{ 'has-error': submitted && registerForm.get('lastName')?.invalid }"
+    >
+      <label for="lastName">Sukunimi*</label>
+      <input id="lastName" type="text" formControlName="lastName" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('lastName')?.hasError('required')
+        "
+        class="error"
+      >
+        Sukunimi on pakollinen tieto.
+      </div>
+    </div>
+
+    <!-- Sähköposti -->
+    <div
+      class="form-group"
+      [ngClass]="{ 'has-error': submitted && registerForm.get('email')?.invalid }"
+    >
+      <label for="email">Sähköposti*</label>
+      <input id="email" type="email" formControlName="email" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('email')?.hasError('required')
+        "
+        class="error"
+      >
+        Sähköposti on pakollinen tieto.
+      </div>
+      <div
+        *ngIf="
+          submitted &&
+          !registerForm.get('email')?.hasError('required') &&
+          registerForm.get('email')?.hasError('email')
+        "
+        class="error"
+      >
+        Anna kelvollinen sähköpostiosoite.
+      </div>
+    </div>
+
+    <!-- Salasana -->
+    <div
+      class="form-group"
+      [ngClass]="{ 'has-error': submitted && registerForm.get('password')?.invalid }"
+    >
+      <label for="password">Salasana*</label>
+      <input id="password" type="password" formControlName="password" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('password')?.hasError('required')
+        "
+        class="error"
+      >
+        Salasana on pakollinen tieto.
+      </div>
+      <div
+        *ngIf="
+          submitted &&
+          !registerForm.get('password')?.hasError('required') &&
+          registerForm.get('password')?.hasError('minlength')
+        "
+        class="error"
+      >
+        Salasanan on oltava vähintään 8 merkkiä pitkä.
+      </div>
+    </div>
+
+    <!-- Salasana uudelleen -->
+    <div
+      class="form-group"
+      [ngClass]="{
+        'has-error':
+          submitted &&
+          (registerForm.get('confirmPassword')?.invalid ||
+            registerForm.errors?.['passwordsNotMatching'])
+      }"
+    >
+      <label for="confirmPassword">Salasana uudelleen*</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+      />
+
+      <!-- kenttä puuttuu -->
+      <div
+        *ngIf="
+          submitted &&
+          registerForm.get('confirmPassword')?.hasError('required')
+        "
+        class="error"
+      >
+        Vahvista salasana.
+      </div>
+
+      <!-- salasanat eivät täsmää -->
+      <div
+        *ngIf="
+          submitted &&
+          !registerForm.get('confirmPassword')?.hasError('required') &&
+          registerForm.errors?.['passwordsNotMatching']
+        "
+        class="error"
+      >
+        Salasanat eivät täsmää.
+      </div>
+    </div>
+
+    <!-- Puhelinnumero -->
+    <div
+      class="form-group"
+      [ngClass]="{ 'has-error': submitted && registerForm.get('phone')?.invalid }"
+    >
+      <label for="phone">Puhelinnumero*</label>
+      <input id="phone" type="tel" formControlName="phone" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('phone')?.hasError('required')
+        "
+        class="error"
+      >
+        Puhelinnumero on pakollinen tieto.
+      </div>
+      <div
+        *ngIf="
+          submitted &&
+          !registerForm.get('phone')?.hasError('required') &&
+          registerForm.get('phone')?.hasError('pattern')
+        "
+        class="error"
+      >
+        Anna kelvollinen puhelinnumero.
+      </div>
+    </div>
+
+    <!-- Katuosoite -->
+    <div
+      class="form-group"
+      [ngClass]="{
+        'has-error': submitted && registerForm.get('streetAddress')?.invalid
+      }"
+    >
+      <label for="streetAddress">Katuosoite*</label>
+      <input id="streetAddress" type="text" formControlName="streetAddress" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('streetAddress')?.hasError('required')
+        "
+        class="error"
+      >
+        Katuosoite on pakollinen tieto.
+      </div>
+    </div>
+
+    <!-- Postinumero -->
+    <div
+      class="form-group"
+      [ngClass]="{
+        'has-error': submitted && registerForm.get('postalCode')?.invalid
+      }"
+    >
+      <label for="postalCode">Postinumero*</label>
+      <input id="postalCode" type="text" formControlName="postalCode" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('postalCode')?.hasError('required')
+        "
+        class="error"
+      >
+        Postinumero on pakollinen tieto.
+      </div>
+      <div
+        *ngIf="
+          submitted &&
+          !registerForm.get('postalCode')?.hasError('required') &&
+          registerForm.get('postalCode')?.hasError('pattern')
+        "
+        class="error"
+      >
+        Anna kelvollinen postinumero (5 numeroa).
+      </div>
+    </div>
+
+    <!-- Paikkakunta -->
+    <div
+      class="form-group"
+      [ngClass]="{ 'has-error': submitted && registerForm.get('city')?.invalid }"
+    >
+      <label for="city">Paikkakunta*</label>
+      <input id="city" type="text" formControlName="city" />
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('city')?.hasError('required')
+        "
+        class="error"
+      >
+        Paikkakunta on pakollinen tieto.
+      </div>
+    </div>
+
+    <!-- Käyttöehdot -->
+    <div
+      class="form-group"
+      [ngClass]="{
+        'has-error':
+          submitted && registerForm.get('termsAccepted')?.invalid
+      }"
+    >
+      <label>
+        <input type="checkbox" formControlName="termsAccepted" />
+        Hyväksyn käyttöehdot
+      </label>
+
+      <div
+        *ngIf="
+          submitted && registerForm.get('termsAccepted')?.invalid
+        "
+        class="error"
+      >
+        Sinun tulee hyväksyä käyttöehdot jatkaaksesi.
+      </div>
+    </div>
+
+    <button type="submit">
+      Luo käyttäjä
+    </button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+
+  <p>
+    Onko sinulla jo käyttäjä?
+    <a routerLink="/kirjaudu">Kirjaudu sisään</a>
+  </p>
+</div>

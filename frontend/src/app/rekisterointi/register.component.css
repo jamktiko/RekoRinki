@@ -1,0 +1,50 @@
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 32px;
+}
+
+.register-title {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.full-width {
+  flex: 1;
+}
+
+.submit-button {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.messages {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+.success {
+  color: #2e7d32;
+}
+
+.login-link {
+  margin-top: 24px;
+  text-align: center;
+}

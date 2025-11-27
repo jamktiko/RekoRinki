@@ -7,7 +7,7 @@ import { TuottajatComponent } from './tuottajat/tuottajat.component';
 import { ProfiiliComponent } from './profiili/profiili.component';
 import { IlmoituksetComponent } from './ilmoitukset/ilmoitukset.component';
 import { IlmoitusComponent } from './ilmoitus/ilmoitus.component';
-import { RoleGuard } from './role.guard';
+import { RegisterComponent } from './rekisterointi/register.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/ilmoitukset', pathMatch: 'full' },
@@ -49,4 +49,8 @@ export const routes: Routes = [
     // canActivate: [RoleGuard],
     // data: { roles: ['asiakas', 'tuottaja'] },
   },
+  {
+    component: RegisterComponent,
+    path: 'rekisterointi',
+  }
 ];
