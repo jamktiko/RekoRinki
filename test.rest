@@ -1,0 +1,16 @@
+POST http://localhost:3000/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "tuottaja": false,
+  "kayttajatunnus": "testiasiakas01",
+  "salasana": "Salasana123!",
+  "etunimi": "Matti",
+  "sukunimi": "Meikäläinen",
+  "puhelinnro": "+358401234567",
+  "sahkoposti": "matti.meikalainen@example.com",
+  "katuosoite": "Esimerkkikatu 12 A",
+  "postinumero": "00100",
+  "postitoimipaikka": "Helsinki",
+  "paikkakunta": "Helsinki"
+}

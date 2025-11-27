@@ -9,6 +9,7 @@ import './dbconnection.js';
 import indexRouter from './routes/index.js';
 import hakuRouter from './routes/haku.js';
 import ilmoitusRouter from './routes/ilmoitus.js';
+import regRouter from './routes/reg.js';
 dotenv.config();
 
 const app = express();
@@ -29,5 +30,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/', hakuRouter);
 app.use('/', ilmoitusRouter);
-
+app.use('/', regRouter);
 export default app;
