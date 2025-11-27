@@ -7,6 +7,7 @@ import { TuottajatComponent } from './tuottajat/tuottajat.component';
 import { ProfiiliComponent } from './profiili/profiili.component';
 import { IlmoituksetComponent } from './ilmoitukset/ilmoitukset.component';
 import { IlmoitusComponent } from './ilmoitus/ilmoitus.component';
+import { RoleGuard } from './role.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/ilmoitukset', pathMatch: 'full' },
@@ -14,23 +15,38 @@ export const routes: Routes = [
     component: TuotteetComponent,
     path: 'tuotteet',
   },
+
+  // ostoskori vain asiakkaalle
   {
     component: OstoskoriComponent,
     path: 'ostoskori',
+    // canActivate: [RoleGuard],
+    // data: { roles: ['asiakas'] },
   },
 
-  { component: TuottajatComponent, path: 'tuottajat/:id' },
+  // tuottajan sivut
+  {
+    component: TuottajatComponent,
+    path: 'tuottajat/:id',
+    // canActivate: [RoleGuard],
+    // data: { roles: ['tuottaja'] },
+  },
 
   {
     component: IlmoituksetComponent,
     path: 'ilmoitukset',
   },
+
   {
     component: IlmoitusComponent,
     path: 'ilmoitus/:id',
   },
+
+  // profiili molemmille
   {
     component: ProfiiliComponent,
     path: 'profiili',
+    // canActivate: [RoleGuard],
+    // data: { roles: ['asiakas', 'tuottaja'] },
   },
 ];
