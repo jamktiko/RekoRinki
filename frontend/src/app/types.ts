@@ -115,3 +115,25 @@ export interface YhdenIlmoitusTiedot extends KaikkiIlmoitusTiedot {
   // ilmoituksen noutoreitit / toimituspaikat
   reitits: YhdenIlmoitusReitti[];
 }
+
+// millä tavalla talennetaan meidän tiedot sessionStoragella
+// Rekisteröinti
+export interface AuthUser {
+  // id: number;
+  kayttajatunnus: string;
+  salasana: string;
+  role: string; // esim: 'Asiakas', 'Tuottaja'
+}
+
+// mitä lähettämme backendilla eli login
+export interface LoginRequest {
+  kayttajatunnus: string; // tai username, mitä backend vaatii
+  salasana: string;
+  // role: string; // tarvikko olla????
+}
+
+// mitä backend palauttaa
+export interface AuthResponse {
+  token: string;
+  user: AuthUser;
+}
