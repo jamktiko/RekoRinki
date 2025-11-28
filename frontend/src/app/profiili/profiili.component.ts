@@ -14,6 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // import { Router } from 'express';
 import { CommonModule } from '@angular/common';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-profiili',
@@ -27,6 +29,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     CommonModule,
+    RouterLink
   ],
   templateUrl: './profiili.component.html',
   styleUrl: './profiili.component.css',

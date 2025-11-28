@@ -52,5 +52,6 @@ export const routes: Routes = [
   {
     component: RegisterComponent,
     path: 'rekisterointi',
-  }
+  },
+
 ];
