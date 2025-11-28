@@ -1,0 +1,235 @@
+<div class="flex flex-col items-center w-full px-4 py-10">
+  <!-- Otsikko -->
+  <h2 class="text-3xl font-semibold mb-10">Rekisteröidy</h2>
+
+  <!-- Lomake -->
+  <form
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    class="w-full max-w-4xl"
+    novalidate
+  >
+    <!-- Olen tuottaja -checkbox -->
+    <div class="w-full mb-6">
+      <mat-checkbox formControlName="isBusiness">
+        Olen tuottaja
+      </mat-checkbox>
+    </div>
+
+    <!-- Kaksi saraketta -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Etunimi -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Etunimi</mat-label>
+          <input
+            matInput
+            id="etunimi"
+            type="text"
+            formControlName="etunimi"
+          />
+          <mat-error
+            *ngIf="
+              registerForm.get('etunimi')?.invalid &&
+              registerForm.get('etunimi')?.touched
+            "
+          >
+            Etunimi on pakollinen.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Sukunimi -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Sukunimi</mat-label>
+          <input
+            matInput
+            id="sukunimi"
+            type="text"
+            formControlName="sukunimi"
+          />
+          <mat-error
+            *ngIf="
+              registerForm.get('sukunimi')?.invalid &&
+              registerForm.get('sukunimi')?.touched
+            "
+          >
+            Sukunimi on pakollinen.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Sähköposti -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Sähköposti</mat-label>
+          <input
+            matInput
+            id="email"
+            type="email"
+            formControlName="email"
+          />
+          <mat-error
+            *ngIf="
+              registerForm.get('email')?.errors?.['required'] &&
+              registerForm.get('email')?.touched
+            "
+          >
+            Sähköposti on pakollinen.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.get('email')?.errors?.['email'] &&
+              registerForm.get('email')?.touched
+            "
+          >
+            Anna kelvollinen sähköpostiosoite.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Salasana -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Salasana</mat-label>
+          <input
+            matInput
+            id="password"
+            type="password"
+            formControlName="password"
+          />
+          <mat-error
+            *ngIf="
+              registerForm.get('password')?.errors?.['required'] &&
+              registerForm.get('password')?.touched
+            "
+          >
+            Salasana on pakollinen.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.get('password')?.errors?.['minlength'] &&
+              registerForm.get('password')?.touched
+            "
+          >
+            Salasanan tulee olla vähintään 8 merkkiä pitkä.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Salasana uudelleen -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Salasana uudelleen</mat-label>
+          <input
+            matInput
+            id="passwordConfirm"
+            type="password"
+            formControlName="passwordConfirm"
+          />
+          <mat-error
+            *ngIf="
+              registerForm.hasError('passwordMismatch') &&
+              registerForm.get('passwordConfirm')?.touched
+            "
+          >
+            Salasanat eivät täsmää.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Puhelinnumero -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Puhelinnumero</mat-label>
+          <input
+            matInput
+            id="phone"
+            type="tel"
+            formControlName="phone"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Katuosoite -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Katuosoite</mat-label>
+          <input
+            matInput
+            id="street"
+            type="text"
+            formControlName="street"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Postinumero -->
+      <div>
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Postinumero</mat-label>
+          <input
+            matInput
+            id="postalCode"
+            type="text"
+            formControlName="postalCode"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Kaupunki / Kunta -->
+      <div class="md:col-span-2 md:w-1/2">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Kaupunki/Kunta</mat-label>
+          <input
+            matInput
+            id="city"
+            type="text"
+            formControlName="city"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Käyttöehdot -->
+    <div class="flex items-center gap-2 mt-6">
+      <mat-checkbox formControlName="terms" id="terms">
+        Hyväksyn käyttöehdot
+      </mat-checkbox>
+    </div>
+    <p
+      class="text-xs text-red-600 mt-1"
+      *ngIf="
+        registerForm.get('terms')?.invalid &&
+        registerForm.get('terms')?.touched
+      "
+    >
+      Käyttöehdot on hyväksyttävä jatkaaksesi.
+    </p>
+
+    <!-- Rekisteröityminen -->
+    <div class="flex justify-center mt-6">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="registerForm.invalid"
+        class="px-8 py-3 rounded-md font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        Rekisteröidy
+      </button>
+    </div>
+
+    <!-- Linkki kirjautumiseen -->
+    <p class="text-center mt-4 text-sm">
+      Onko sinulla jo tili?
+      <a
+        [routerLink]="['/profiili']"
+        class="font-semibold text-black hover:underline"
+      >
+        Kirjaudu sisään
+      </a>
+    </p>
+  </form>
+</div>

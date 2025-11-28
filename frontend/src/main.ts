@@ -7,3 +7,4 @@ import { importProvidersFrom } from '@angular/core';
 bootstrapApplication(AppComponent, appConfig).catch((err) =>
   console.error(err)
 );
+
