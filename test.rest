@@ -3,14 +3,14 @@ Content-Type: application/json
 
 {
   "tuottaja": false,
-  "kayttajatunnus": "testiasiakas01",
-  "salasana": "Salasana123!",
-  "etunimi": "Matti",
-  "sukunimi": "Meikäläinen",
-  "puhelinnro": "+358401234567",
-  "sahkoposti": "matti.meikalainen@example.com",
-  "katuosoite": "Esimerkkikatu 12 A",
-  "postinumero": "00100",
-  "postitoimipaikka": "Helsinki",
-  "paikkakunta": "Helsinki"
+  "kayttajatunnus": "Testikäyttäjä100",
+  "salasana": "Testi123",
+  "etunimi": "testi500",
+  "sukunimi": "testi",
+  "puhelinnro": "+35850123456789",
+  "sahkoposti": "testi100@jamk.com",
+  "katuosoite": "Matarankatu 1",
+  "postinumero": "40320",
+  "postitoimipaikka": "Jyväskylä",
+  "paikkakunta": "Jyväskylä"
 }
