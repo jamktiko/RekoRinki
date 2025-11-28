@@ -2,8 +2,20 @@ import { Asiakas, Tuottaja } from '../models/model.js';
 import bcrypt from 'bcryptjs';
 const reg = async (data) => {
   try {
-    const { tuottaja, sahkoposti, salasana } = data;
-
+    const {
+      tuottaja,
+      kayttajatunnus,
+      salasana,
+      etunimi,
+      sukunimi,
+      puhelinnro,
+      sahkoposti,
+      katuosoite,
+      postinumero,
+      postitoimipaikka,
+      paikkakunta,
+      lisatiedot,
+    } = data;
     const hash = await bcrypt.hash(salasana, 8);
     let kayttaja;
     if (tuottaja === true) {
@@ -12,7 +24,7 @@ const reg = async (data) => {
         salasana: salasana,
         etunimi: etunimi,
         sukunimi: sukunimi,
-        puhelinnro: puhelinro,
+        puhelinnro: puhelinnro,
         sahkoposti: sahkoposti,
         katuosoite: katuosoite,
         postinumero: postinumero,
