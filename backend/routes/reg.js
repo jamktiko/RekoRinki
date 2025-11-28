@@ -3,9 +3,10 @@ import reg from '../controllers/regController.js';
 const router = express.Router();
 router.post('/register', async (req, res) => {
   try {
-    const uusiKayttaja = await reg(req.body);
+    const token = await reg(req.body);
     res.status(201).json({
       message: 'Rekisteröinti onnistui',
+      token: token,
     });
   } catch (error) {
     console.log(error);

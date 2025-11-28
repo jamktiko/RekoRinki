@@ -1,5 +1,6 @@
 import { Asiakas, Tuottaja } from '../models/model.js';
 import bcrypt from 'bcryptjs';
+import createToken from '../createToken.js';
 const reg = async (data) => {
   try {
     const {
@@ -16,12 +17,12 @@ const reg = async (data) => {
       paikkakunta,
       lisatiedot,
     } = data;
-    const hash = await bcrypt.hash(salasana, 8);
+    const hashedPassword = bcrypt.hashSync(salasana, 8);
     let kayttaja;
     if (tuottaja === true) {
       kayttaja = await Tuottaja.create({
         kayttajatunnus: kayttajatunnus,
-        salasana: salasana,
+        salasana: hashedPassword,
         etunimi: etunimi,
         sukunimi: sukunimi,
         puhelinnro: puhelinnro,
@@ -35,7 +36,7 @@ const reg = async (data) => {
     } else {
       kayttaja = await Asiakas.create({
         kayttajatunnus: kayttajatunnus,
-        salasana: salasana,
+        salasana: hashedPassword,
         etunimi: etunimi,
         sukunimi: sukunimi,
         puhelinnro: puhelinnro,
@@ -46,7 +47,8 @@ const reg = async (data) => {
         paikkakunta: paikkakunta,
       });
     }
-    return kayttaja;
+    const token = createToken(kayttaja, tuottaja);
+    return token;
   } catch (error) {
     throw error;
   }
