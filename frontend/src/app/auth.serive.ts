@@ -1,3 +1,11 @@
+/**
+ * Serivce hoitaa kirjautumisen backendille.
+ * Vastauksesta puretaan token ja validoidaan se.
+ * Jos OK → tallennetaan sessionStorageen ja ilmoitetaan UI:lle.
+ * Subjectillä lähetetään “login onnistui” muille komponenteille.
+ * Logout tyhjentää tokenit.
+ */
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
