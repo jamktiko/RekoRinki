@@ -7,7 +7,7 @@ dotenv.config();
 const client = new SecretsManagerClient({ region: 'eu-north-1' });
 
 async function getDbCredentials() {
-  const isDev = process.env.NODE_ENV !== 'development';
+  const isDev = process.env.NODE_ENV == 'development';
   console.log(isDev);
 
   if (isDev) {
@@ -20,15 +20,17 @@ async function getDbCredentials() {
     };
   }
 
-  const secretName = process.env.DB_SECRET_ARN;
-  const data = await client.send(
-    new GetSecretValueCommand({ SecretId: secretName })
-  );
-  const secret = JSON.parse(data.SecretString);
+  // const secretName = process.env.DB_SECRET_ARN;
+  const secretName = JSON.parse(process.env.DB_SECRET_ARN);
+  console.log(secretName);
+  // const data = await client.send(
+  //   new GetSecretValueCommand({ SecretId: secretName })
+  // );
+  // const secret = JSON.parse(data.SecretString);
 
   return {
-    username: secret.username,
-    password: secret.password,
+    username: secretName.username,
+    password: secretName.password,
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT) || 5432,
     dbname: process.env.DB_NAME,

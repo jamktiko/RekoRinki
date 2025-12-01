@@ -3,7 +3,7 @@
  missä näkyy ne tuotteet, jotka ovat myyjassa -->
 
 <!-- Notifications komponentti logiikka -->
-<!-- Notificationskomponentti → IlmoitusTuotteetkomponentti → 
+<!-- Notificationskomponentti → IlmoitusTuotteetkomponentti →
   Tilauskomponentti (Ostoskori) → Paymentkomponentti (Maksu) → Vahvistus -->
 
 <!-- tervetuloa Rekoon elementti -->
@@ -21,8 +21,8 @@
     <div class="p-6 bg-white shadow-sm flex justify-center">
       <label for="searchInput" class="sr-only">Hae Rekosta</label>
 
-      <input id="searchInput" type="text" placeholder="Hae Rekosta..." class="w-full max-w-md px-6 py-3 border border-gray-300 rounded-full 
-           focus:outline-none focus:ring-2 focus:ring-blue-500 
+      <input id="searchInput" type="text" placeholder="Hae Rekosta..." class="w-full max-w-md px-6 py-3 border border-gray-300 rounded-full
+           focus:outline-none focus:ring-2 focus:ring-blue-500
            focus:border-transparent shadow-sm" (input)="onSearch($event)" [value]="searchTerm" #searchInput />
 
       <!-- Clear-nappi -->
