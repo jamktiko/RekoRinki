@@ -1,6 +1,6 @@
 import { Asiakas, Tuottaja } from '../models/model.js';
 import bcrypt from 'bcryptjs';
-import createToken from '../createToken.js';
+import createToken from '../createtoken.js';
 const reg = async (data) => {
   try {
     const {

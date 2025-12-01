@@ -3,12 +3,12 @@ Content-Type: application/json
 
 {
   "tuottaja": false,
-  "kayttajatunnus": "Testikäyttäjä100",
+  "kayttajatunnus": "Testikäyttäjä2000",
   "salasana": "Testi123",
-  "etunimi": "testi500",
-  "sukunimi": "testi",
-  "puhelinnro": "+35850123456789",
-  "sahkoposti": "testi100@jamk.com",
+  "etunimi": "testi2000",
+  "sukunimi": "testi2000",
+  "puhelinnro": "+35840012345678",
+  "sahkoposti": "testi2000@jamk.com",
   "katuosoite": "Matarankatu 1",
   "postinumero": "40320",
   "postitoimipaikka": "Jyväskylä",
