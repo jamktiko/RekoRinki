@@ -8,6 +8,7 @@ import { ProfiiliComponent } from './profiili/profiili.component';
 import { IlmoituksetComponent } from './ilmoitukset/ilmoitukset.component';
 import { IlmoitusComponent } from './ilmoitus/ilmoitus.component';
 import { RegisterComponent } from './rekisterointi/register.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/ilmoitukset', pathMatch: 'full' },
@@ -53,5 +54,8 @@ export const routes: Routes = [
     component: RegisterComponent,
     path: 'rekisterointi',
   },
-
+  {
+    component: LoginComponent,
+    path: 'login',
+  },
 ];
