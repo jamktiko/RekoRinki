@@ -81,6 +81,11 @@
                       class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300">
                       {{ product.amount / 500 | number:'1.0-0' }}
                     </span>
+                    <!-- <input
+                      class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300"
+                      title="tuoteMaaraControl" [value]="product.amount / 500"
+                      (blur)="updateCartQuantity(product.uniqueId, ($event.target as HTMLInputElement).value)" /> -->
+
 
                     <button (click)="ostoskoriService.increment(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">

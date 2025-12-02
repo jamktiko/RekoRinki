@@ -68,6 +68,8 @@ export interface IlmoitusTiedot extends KaikkiIlmoitusTiedot {
   tuottaja: {
     etunimi: string;
     sukunimi: string;
+    kuva: string;
+    lisatiedot: string;
   };
 }
 
@@ -107,6 +109,7 @@ export interface YhdenIlmoitusTiedot extends KaikkiIlmoitusTiedot {
     etunimi: string;
     sukunimi: string;
     kuva: string | null; // tuottajan profiilikuva
+    lisatiedot: string;
   };
 
   // tuotteet jotka liittyvät ilmoitukseen

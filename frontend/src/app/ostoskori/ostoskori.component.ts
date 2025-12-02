@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { OstoskoriService } from '../ostoskori.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-ostoskori',
@@ -38,8 +39,12 @@ export class OstoskoriComponent {
   // Tila valitulle noutopaikalle (string, koska valinta on tekstiä)
   selectedPickup: string = '';
 
+  // FormControlit jokaiselle tuotteelle
+  maaraControl: { [uniqueId: string]: FormControl } = {};
+
   ngOnInit(): void {
     this.loadNotifications(); // Lataa ilmoitukset komponentissa
+    // this.initFormControls();
   }
 
   // hakee noutotiedot dynaamisesti korin tuotteista
@@ -78,7 +83,7 @@ export class OstoskoriComponent {
 
   // Siirry tuotteen ilmoitussivulle
   goToProductNotification(
-    product: Product & { notificationID?: number; producerID?: number }
+    product: Product & { notificationID?: number }
   ): void {
     if (product.notificationID) {
       this.router.navigate(['/ilmoitus', product.notificationID]);
@@ -109,6 +114,7 @@ export class OstoskoriComponent {
         // this.notifications = data || [];
         this.notifications = Array.isArray(data) ? data : [];
         console.log('Notifications set to:', this.notifications);
+        this.pulledPickupOptions = this.getPickupOptions();
         console.log(data);
       },
       error: (err) => {
@@ -116,6 +122,17 @@ export class OstoskoriComponent {
         this.notifications = [];
       },
     });
+  }
+
+  updateCartQuantity(uniqueId: string, value: any): void {
+    const amountNumber = Number(value);
+
+    // Jos arvo ei ole validi
+    if (isNaN(amountNumber) || amountNumber <= 0) return;
+
+    // muunnetaan takaisin grammoiksi
+    const grams = amountNumber * 500;
+    this.ostoskoriService.updateItemAmount(uniqueId, grams);
   }
 
   // computePickupOptions metodi kerätä ja yhdistää noutotiedot (pickup options) korin tuotteista
@@ -183,7 +200,6 @@ export class OstoskoriComponent {
         uniqueId: p.uniqueId,
       };
     });
-    console.log();
   }
 
   // laske sen hinta

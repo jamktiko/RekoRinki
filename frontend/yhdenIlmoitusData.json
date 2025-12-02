@@ -1,0 +1,40 @@
+{
+  "kuva": null,
+  "title": "Maidon jakopiste Lapualle",
+  "maakunta": "Etelä-Pohjanmaa",
+  "julkaisupaiva": "2025-11-20T20:31:08.000Z",
+  "voimassaolo_paattyy": "2025-11-27T20:31:08.000Z",
+  "ilmoitus_has_Tuotteets": [
+    {
+      "kuva": null,
+      "maara": 100,
+      "uniqueId": "1_1",
+      "tuotteet": {
+        "nimi": "Luomumaito 1L",
+        "kuvaus": "Tuoretta luomumaitoa",
+        "yksikkohinta": "1.50"
+      }
+    },
+    {
+      "kuva": null,
+      "maara": 80,
+      "uniqueId": "1_2",
+      "tuotteet": {
+        "nimi": "Kananmunat 10kpl",
+        "kuvaus": "Vapaan kanan munia",
+        "yksikkohinta": "3.80"
+      }
+    }
+  ],
+  "tuottaja": { "kuva": null, "etunimi": "Kalle", "sukunimi": "Karhunen" },
+  "reitits": [
+    {
+      "jakopaiva_aika": "2025-11-23T20:31:08.000Z",
+      "jakopaikka": "Lapuan tori",
+      "katuosoite": "Torikatu 1",
+      "postinumero": "62100",
+      "paikkakunta": "Lapua",
+      "lisatieto": "Jako klo 17–19"
+    }
+  ]
+}

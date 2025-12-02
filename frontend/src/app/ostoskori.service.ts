@@ -47,6 +47,61 @@ export class OstoskoriService {
     };
   }
 
+  // Tämä päivittää jo ostoskorissa olevan määrän
+  updateItemAmount(uniqueId: string, newAmount: number): void {
+    const items = this.getItems();
+    const item = items.find((p) => p.uniqueId === uniqueId);
+
+    if (!item) return;
+
+    item.amount = newAmount;
+    localStorage.setItem('cart', JSON.stringify(items));
+  }
+
+  /** Aseta suoraan haluttu määrä (kpl) */
+  setQuantity(rawProduct: YhdenIlmoitusTuotteet, count: number) {
+    // Jos käyttäjä tyhjentää kentän / kirjoittaa negatiivisen → 0
+    if (!count || count <= 0) {
+      this.removeFromCart(rawProduct.uniqueId);
+      return;
+    }
+
+    const current = this._products.value;
+    const existing = current.find((p) => p.uniqueId === rawProduct.uniqueId);
+
+    // Muunnetaan kpl → grammoiksi (teillä 1kpl = 500g)
+    const amountInGrams = count * 500;
+
+    // Jos tuotetta EI ole korissa → luodaan uusi
+    if (!existing) {
+      const mapped = this.mapTuote(rawProduct);
+
+      const newItem: Product = {
+        ...mapped,
+        amount: amountInGrams,
+        totalprice: count * mapped.price,
+      };
+
+      this._products.next([...current, newItem]);
+      this.saveToLocalStorage();
+      return;
+    }
+
+    // Jos tuote löytyy → päivitetään suoraan
+    const updated = current.map((p) =>
+      p.uniqueId === rawProduct.uniqueId
+        ? {
+            ...p,
+            amount: amountInGrams,
+            totalprice: count * p.price,
+          }
+        : p
+    );
+
+    this._products.next(updated);
+    this.saveToLocalStorage();
+  }
+
   /** Lisää tuotteen (ottaa nyt raakadatan ja mapaa) */
   addToCart(rawProduct: YhdenIlmoitusTuotteet) {
     // ← Muutettu parametri

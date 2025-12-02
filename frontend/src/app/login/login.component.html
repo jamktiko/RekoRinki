@@ -1,8 +1,8 @@
 <div class="flex flex-col items-center justify-center min-h-[80vh] bg-white px-4 mt-5">
   <!-- Otsikko -->
-  <h2 class="text-3xl md:text-4xl font-semibold mb-16 md:mb-20 mt-[-40px] text-center">
+  <h1 class="text-3xl md:text-4xl font-semibold mb-16 md:mb-20 mt-[-40px] text-center">
     Kirjaudu sisään
-  </h2>
+  </h1>
 
   <!-- Lomake -->
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()"
@@ -43,14 +43,15 @@
 
     <!-- Kirjaudu sisään -nappi (spinnerillä) -->
     <button mat-raised-button color="primary" type="submit"
-      class="w-full bg-green-600 hover:bg-green-500 text-white font-semibold py-2 rounded-sm transition flex items-center justify-center gap-2"
+      class="w-full bg-[#80c783] hover:bg-green-500 font-semibold py-2 rounded-sm transition flex items-center justify-center gap-2"
       [disabled]="loading" [attr.aria-busy]="loading">
 
       <!-- Spinner näkyy vain kun lataus on käynnissä -->
       <mat-progress-spinner *ngIf="loading" diameter="20" mode="indeterminate" class="!mr-1"></mat-progress-spinner>
 
       <!-- <span *ngIf="!loading">Kirjaudu sisään</span> -->
-      <a routerLink="/login">Kirjaudu sisään</a>
+      <!-- <a [routerLink]="['/profiili']">Kirjaudu sisään</a> -->
+      <span *ngIf="!loading">Kirjaudu sisään</span>
     </button>
   </form>
 
