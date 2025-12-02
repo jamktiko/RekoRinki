@@ -42,6 +42,7 @@ export interface AppNotification {
 })
 export class NotificationService {
   private serverUrl = environment.apiUrl;
+  // private serverUrl = '';
 
   constructor(private http: HttpClient) {}
 

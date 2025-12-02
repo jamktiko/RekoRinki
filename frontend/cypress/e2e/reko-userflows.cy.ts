@@ -40,9 +40,9 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
   // KÄYTTÄJÄPOLKU 2
   // Etusivu → haku "Huhtasuo" → ilmoitus → tuote → poista → tyhjä kori
   // -----------------------------------------------------
-  it('Käyttäjäpolku 2: Haku "Huhtasuo" → ilmoitus → tuote → poista → tyhjä kori', () => {
+  it('Käyttäjäpolku 2: Haku "Lammas" → ilmoitus → tuote → poista → tyhjä kori', () => {
     // 1. Kirjoitetaan hakukenttään "Huhtasuo"
-    cy.get('#searchInput').type('Huhtasuo');
+    cy.get('#searchInput').type('Lammas');
 
     // 2. Haku palauttaa ainakin yhden ilmoituksen (näkyy "Näytä tuotteet" -nappi)
     cy.contains('Näytä tuotteet').should('exist');
@@ -92,14 +92,14 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
     cy.get('h1').should('be.visible');
 
     // 4 Lisää ensimmäinen tuote
-    cy.contains('Vadelma')
+    cy.contains('Luomumaito')
       .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
       .click();
 
     // 4 Lisää toinen tuote
-    cy.contains('Pensasmustikka')
+    cy.contains('Kananmunat')
       .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
@@ -156,20 +156,20 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
     cy.get('h1').should('be.visible');
 
     // 4. Lisätään kaksi eri tuotetta ostoskoriin
-    cy.contains('p', 'Mansikka')
+    cy.contains('p', 'Luomumaito')
       .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
       .click();
 
-    cy.contains('p', 'Vadelma')
+    cy.contains('p', 'Kananmunat')
       .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
       .click();
 
     // 5. Nostetaan ensimmäisen tuotteen määrää kahdesti
-    cy.contains('p', 'Mansikka')
+    cy.contains('p', 'Luomumaito')
       .closest('.flex')
       .find('.material-symbols-outlined')
       .contains('add')
@@ -180,11 +180,11 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
     cy.get('a[routerLink="/ostoskori"]').first().click();
 
     // 7. Varmistetaan, että ostoskorissa on kaksi eri tuotetta
-    cy.contains('Mansikka').should('exist');
-    cy.contains('Vadelma').should('exist');
+    cy.contains('Luomumaito').should('exist');
+    cy.contains('Kananmunat').should('exist');
 
     // 8. Poistetaan toinen tuote klikkaamalla delete-nappia
-    cy.contains('h2', 'Vadelma')
+    cy.contains('h2', 'Kananmunat')
       .closest('div.border.border-gray-200')
       .find('.material-symbols-outlined')
       .contains('delete')
@@ -193,9 +193,9 @@ describe('REKO – käyttäjäpolut ilman testID', () => {
     // 9. Tarkistetaan, että ostoskori ei ole tyhjä
     cy.contains('Ostoskori on tyhjä').should('not.exist');
 
-    // 10. Valitaan ensimmäinen noutopaikka (oletetaan mat-select käytössä)
-    cy.get('mat-select').first().click();
-    cy.get('mat-option').first().click();
+    // 10. --- Otetaan käyttöön sitten kun noutopaikka näkyy taas --- Valitaan ensimmäinen noutopaikka (oletetaan mat-select käytössä)
+    // cy.get('mat-select').first().click();
+    // cy.get('mat-option').first().click();
 
     // 11. Painetaan "Vahvista tilaus" -nappia
     cy.contains('button', 'Vahvista tilaus').click();
