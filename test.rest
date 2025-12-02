@@ -1,16 +1,25 @@
-POST http://localhost:3000/register HTTP/1.1
+# POST http://localhost:3000/register HTTP/1.1
+# Content-Type: application/json
+
+# {
+#   "tuottaja": false,
+#   "kayttajatunnus": "a123",
+#   "salasana": "Testi123",
+#   "etunimi": "a",
+#   "sukunimi": "a",
+#   "puhelinnro": "+35840012345678",
+#   "sahkoposti": "a@jamk.fi",
+#   "katuosoite": "Matarankatu 1",
+#   "postinumero": "40320",
+#   "postitoimipaikka": "Jyväskylä",
+#   "paikkakunta": "Jyväskylä"
+# }
+
+post http://localhost:3000/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "tuottaja": false,
-  "kayttajatunnus": "Testikäyttäjä2000",
-  "salasana": "Testi123",
-  "etunimi": "testi2000",
-  "sukunimi": "testi2000",
-  "puhelinnro": "+35840012345678",
-  "sahkoposti": "testi2000@jamk.com",
-  "katuosoite": "Matarankatu 1",
-  "postinumero": "40320",
-  "postitoimipaikka": "Jyväskylä",
-  "paikkakunta": "Jyväskylä"
-}
+"tuottaja": false,
+"sahkoposti": "a@jamk.fi",
+"salasana": "Testi123"
+}     
