@@ -41,7 +41,7 @@ const haeIlmoitus = async (ilmoitusID) => {
         },
         {
           model: Tuottaja,
-          attributes: ['kuva', 'etunimi', 'sukunimi', 'kuvaus'],
+          attributes: ['kuva', 'etunimi', 'sukunimi', 'lisatiedot'],
         },
         {
           model: Reitit,
