@@ -15,6 +15,7 @@ const haeIlmoitus = async (ilmoitusID) => {
         'kuva',
         'title',
         'maakunta',
+        'kuvaus',
         'julkaisupaiva',
         'voimassaolo_paattyy',
       ],
@@ -40,7 +41,7 @@ const haeIlmoitus = async (ilmoitusID) => {
         },
         {
           model: Tuottaja,
-          attributes: ['kuva', 'etunimi', 'sukunimi'],
+          attributes: ['kuva', 'etunimi', 'sukunimi', 'kuvaus'],
         },
         {
           model: Reitit,
