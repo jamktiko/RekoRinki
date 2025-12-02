@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +33,8 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./login.component.css'], // jos käytössä
 })
 export class LoginComponent {
+  private router = inject(Router);
+
   // loginForm: FormGroup;
   // loading = false;
   // hide = true; // jos haluat myöhemmin silmäikonin tms.
@@ -102,29 +105,61 @@ export class LoginComponent {
   loading = false; // lataustila napille
 
   // Lähetystapahtuma
+  // onSubmit(): void {
+  //   if (this.loginForm.valid) {
+  //     const { email, password } = this.loginForm.value;
+  //     console.log('Kirjautumistiedot:', email, password);
+
+  //     // Simuloidaan onnistunutta kirjautumista
+  //     this.loading = true;
+  //     setTimeout(() => {
+  //       this.loading = false;
+  //       alert('Kirjautuminen onnistui!');
+
+  //       this.loginForm.reset(); // tyhjentää arvot
+  //       Object.keys(this.loginForm.controls).forEach((key) => {
+  //         const control = this.loginForm.get(key);
+  //         control?.setErrors(null); // poistaa mahdolliset virheet
+  //         control?.markAsPristine(); // kertoo, ettei käyttäjä ole vielä muokannut mitään
+  //         control?.markAsUntouched(); // kertoo, ettei käyttäjä ole vielä “käynyt” kentissä
+  //       });
+  //     }, 1500);
+  //   } else {
+  //     console.log('Lomake ei ole kelvollinen');
+  //     this.loginForm.markAllAsTouched();
+  //   }
+  // }
+
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      console.log('Kirjautumistiedot:', email, password);
-
-      // Simuloidaan onnistunutta kirjautumista
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        alert('Kirjautuminen onnistui!');
-
-        this.loginForm.reset(); // tyhjentää arvot
-        Object.keys(this.loginForm.controls).forEach((key) => {
-          const control = this.loginForm.get(key);
-          control?.setErrors(null); // poistaa mahdolliset virheet
-          control?.markAsPristine(); // kertoo, ettei käyttäjä ole vielä muokannut mitään
-          control?.markAsUntouched(); // kertoo, ettei käyttäjä ole vielä “käynyt” kentissä
-        });
-      }, 1500);
-    } else {
-      console.log('Lomake ei ole kelvollinen');
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+
+    this.loading = true;
+
+    const { email, password } = this.loginForm.value;
+    console.log('Kirjautumistiedot:', email, password);
+
+    // 🔥 Simuloidaan 1.5 sek login API
+    setTimeout(() => {
+      this.loading = false;
+
+      // 👉 Tyhjennetään lomake
+      this.loginForm.reset();
+      Object.keys(this.loginForm.controls).forEach((key) => {
+        const control = this.loginForm.get(key);
+        control?.setErrors(null);
+        control?.markAsPristine();
+        control?.markAsUntouched();
+      });
+
+      // 👉 Nyt navigointi profiili-sivulle
+      this.router.navigate(['/profiili']);
+
+      // Tai snackbar
+      this.snackBar.open('Kirjautuminen onnistui!', 'OK', { duration: 2000 });
+    }, 1500);
   }
 
   // apumetodit templateä varten (lyhyempi kirjoitus)

@@ -1,6 +1,6 @@
 <div class="flex flex-col items-center w-full px-4 py-10">
   <!-- Otsikko -->
-  <h2 class="text-3xl font-semibold mb-10">Rekisteröidy</h2>
+  <h1 class="text-3xl font-semibold mb-10">Rekisteröidy</h1>
 
   <!-- Lomake -->
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="w-full max-w-4xl" novalidate>
@@ -144,7 +144,7 @@
 
     <!-- Rekisteröityminen -->
     <div class="flex justify-center mt-6">
-      <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid"
+      <button [routerLink]="['/profiili']" mat-raised-button color="primary" type="submit"
         class="px-8 py-3 rounded-md font-semibold disabled:opacity-60 disabled:cursor-not-allowed">
         Rekisteröidy
       </button>
@@ -153,7 +153,7 @@
     <!-- Linkki kirjautumiseen -->
     <p class="text-center mt-4 text-sm">
       Onko sinulla jo tili?
-      <a [routerLink]="['/profiili']" class="font-semibold text-black hover:underline">
+      <a [routerLink]="['/login']" class="font-semibold text-black hover:underline">
         Kirjaudu sisään
       </a>
     </p>

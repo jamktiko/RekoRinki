@@ -3,17 +3,20 @@ import {
   YhdenIlmoitusReitti,
   YhdenIlmoitusTiedot,
   YhdenIlmoitusTuotteet,
+  IlmoitusTiedot,
+  KaikkiIlmoitusTiedot,
 } from '../types';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationService } from '../notification.service';
 import { OstoskoriService } from '../ostoskori.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ilmoitus',
   standalone: true,
-  imports: [CommonModule, MatSnackBarModule],
+  imports: [CommonModule, MatSnackBarModule, ReactiveFormsModule],
   templateUrl: './ilmoitus.component.html',
   styleUrl: './ilmoitus.component.css',
 })
@@ -29,6 +32,10 @@ export class IlmoitusComponent {
   reitit: YhdenIlmoitusReitti[] = [];
   loading = true;
   error: string | null = null;
+  // IlmoitusData!: IlmoitusTiedot;
+
+  // tämä muuttuja avulla käyttäjä halua lisätä haluattun lukumäärä lisämään ostoskori
+  tuoteMaaraControl: { [uniqueId: string]: FormControl } = {};
 
   // notifications: AppNotification[] | any = [];
 
@@ -45,6 +52,15 @@ export class IlmoitusComponent {
       // this.loadProducts();
       // this.fetchIlmoitukset();
     }
+
+    // this.relatedProducts.forEach((product) => {
+    //   this.tuoteMaaraControl[product.uniqueId] = new FormControl(0);
+    // });
+    // this.notification.ilmoitus_has_Tuotteets.forEach((product) => {
+    //   this.tuoteMaaraControl[product.uniqueId] = new FormControl(
+    //     this.getCartQuantity(product.uniqueId)
+    //   );
+    // });
   }
 
   // hae ilmoitusket data notification servicesta tiedosta
@@ -66,17 +82,40 @@ export class IlmoitusComponent {
   loadNotification(id: number) {
     this.notificationService.getNotificationById(id).subscribe({
       next: (data: YhdenIlmoitusTiedot) => {
-        // koko ilmoitus sellaisenaan
         this.notification = data;
 
-        // tuotteet suoraan backendistä
-        this.relatedProducts = data.ilmoitus_has_Tuotteets;
+        // Aseta tuotteet ensin
+        this.relatedProducts = data.ilmoitus_has_Tuotteets || [];
+
+        // Luo FormControlit kaikille tuotteille NYT kun relatedProducts on asetettu
+        this.relatedProducts.forEach((product) => {
+          // varmista, että arvo on numero
+          const initial = Number(this.getCartQuantity(product.uniqueId)) || 0;
+          const control = new FormControl(initial);
+
+          // Kuuntele inputin muutosta — parsitaan aina numeroksi
+          control.valueChanges.subscribe((rawValue) => {
+            const value = Number(rawValue);
+            // jos ei numero tai negatiivinen, normalisoi 0:ksi
+            if (!isFinite(value) || value < 0) {
+              control.setValue(0, { emitEvent: false });
+              this.updateCartQuantity(product, 0);
+              return;
+            }
+            // päivitä koriin (setQuantity hoitaa localStorage tallennuksen)
+            this.updateCartQuantity(product, Math.floor(value));
+          });
+
+          this.tuoteMaaraControl[product.uniqueId] = control;
+        });
 
         // reitit suoraan backendistä
-        this.reitit = data.reitits;
+        this.reitit = data.reitits || [];
 
-        // debug
-        console.log('Ilmoitus:', data);
+        this.loading = false;
+        console.log('IlmoitusData:', data);
+        // console.log('Ilmoituskuvaus:', this.IlmoitusData);
+        console.log('tässä on IlmoitusData', this.notification);
       },
       error: (err) => {
         console.error('Virhe ilmoituksen haussa:', err);
@@ -84,6 +123,23 @@ export class IlmoitusComponent {
         this.loading = false;
       },
     });
+  }
+
+  // funktiolla normalisoidaan syöte (esim. negatiiviset arvot → 0) ja käsitellään ostoskori.
+  updateCartQuantity(product: YhdenIlmoitusTuotteet, amount: number) {
+    if (amount == null) return;
+    amount = Number(amount);
+    if (!isFinite(amount) || amount < 0) amount = 0;
+    amount = Math.floor(amount); // varmista integer
+
+    // suora asetus ostoskoriin
+    this.ostoskoriservice.setQuantity(product, amount);
+    // päivitämme kontrollin arvo ohjelmallisesti ilman eventin laukaisua (jos se tarvitaan)
+    const ctrl = this.tuoteMaaraControl[product.uniqueId];
+    if (ctrl && Number(ctrl.value) !== amount) {
+      ctrl.setValue(amount, { emitEvent: false });
+    }
+    console.log('Kori päivitetty:', product.uniqueId, amount);
   }
 
   // loadProducts()-metodia suodattaa vain ne tuotteet, joiden ID on ilmoituksen producstID-listassa.
@@ -167,26 +223,34 @@ export class IlmoitusComponent {
   // }
   //
   addOne(product: YhdenIlmoitusTuotteet): void {
-    // Tarkista varasto: Älä lisää jos tyhjä
-    // const stockProduct = this.pstore
-    //   .products()
-    //   .find((p) => p.id === product.tuoteID);
-    // if (!stockProduct || stockProduct.amount <= 0) {
-    //   this.snackBar.open('Varasto tyhjä – ei voi lisätä!', '', {
-    //     duration: 3000,
-    //     horizontalPosition: 'start',
-    //     verticalPosition: 'bottom',
-    //     panelClass: ['error-snackbar'],
-    //   });
-    //   return;
+    // Tarkista korin määrä: Jos 0, lisää uusi tuote; muuten kasvata
+    // if (this.getCartQuantity(product.uniqueId) === 0) {
+    //   this.ostoskoriservice.addToCart(product); // Lisää uusi tuote korin eli Käyttää palvelua (mapaa itse)
+    // } else {
+    //   this.ostoskoriservice.addToCart(product); // Kasvata olemassa olevaa ja Sama metodi hoitaa lisäyksen (palvelu tarkistaa olemassaolon)
     // }
 
-    // Tarkista korin määrä: Jos 0, lisää uusi tuote; muuten kasvata
-    if (this.getCartQuantity(product.uniqueId) === 0) {
-      this.ostoskoriservice.addToCart(product); // Lisää uusi tuote korin eli Käyttää palvelua (mapaa itse)
-    } else {
-      this.ostoskoriservice.addToCart(product); // Kasvata olemassa olevaa ja Sama metodi hoitaa lisäyksen (palvelu tarkistaa olemassaolon)
-    }
+    // // Päivitä FormControlin arvo
+    // if (!this.tuoteMaaraControl[product.uniqueId]) {
+    //   // Luo FormControl jos ei vielä ole
+    //   this.tuoteMaaraControl[product.uniqueId] = new FormControl(1);
+    // } else {
+    //   // Kasvata arvoa yhdellä
+    //   const current = this.tuoteMaaraControl[product.uniqueId].value || 0;
+    //   this.tuoteMaaraControl[product.uniqueId].setValue(current + 1);
+    // }
+
+    const uniqueId = product.uniqueId;
+    const ctrl = this.tuoteMaaraControl[uniqueId];
+    const current =
+      Number(ctrl?.value ?? this.getCartQuantity(uniqueId) ?? 0) || 0;
+    const newValue = current + 1;
+
+    // Aseta ostoskoriin
+    this.ostoskoriservice.setQuantity(product, newValue);
+
+    // Päivitä input ilman että valueChanges-subscriber laukeaa
+    if (ctrl) ctrl.setValue(newValue, { emitEvent: false });
 
     // Näytä onnistumisilmoitus
     this.snackBar.open(`${product.tuotteet.nimi} lisätty ostoskoriin!`, '', {
@@ -210,12 +274,31 @@ export class IlmoitusComponent {
       return;
     }
 
-    // Jos määrä > 1, vähennä; jos == 1, poista kokonaan
-    if (currentQuantity > 1) {
-      this.ostoskoriservice.decrement(product.uniqueId); // Vähennä määrää
-    } else {
-      this.ostoskoriservice.removeFromCart(product.uniqueId); // Poista tuote kokonaan
-    }
+    // // Jos määrä > 1, vähennä; jos == 1, poista kokonaan
+    // if (currentQuantity > 1) {
+    //   this.ostoskoriservice.decrement(product.uniqueId); // Vähennä määrää
+    // } else {
+    //   this.ostoskoriservice.removeFromCart(product.uniqueId); // Poista tuote kokonaan
+    // }
+
+    // // Päivitä FormControl
+    // if (this.tuoteMaaraControl[product.uniqueId]) {
+    //   const control = this.tuoteMaaraControl[product.uniqueId];
+    //   const newValue = Math.max((control.value || 0) - 1, 0);
+    //   control.setValue(newValue);
+    // }
+
+    const uniqueId = product.uniqueId;
+    const ctrl = this.tuoteMaaraControl[uniqueId];
+    const current =
+      Number(ctrl?.value ?? this.getCartQuantity(uniqueId) ?? 0) || 0;
+    const newValue = Math.max(current - 1, 0);
+
+    // Aseta ostoskoriin / poista jos 0
+    this.ostoskoriservice.setQuantity(product, newValue);
+
+    // Päivitä input ilman eventtia
+    if (ctrl) ctrl.setValue(newValue, { emitEvent: false });
 
     // Näytä onnistumisilmoitus
     this.snackBar.open(

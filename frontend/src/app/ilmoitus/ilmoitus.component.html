@@ -86,10 +86,18 @@
               <!-- [class.cursor-not-allowed]="getCartQuantity(product.id) <= 0">, [disabled]="getCartQuantity(product.id) <= 0 -->
             </button>
 
-            <span
+            <!-- <span
               class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300">
               {{ getCartQuantity(product.uniqueId) }}
-            </span>
+            </span> -->
+
+            <input *ngIf="tuoteMaaraControl[product.uniqueId]"
+              class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300"
+              [formControl]="tuoteMaaraControl[product.uniqueId]" title="tuoteMaaraControl"
+              (ngModelChange)="updateCartQuantity(product, $event)" />
+
+
+
 
             <button (click)="addOne(product)" aria-label="Lisää yksi tuote"
               class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
@@ -121,8 +129,11 @@
 
     <div class="px-6 py-4">
       <h2 class="text-lg font-semibold text-gray-900 mb-3">Kuvaus</h2>
-      <p class="text-gray-800 text-base leading-relaxed">{{ notification.kuvaus }}</p>
+      <!-- <p class="text-gray-800 text-base leading-relaxed">{{ notification?.kuvaus }}</p> -->
+      <p class="text-gray-800 text-base leading-relaxed">{{ notification?.kuvaus }}</p>
+
     </div>
+
   </div>
 
   <!-- OIKEA SIVU - Tuottajan tiedot -->
@@ -155,9 +166,9 @@
       </div>
 
 
-      <p *ngFor=" let product of relatedProducts" class="text-gray-800 leading-relaxed text-left">
+      <!-- <p *ngFor=" let product of relatedProducts" class="text-gray-800 leading-relaxed text-left">
         {{ product.tuotteet.kuvaus }}
-      </p>
+      </p> -->
     </div>
 
     <!-- Noutotiedot -->
@@ -205,8 +216,7 @@
     <div class="ml-4">
       <h3 class="text-lg font-bold text-gray-900 mb-3 ">Tilan tiedot</h3>
       <p class="text-gray-800 leading-relaxed text-base">
-        Tervetuloa nauttimaan kesän makeimmista hedelmistä! Marjamme kasvavat puhtaassa Keski-Suomen luonnossa ja saavat
-        auringonvaloa riittämiin!
+        {{ notification?.tuottaja?.lisatiedot }}
       </p>
     </div>
   </div>
