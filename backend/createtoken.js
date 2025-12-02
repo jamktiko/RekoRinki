@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config;
 const createToken = (user, tuottaja) => {
+  console.log(user);
   const payload = {
     email: user.sahkoposti,
     tuottaja: tuottaja,

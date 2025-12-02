@@ -3,12 +3,12 @@
 
 # {
 #   "tuottaja": false,
-#   "kayttajatunnus": "Testikäyttäjä2000",
+#   "kayttajatunnus": "a123",
 #   "salasana": "Testi123",
-#   "etunimi": "testi2000",
-#   "sukunimi": "testi2000",
+#   "etunimi": "a",
+#   "sukunimi": "a",
 #   "puhelinnro": "+35840012345678",
-#   "sahkoposti": "testi2000@jamk.com",
+#   "sahkoposti": "a@jamk.fi",
 #   "katuosoite": "Matarankatu 1",
 #   "postinumero": "40320",
 #   "postitoimipaikka": "Jyväskylä",
@@ -19,7 +19,7 @@ post http://localhost:3000/login HTTP/1.1
 Content-Type: application/json
 
 {
-"tuottaja": "true",
-"sahkoposti": "pekka.pekkanen@jamk.fi",
-"salasana": "salasana123"
+"tuottaja": false,
+"sahkoposti": "a@jamk.fi",
+"salasana": "Testi1234"
 }

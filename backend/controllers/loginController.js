@@ -5,26 +5,29 @@ const login = async (data) => {
   try {
     const { tuottaja, sahkoposti, salasana } = data;
     const hashedPassword = bcrypt.hashSync(salasana, 8);
+    console.log(data);
+    console.log(hashedPassword);
     let kayttaja;
     if (tuottaja === true) {
       kayttaja = await Tuottaja.findOne({
         where: {
-          tuottaja: tuottaja,
           sahkoposti: sahkoposti,
-          salasana: hashedPassword,
         },
       });
     } else {
       kayttaja = await Asiakas.findOne({
         where: {
-          tuottaja,
-          sahkoposti,
-          salasana: hashedPassword,
+          sahkoposti: sahkoposti,
         },
       });
     }
-    const token = createToken(kayttaja, tuottaja);
-    return token;
+    console.log(kayttaja);
+    if (!bcrypt.compareSync(salasana, kayttaja.salasana)) {
+      throw 'Väärä salasana';
+    } else {
+      const token = createToken(kayttaja, tuottaja);
+      return token;
+    }
   } catch (error) {
     throw error;
   }
