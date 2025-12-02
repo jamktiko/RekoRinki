@@ -10,6 +10,7 @@ import indexRouter from './routes/index.js';
 import hakuRouter from './routes/haku.js';
 import ilmoitusRouter from './routes/ilmoitus.js';
 import regRouter from './routes/reg.js';
+import loginRouter from './routes/login.js';
 dotenv.config();
 
 const app = express();
@@ -31,4 +32,5 @@ app.use('/', indexRouter);
 app.use('/', hakuRouter);
 app.use('/', ilmoitusRouter);
 app.use('/', regRouter);
+app.use('/', loginRouter);
 export default app;
