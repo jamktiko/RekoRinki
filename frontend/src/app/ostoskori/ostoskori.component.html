@@ -70,24 +70,25 @@
                   <!-- Määrän säätö laatikko -->
                   <div
                     class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-                    <button (click)="ostoskoriService.decrement(product.uniqueId)"
+                    <button (click)="decrement(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
                       [disabled]="product.amount <= 500" [class.opacity-50]="product.amount <= 500"
                       [class.cursor-not-allowed]="product.amount <= 500">
                       <span class="text-gray-700 text-lg material-symbols-outlined">remove</span>
                     </button>
 
-                    <span
+                    <!-- <span
                       class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300">
                       {{ product.amount / 500 | number:'1.0-0' }}
-                    </span>
-                    <!-- <input
+                    </span> -->
+                    <input
                       class="w-10 h-8 flex items-center justify-center text-gray-900 font-medium border-l border-r border-gray-300"
                       title="tuoteMaaraControl" [value]="product.amount / 500"
-                      (blur)="updateCartQuantity(product.uniqueId, ($event.target as HTMLInputElement).value)" /> -->
+                      [formControl]="maaraControl[product.uniqueId]"
+                      (ngModelChange)="updateCartQuantity(product.uniqueId, $event)" />
 
 
-                    <button (click)="ostoskoriService.increment(product.uniqueId)"
+                    <button (click)="increment(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
                       <span class="text-gray-700 text-lg material-symbols-outlined">add</span>
                     </button>
@@ -120,7 +121,7 @@
         *ngIf="ostoskoriService.getItems().length > 0">
 
         <!-- Lisää tämä: Mat-Select desktopissa (lg:) laatikon yläpuolella -->
-        <div *ngIf="pulledPickupOptions?.length > 0" class="mb-4">
+        <div class="mb-4">
           <h2 class="text-lg font-semibold text-gray-900 mb-2">Valitse noutopaikka</h2>
           <mat-form-field appearance="fill" class="w-full">
             <mat-label>Noutopaikka</mat-label>
