@@ -1,7 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { ProductStore } from '../productstore';
 import { CartStore } from '../cartstore';
-import { AppNotification, IlmoitusTiedot, Product } from '../types';
+import {
+  AppNotification,
+  IlmoitusTiedot,
+  Product,
+  YhdenIlmoitusReitti,
+  YhdenIlmoitusTiedot,
+} from '../types';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../notification.service';
 import { Router, RouterLink } from '@angular/router';
@@ -9,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { OstoskoriService } from '../ostoskori.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ostoskori',
@@ -20,6 +26,7 @@ import { FormControl } from '@angular/forms';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './ostoskori.component.html',
   styleUrl: './ostoskori.component.css',
@@ -31,11 +38,19 @@ export class OstoskoriComponent {
 
   notifications: IlmoitusTiedot[] = [];
 
+  pickUpRoutes: YhdenIlmoitusTiedot[] | any = [];
+
+  selectedRoute: number | null = null;
+
   // pulledPickupOptions -muuttuja, joka päivittyy ilmoitusten latauksen yhteydessä, jotta template kutsuu datan kerran.
-  pulledPickupOptions: { value: string; viewValue: string }[] = [];
+  pulledPickupOptions: {
+    value: string;
+    viewValue: string;
+  }[] = [];
 
   // Uusi tila: näytetäänkö tilausvahvistus
   showConfirmation = false;
+
   // Tila valitulle noutopaikalle (string, koska valinta on tekstiä)
   selectedPickup: string = '';
 
@@ -44,7 +59,28 @@ export class OstoskoriComponent {
 
   ngOnInit(): void {
     this.loadNotifications(); // Lataa ilmoitukset komponentissa
-    // this.initFormControls();
+    this.initFormControls();
+  }
+
+  // lataa ilmoituskia
+  loadNotifications(): void {
+    console.log('Loading notifications in cart component...');
+    this.nservice.getNotifications().subscribe({
+      next: (data) => {
+        console.log('Notifications loaded in cart:', data);
+        // this.notifications = data || [];
+        this.notifications = Array.isArray(data) ? data : [];
+        console.log('Notifications set to:', this.notifications);
+        this.pulledPickupOptions = this.getPickupOptions();
+        console.log('kaikki notification', this.pulledPickupOptions); // tämä paluattaa tyhjä taulukko
+        console.log('all notification', this.getPickupOptions()); // tämä palauttaa tyhjä taulukko
+        console.log('kaikki ilmoitukset', data); // tämä paluattaa kaikki ilmoitukset
+      },
+      error: (err) => {
+        console.error('Virhe ilmoitusten haussa:', err);
+        this.notifications = [];
+      },
+    });
   }
 
   // hakee noutotiedot dynaamisesti korin tuotteista
@@ -75,10 +111,33 @@ export class OstoskoriComponent {
     });
     return pickups;
   }
-  // Lisää tämä: Metodi valinnan käsittelyyn (valinnainen, mutta hyvä laajennukseen)
+
+  // palauttaa listan { value: reittiID, viewValue: "päivä - lisätieto" }
+  // getPickupOptions(): { value: number; viewValue: string }[] {
+  //   if (!this.notifications || this.notifications.length === 0) return [];
+
+  //   const options: { value: number; viewValue: string }[] = [];
+
+  //   console.log('pickuproutes:', this.pickUpRoutes); // tämäkin palauttaa tyhjä taulukko
+  //   this.pickUpRoutes.forEach((notif) => {
+  //     console.log('notif', notif); // tämä ei toimiiiiii
+  //     const reitit = notif.reitits ?? [];
+  //     reitit.forEach((r) => {
+  //       console.log('reitti', r); //
+  //       const label = `${r.jakopaiva_aika} - ${r.lisatieto ?? ''}`.trim();
+  //       options.push({ value: r.reittiID, viewValue: label });
+  //     });
+  //   });
+  //   console.log('option palauttaa', options); // tämä palauttaa tyhjä taulukko
+
+  //   return options;
+  // }
+
+  // käyttäjä vaihtaa noutopaikka
   onPickupChange(value: string): void {
-    this.selectedPickup = value;
+    // ei tämä konole toimii
     console.log('Valittu noutopaikka:', value); // Voit tallentaa tämän myöhemmin tilaukseen
+    this.selectedPickup = value;
   }
 
   // Siirry tuotteen ilmoitussivulle
@@ -105,25 +164,6 @@ export class OstoskoriComponent {
     this.showConfirmation = false;
   }
 
-  // lataa ilmoituskia
-  loadNotifications(): void {
-    console.log('Loading notifications in cart component...');
-    this.nservice.getNotifications().subscribe({
-      next: (data) => {
-        console.log('Notifications loaded in cart:', data);
-        // this.notifications = data || [];
-        this.notifications = Array.isArray(data) ? data : [];
-        console.log('Notifications set to:', this.notifications);
-        this.pulledPickupOptions = this.getPickupOptions();
-        console.log(data);
-      },
-      error: (err) => {
-        console.error('Virhe ilmoitusten haussa:', err);
-        this.notifications = [];
-      },
-    });
-  }
-
   updateCartQuantity(uniqueId: string, value: any): void {
     const amountNumber = Number(value);
 
@@ -134,31 +174,6 @@ export class OstoskoriComponent {
     const grams = amountNumber * 500;
     this.ostoskoriService.updateItemAmount(uniqueId, grams);
   }
-
-  // computePickupOptions metodi kerätä ja yhdistää noutotiedot (pickup options) korin tuotteista
-  // saatujen ilmoitus-ID:iden perusteella
-  // computePickupOptions(): { value: string; viewValue: string }[] {
-  //   const notificationIds = [
-  //     ...new Set(
-  //       this.getCartProductsWithDetails()
-  //         .map((p) => p.notificationID)
-  //         .filter((id) => id)
-  //     ),
-  //   ];
-  //   const pickups: { value: string; viewValue: string }[] = [];
-  //   notificationIds.forEach((id) => {
-  //     const notif = this.notifications.find((n) => n.id === id);
-  //     if (notif && notif.pickupTimes) {
-  //       notif.pickupTimes.forEach((time) => {
-  //         pickups.push({
-  //           value: `${notif.place}, ${time}`,
-  //           viewValue: `${notif.place}, ${time}`,
-  //         });
-  //       });
-  //     }
-  //   });
-  //   return pickups;
-  // }
 
   // Metodi yhdistämään tuotteet ilmoitustiedoilla
   getCartProductsWithDetails() {
@@ -190,8 +205,7 @@ export class OstoskoriComponent {
         notif?.tuottaja?.etunimi && notif?.tuottaja?.sukunimi
           ? `${notif.tuottaja.etunimi} ${notif.tuottaja.sukunimi}`
           : `Tuottaja ${producerID}`; // ← Fallback: Näytä ID, jos nimi ei löydy
-      // const producerName =
-      //   notif?.tuottaja?.etunimi + ' ' + notif?.tuottaja?.sukunimi;
+
       return {
         ...p,
         producerName: producerName,
@@ -211,5 +225,33 @@ export class OstoskoriComponent {
   // kilkaila
   trackByProduct(index: number, product: any): any {
     return product.uniqueId; // Käytä tuoteID ja tuottajaID tunnistamiseen
+  }
+
+  initFormControls(): void {
+    this.getCartProductsWithDetails().forEach((product) => {
+      const control = new FormControl(this.getCartQuantity(product.uniqueId));
+      control.valueChanges.subscribe((value) => {
+        const num = Number(value);
+        if (!isNaN(num)) this.updateCartQuantity(product.uniqueId, num);
+      });
+      this.maaraControl[product.uniqueId] = control;
+    });
+  }
+
+  getCartQuantity(uniqueId: string): number {
+    const item = this.ostoskoriService
+      .getItems()
+      .find((p) => p.uniqueId === uniqueId);
+    return item ? Math.ceil(item.amount / 500) : 0;
+  }
+
+  increment(uniqueId: string): void {
+    const current = this.getCartQuantity(uniqueId);
+    this.updateCartQuantity(uniqueId, current + 1);
+  }
+
+  decrement(uniqueId: string): void {
+    const current = this.getCartQuantity(uniqueId);
+    if (current > 1) this.updateCartQuantity(uniqueId, current - 1);
   }
 }
