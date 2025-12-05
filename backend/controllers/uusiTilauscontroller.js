@@ -42,6 +42,10 @@ const tilaus = async (data) => {
         { where: { tuoteID: i.tuoteID }, transaction: transaktio }
       );
     }
+    await Tilaus.increment(
+      { summa: +summa },
+      { where: { tilausnro: uusiTilaus.tilausnro }, transaction: transaktio }
+    );
     await transaktio.commit();
     return uusiTilaus;
   } catch (error) {
