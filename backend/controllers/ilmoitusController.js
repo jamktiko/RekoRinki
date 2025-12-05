@@ -12,6 +12,7 @@ const haeIlmoitus = async (ilmoitusID) => {
     const ilmoitus = await Ilmoitukset.findOne({
       where: { ilmoitusID: ilmoitusID },
       attributes: [
+        'ilmoitusID',
         'kuva',
         'title',
         'maakunta',
