@@ -39,7 +39,7 @@ post http://localhost:3000/uusitilaus HTTP/1.1
 "tuoteID": "1",
 "tuottajaID": "1",
 "tilausID": "1",
-"maara": "1",
+"maara": "2",
 "yksikkohinta": "4.20"}
 ]
 }
