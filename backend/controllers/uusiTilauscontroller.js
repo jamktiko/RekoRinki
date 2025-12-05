@@ -1,4 +1,3 @@
-// import { Sequelize } from '@sequelize/core';
 import con from '../dbconnection.js';
 import {
   Asiakas,
@@ -12,6 +11,7 @@ import {
 const tilaus = async (data) => {
   const transaktio = await con.startUnmanagedTransaction();
   try {
+    let summa = 0;
     const uusiTilaus = await Tilaus.create(
       {
         asiakasID: data.asiakasID,
@@ -36,6 +36,7 @@ const tilaus = async (data) => {
         },
         { transaction: transaktio }
       );
+      summa += i.maara * i.yksikkohinta;
       await Tuotteet.increment(
         { tuotesaldo: -i.maara },
         { where: { tuoteID: i.tuoteID }, transaction: transaktio }
