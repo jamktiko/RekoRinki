@@ -23,6 +23,7 @@ const haeIlmoitus = async (ilmoitusID) => {
         {
           model: Ilmoitus_has_Tuotteet,
           attributes: [
+            'ilmoitusID',
             'kuva',
             'maara',
             [
