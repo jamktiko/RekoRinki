@@ -38,9 +38,11 @@ export class OstoskoriComponent {
 
   notifications: IlmoitusTiedot[] = [];
 
-  pickUpRoutes: YhdenIlmoitusTiedot[] | any = [];
+  YhdenIlmoitusTiedot: YhdenIlmoitusTiedot[] | any = [];
 
-  selectedRoute: number | null = null;
+  // reitit: YhdenIlmoitusReitti[] = [];
+
+  // selectedRoute: number | null = null;
 
   // pulledPickupOptions -muuttuja, joka päivittyy ilmoitusten latauksen yhteydessä, jotta template kutsuu datan kerran.
   pulledPickupOptions: {
@@ -60,7 +62,27 @@ export class OstoskoriComponent {
   ngOnInit(): void {
     this.loadNotifications(); // Lataa ilmoitukset komponentissa
     this.initFormControls();
+    // this.loadReittiDetailsForCart();
   }
+
+  // loadReittiDetailsForCart() {
+  //   const ids = [
+  //     ...new Set(
+  //       this.getCartProductsWithDetails()
+  //         .map((p) => p.notificationID)
+  //         .filter((id) => id)
+  //     ),
+  //   ];
+
+  //   this.YhdenIlmoitusTiedot = [];
+
+  //   ids.forEach((id) => {
+  //     this.nservice.getNotificationById(id).subscribe((data) => {
+  //       console.log('SAATU YHDEN ILMOITUS TIEDOT:', data);
+  //       this.YhdenIlmoitusTiedot.push(data);
+  //     });
+  //   });
+  // }
 
   // lataa ilmoituskia
   loadNotifications(): void {
@@ -71,11 +93,29 @@ export class OstoskoriComponent {
         // this.notifications = data || [];
         this.notifications = Array.isArray(data) ? data : [];
         console.log('Notifications set to:', this.notifications);
-        this.pulledPickupOptions = this.getPickupOptions();
-        console.log('kaikki notification', this.pulledPickupOptions); // tämä paluattaa tyhjä taulukko
-        console.log('all notification', this.getPickupOptions()); // tämä palauttaa tyhjä taulukko
-        console.log('kaikki ilmoitukset', data); // tämä paluattaa kaikki ilmoitukset
+
+        // Hae vain yhden ilmoitus tiedot ilmoitusID perusteella
+        const ids = this.notifications.map((n) => n.ilmoitusID);
+        ids.forEach((id) => {
+          this.nservice.getNotificationById(id).subscribe({
+            next: (full) => {
+              this.YhdenIlmoitusTiedot.push(full);
+              console.log('Full notification loaded:', full);
+
+              // Kun kaikki on haettu, päivitä concat noutopaikat
+              this.pulledPickupOptions = this.getPickupOptions();
+            },
+            error: (err) =>
+              console.error('Error loading full notification id', id, err),
+          });
+          // this.pulledPickupOptions = this.getPickupOptions();
+
+          console.log('kaikki notification', this.pulledPickupOptions); // tämä paluattaa tyhjä taulukko
+          console.log('all notification', this.getPickupOptions()); // tämä palauttaa value ja viewValue
+          console.log('kaikki ilmoitukset', data); // tämä paluattaa kaikki ilmoitukset
+        });
       },
+
       error: (err) => {
         console.error('Virhe ilmoitusten haussa:', err);
         this.notifications = [];
@@ -86,29 +126,42 @@ export class OstoskoriComponent {
   // hakee noutotiedot dynaamisesti korin tuotteista
   // noitificationID löytämme oikein ilmoitukset tiedot
   getPickupOptions(): { value: string; viewValue: string }[] {
-    if (!this.notifications || this.notifications.length === 0) {
+    console.log('YhdenIlmoitusTiedot palauttaa', this.YhdenIlmoitusTiedot); // tämä palauttaa kaikki ilmoitukset
+    if (!this.YhdenIlmoitusTiedot || this.YhdenIlmoitusTiedot.length === 0) {
+      console.log('Yhden Ilmoitus Tiedot: ', this.YhdenIlmoitusTiedot);
       return []; // Palauta tyhjä lista jos data ei ole vielä ladattu
     }
-    // Kerää uniikit ilmoitus-ID:t korin tuotteista
+
+    // Jos ostoskorissa on tuotteita, kerää niiden ilmoitus-IDt
     const notificationIds = [
       ...new Set(
         this.getCartProductsWithDetails()
           .map((p) => p.notificationID)
-          .filter((id) => id)
+          .filter((id) => id !== undefined && id !== null)
       ),
     ];
+    console.log('notificationIds:', notificationIds); // tämäkin palauttaa ilmoitukset id
+
+    const pickups: { value: string; viewValue: string }[] = [];
+    console.log('pickups palauttaa: ', pickups);
 
     // Hae noutotiedot näistä ilmoituksista
-    const pickups: { value: string; viewValue: string }[] = [];
     notificationIds.forEach((id) => {
-      const notif = this.notifications.find((n) => n.ilmoitusID === id);
-      if (notif) {
-        pickups.push({
-          value: `${notif.maakunta} - ${notif.julkaisupaiva}`,
-          viewValue: `${notif.maakunta} - ${notif.julkaisupaiva}`,
+      const notif = this.YhdenIlmoitusTiedot.find((n) => n.ilmoitusID === id);
+      console.log(
+        'this.YhdenIlmoitusTiedot.map((n) => n.ilmoitusID) ',
+        this.YhdenIlmoitusTiedot.map((n) => n.ilmoitusID)
+      );
+      console.log('Notif YhenIlmoitusTiedot: ', notif);
+      console.log('YhdenIlmoitustieodt:', this.YhdenIlmoitusTiedot);
+      if (notif?.reitits) {
+        notif.reitits.forEach((r) => {
+          const label = `${r.jakopaiva_aika} - ${r.lisatieto ?? ''}`.trim();
+          pickups.push({ value: label, viewValue: label });
         });
       }
     });
+    console.log('pickup:', pickups);
     return pickups;
   }
 
@@ -164,6 +217,7 @@ export class OstoskoriComponent {
     this.showConfirmation = false;
   }
 
+  // tämä funktio kasvata grammoina määrä kertamalla 500
   updateCartQuantity(uniqueId: string, value: any): void {
     const amountNumber = Number(value);
 
@@ -173,14 +227,15 @@ export class OstoskoriComponent {
     // muunnetaan takaisin grammoiksi
     const grams = amountNumber * 500;
     this.ostoskoriService.updateItemAmount(uniqueId, grams);
+    console.log('grams', grams);
   }
 
   // Metodi yhdistämään tuotteet ilmoitustiedoilla
   getCartProductsWithDetails() {
-    console.log('Notifications in cart component:', this.notifications);
+    console.log('Notifications in cart component:', this.notifications); // tämä paluttaa kaikki ilmoitukset
     console.log(
       'Notification IDs:',
-      this.notifications.map((n) => n.ilmoitusID)
+      this.notifications.map((n) => n.ilmoitusID) // tämä palauttaa kaikki ilmoituksenID
     );
     return this.ostoskoriService.getItems().map((p) => {
       // Parse producerID from uniqueId (e.g., "1_2" → producerID: 2)
@@ -189,7 +244,7 @@ export class OstoskoriComponent {
 
       console.log(
         'Processing product:',
-        p.uniqueId,
+        p.uniqueId, // tämä palauttaa ilmoitusid ja tuottajaid
         'notificationID:',
         notificationID,
         'producerID:',
@@ -199,12 +254,14 @@ export class OstoskoriComponent {
       const notif = this.notifications.find(
         (n) => n.ilmoitusID === notificationID
       );
-      console.log('Found notification:', notif);
+      console.log('Found notification:', notif); // tämä palauttaa kaikki ilmoituksen
 
       const producerName =
         notif?.tuottaja?.etunimi && notif?.tuottaja?.sukunimi
           ? `${notif.tuottaja.etunimi} ${notif.tuottaja.sukunimi}`
           : `Tuottaja ${producerID}`; // ← Fallback: Näytä ID, jos nimi ei löydy
+
+      console.log('producerNmae:', producerName); // tämä palauttaa tuottaja etu- ja sukunimi
 
       return {
         ...p,

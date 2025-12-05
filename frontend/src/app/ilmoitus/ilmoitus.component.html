@@ -92,7 +92,7 @@
             </span> -->
 
             <input *ngIf="tuoteMaaraControl[product.uniqueId]"
-              class="w-10 h-8 text-gray-900 font-medium border-l border-r border-gray-300"
+              class="w-10 h-8 text-gray-900 font-medium border-l border-r border-gray-300 text-center"
               [formControl]="tuoteMaaraControl[product.uniqueId]" title="tuoteMaaraControl"
               (ngModelChange)="updateCartQuantity(product, $event)" />
 
