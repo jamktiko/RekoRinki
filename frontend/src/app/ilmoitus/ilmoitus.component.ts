@@ -114,7 +114,8 @@ export class IlmoitusComponent {
 
         this.loading = false;
         console.log('IlmoitusData:', data);
-        // console.log('Ilmoituskuvaus:', this.IlmoitusData);
+        console.log('Reitit:', this.reitit);
+        console.log('data.Reitit:', data.reitits);
         console.log('tässä on IlmoitusData', this.notification);
       },
       error: (err) => {
