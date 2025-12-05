@@ -11,6 +11,7 @@ import hakuRouter from './routes/haku.js';
 import ilmoitusRouter from './routes/ilmoitus.js';
 import regRouter from './routes/reg.js';
 import loginRouter from './routes/login.js';
+import uusitilausRouter from './routes/uusiTilaus.js';
 dotenv.config();
 
 const app = express();
@@ -33,4 +34,5 @@ app.use('/', hakuRouter);
 app.use('/', ilmoitusRouter);
 app.use('/', regRouter);
 app.use('/', loginRouter);
+app.use('/', uusitilausRouter);
 export default app;
