@@ -55,7 +55,8 @@ export class OstoskoriService {
     if (!item) return;
 
     item.amount = newAmount;
-    localStorage.setItem('cart', JSON.stringify(items));
+    // localStorage.setItem('cart', JSON.stringify(items));
+    this.saveToLocalStorage();
   }
 
   /** Aseta suoraan haluttu määrä (kpl) */

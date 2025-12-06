@@ -70,7 +70,7 @@
                   <!-- Määrän säätö laatikko -->
                   <div
                     class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-                    <button (click)="decrement(product.uniqueId)"
+                    <button (click)="ostoskoriService.decrement(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
                       [disabled]="product.amount <= 500" [class.opacity-50]="product.amount <= 500"
                       [class.cursor-not-allowed]="product.amount <= 500">
@@ -88,7 +88,7 @@
                       (ngModelChange)="updateCartQuantity(product.uniqueId, $event)" />
 
 
-                    <button (click)="increment(product.uniqueId)"
+                    <button (click)="ostoskoriService.increment(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
                       <span class="text-gray-700 text-lg material-symbols-outlined">add</span>
                     </button>
@@ -100,6 +100,7 @@
                   <!-- Kokonaishinta samalla tasolla kuin -1+ laatikko -->
                   <h2 class="text-lg font-semibold text-gray-900 whitespace-nowrap">
                     {{ getProductTotal(product) | number:'1.2-2' }} €
+
                   </h2>
                   <!-- Yksikköhinta samalla tasolla kuin /500g -->
                   <p class="text-xs text-gray-500 whitespace-nowrap">

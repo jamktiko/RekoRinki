@@ -227,6 +227,7 @@ export class OstoskoriComponent {
     // muunnetaan takaisin grammoiksi
     const grams = amountNumber * 500;
     this.ostoskoriService.updateItemAmount(uniqueId, grams);
+    // this.ostoskoriService.getTotalCount();
     console.log('grams', grams);
   }
 
