@@ -126,12 +126,16 @@
           <h2 class="text-lg font-semibold text-gray-900 mb-2">Valitse noutopaikka</h2>
           <mat-form-field appearance="fill" class="w-full">
             <mat-label>Noutopaikka</mat-label>
-            <mat-select [(value)]="selectedPickup" (selectionChange)="onPickupChange($event.value)">
-              <mat-option *ngFor="let pickup of pulledPickupOptions" [value]="pickup.value">
+            <mat-select [formControl]="pickupControl">
+              <mat-option *ngFor=" let pickup of pulledPickupOptions" [value]="pickup.value">
                 {{ pickup.viewValue }}
               </mat-option>
             </mat-select>
           </mat-form-field>
+
+          <div *ngIf="pickupControl.touched && pickupControl.invalid" class="text-red-600 text-sm mt-1">
+            Noutpaikka täytyy valitta
+          </div>
         </div>
 
 
@@ -149,7 +153,7 @@
         </div>
 
         <!-- Vahvistusnappi -->
-        <button (click)="confirmOrder()"
+        <button (click)="NoutoTiedotPakollinen()"
           class="w-full bg-[#80c783] text-black py-4 px-6 rounded-lg hover:bg-green-500 transition-colors font-semibold text-lg mb-4">
           Vahvista tilaus
         </button>
