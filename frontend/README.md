@@ -1,5 +1,6 @@
 # Frontend
-This project was generated using Angualr CLI version 18.2.21
+
+This project was generated using [Angualr CLI](https://github.com/angular/angular-cli) version 18.2.21
 
 ## 🧑‍💻 Setup for New Developers
 
