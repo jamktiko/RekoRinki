@@ -70,7 +70,7 @@
                   <!-- Määrän säätö laatikko -->
                   <div
                     class="flex items-center border-2 border-green-600 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-                    <button (click)="decrement(product.uniqueId)"
+                    <button (click)="ostoskoriService.decrement(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-l-lg"
                       [disabled]="product.amount <= 500" [class.opacity-50]="product.amount <= 500"
                       [class.cursor-not-allowed]="product.amount <= 500">
@@ -88,7 +88,7 @@
                       (ngModelChange)="updateCartQuantity(product.uniqueId, $event)" />
 
 
-                    <button (click)="increment(product.uniqueId)"
+                    <button (click)="ostoskoriService.increment(product.uniqueId)"
                       class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors rounded-r-lg">
                       <span class="text-gray-700 text-lg material-symbols-outlined">add</span>
                     </button>
@@ -100,6 +100,7 @@
                   <!-- Kokonaishinta samalla tasolla kuin -1+ laatikko -->
                   <h2 class="text-lg font-semibold text-gray-900 whitespace-nowrap">
                     {{ getProductTotal(product) | number:'1.2-2' }} €
+
                   </h2>
                   <!-- Yksikköhinta samalla tasolla kuin /500g -->
                   <p class="text-xs text-gray-500 whitespace-nowrap">
@@ -125,12 +126,16 @@
           <h2 class="text-lg font-semibold text-gray-900 mb-2">Valitse noutopaikka</h2>
           <mat-form-field appearance="fill" class="w-full">
             <mat-label>Noutopaikka</mat-label>
-            <mat-select [(value)]="selectedPickup" (selectionChange)="onPickupChange($event.value)">
-              <mat-option *ngFor="let pickup of pulledPickupOptions" [value]="pickup.value">
+            <mat-select [formControl]="pickupControl">
+              <mat-option *ngFor=" let pickup of pulledPickupOptions" [value]="pickup.value">
                 {{ pickup.viewValue }}
               </mat-option>
             </mat-select>
           </mat-form-field>
+
+          <div *ngIf="pickupControl.touched && pickupControl.invalid" class="text-red-600 text-sm mt-1">
+            Noutpaikka täytyy valitta
+          </div>
         </div>
 
 
@@ -148,7 +153,7 @@
         </div>
 
         <!-- Vahvistusnappi -->
-        <button (click)="confirmOrder()"
+        <button (click)="NoutoTiedotPakollinen()"
           class="w-full bg-[#80c783] text-black py-4 px-6 rounded-lg hover:bg-green-500 transition-colors font-semibold text-lg mb-4">
           Vahvista tilaus
         </button>

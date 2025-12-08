@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { OstoskoriService } from '../ostoskori.service';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-ostoskori',
@@ -59,10 +59,32 @@ export class OstoskoriComponent {
   // FormControlit jokaiselle tuotteelle
   maaraControl: { [uniqueId: string]: FormControl } = {};
 
+  // muuttaja, joka tarkistetaan, onko noutotiedot valittu tai ei
+  // Mat-select KUUNTELEE vain tätä controlia → tämä on avain.
+  pickupControl = new FormControl<string | null>(null, Validators.required);
+
   ngOnInit(): void {
     this.loadNotifications(); // Lataa ilmoitukset komponentissa
     this.initFormControls();
     // this.loadReittiDetailsForCart();
+  }
+
+  NoutoTiedotPakollinen() {
+    console.log('Submit painettu, kontrolin arvo:', this.pickupControl.value);
+    // console.log('onkovalittunoutotieto:', this.OnkoValittuNoututieto);
+    if (this.pickupControl.invalid) {
+      this.pickupControl.markAllAsTouched();
+      this.pickupControl.updateValueAndValidity();
+      return;
+    }
+
+    this.selectedPickup = this.pickupControl.value;
+    console.log('Tilaus tehty');
+
+    // Jatka tilausta: esimerkkinä vahvistus ja tyhjennä kori
+    console.log('Tilaus lähetetty noutopaikalla:', this.selectedPickup);
+    this.ostoskoriService.clearCart();
+    this.showConfirmation = true;
   }
 
   // loadReittiDetailsForCart() {
@@ -96,14 +118,23 @@ export class OstoskoriComponent {
 
         // Hae vain yhden ilmoitus tiedot ilmoitusID perusteella
         const ids = this.notifications.map((n) => n.ilmoitusID);
+        let loaded = 0;
+
         ids.forEach((id) => {
           this.nservice.getNotificationById(id).subscribe({
             next: (full) => {
               this.YhdenIlmoitusTiedot.push(full);
               console.log('Full notification loaded:', full);
+              loaded++;
+
+              // 🔥 Kun kaikki ID:t on ladattu → nyt vasta luodaan pickupOptions
+              if (loaded === ids.length) {
+                this.pulledPickupOptions = this.getPickupOptions();
+                console.log('Noutopaikat ladattu:', this.pulledPickupOptions);
+              }
 
               // Kun kaikki on haettu, päivitä concat noutopaikat
-              this.pulledPickupOptions = this.getPickupOptions();
+              // this.pulledPickupOptions = this.getPickupOptions();
             },
             error: (err) =>
               console.error('Error loading full notification id', id, err),
@@ -204,14 +235,6 @@ export class OstoskoriComponent {
     }
   }
 
-  // Vahvista tilaus ja tyhjennä ostoskori
-  confirmOrder(): void {
-    // 1. Näytä vahvistusikkuna
-    this.showConfirmation = true;
-    // 2. Tyhjennä ostoskori
-    this.ostoskoriService.clearCart();
-  }
-
   // LISÄTTY: Sulje tilausvahvistus
   closeConfirmation(): void {
     this.showConfirmation = false;
@@ -227,6 +250,7 @@ export class OstoskoriComponent {
     // muunnetaan takaisin grammoiksi
     const grams = amountNumber * 500;
     this.ostoskoriService.updateItemAmount(uniqueId, grams);
+    // this.ostoskoriService.getTotalCount();
     console.log('grams', grams);
   }
 

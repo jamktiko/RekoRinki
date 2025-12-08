@@ -14,6 +14,7 @@ export interface Product {
   unit?: string; // Yksikkö (esim. 'g')
   notificationID?: number; // ilmoitusID
   inventory?: number; //  varatossa oleva tuotteen määrä/kpl
+  kuva?: string;
 }
 
 /* Ostoskorin ja tuotekokoelman tietotyypit on tehty tarkoituksella samanlaisiksi, jotta

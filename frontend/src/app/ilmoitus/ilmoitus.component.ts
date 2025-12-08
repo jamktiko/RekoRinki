@@ -52,15 +52,6 @@ export class IlmoitusComponent {
       // this.loadProducts();
       // this.fetchIlmoitukset();
     }
-
-    // this.relatedProducts.forEach((product) => {
-    //   this.tuoteMaaraControl[product.uniqueId] = new FormControl(0);
-    // });
-    // this.notification.ilmoitus_has_Tuotteets.forEach((product) => {
-    //   this.tuoteMaaraControl[product.uniqueId] = new FormControl(
-    //     this.getCartQuantity(product.uniqueId)
-    //   );
-    // });
   }
 
   // hae ilmoitusket data notification servicesta tiedosta
