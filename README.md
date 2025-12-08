@@ -1,4 +1,4 @@
-#🌱 Reko – Local Food Marketplace
+#Reko – Local Food Marketplace
 Reko is a web application that connects local food producers and customers.
 Producers can create listings and add products. Customers can browse listings, view products, and place orders.
 
