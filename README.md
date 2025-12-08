@@ -6,11 +6,11 @@ Producers can create listings and add products. Customers can browse listings, v
 Reko is a school project made for learning purposes only. It is not meant for real-world use.
 
 # ✨ Key Features
-•  Browse listings 🗂️
-•	 View products 🧺
-•	 Shopping cart functionality (add & remove items) ➕➖
-•	 Simple and clean user interface 🧼
-•	 User registration and login pages 🔐
+• Browse listings 🗂️
+•	View products 🧺
+•	Shopping cart functionality (add & remove items) ➕➖
+•	Simple and clean user interface 🧼
+•	User registration and login pages 🔐
 
 # 📌 Project Purpose
 The purpose of this project is to make a full-stack web application for school.  
@@ -19,22 +19,22 @@ In this project, we learn:
 •	how frontend and backend work together  
 •	how to design a database  
 •	how to use GitHub for version control  
-•	how to use cloud services (AWS)  
+• how to use cloud services (AWS)  
 •	how to work in a group
 
 # 🛠️ Technologies
 
 ## 🎨Frontend
-•	Angular
-•	TypeScript
-•	HTML + CSS (Tailwind)
+• Angular
+• TypeScript
+• HTML + CSS (Tailwind)
 
 ## 🖥️Backend
-•	Node.js
-•	Express
+• Node.js
+• Express
 
 ## 🗄️Database
-•	MySQL (AWS RDS)
+• MySQL (AWS RDS)
 
 ## ☁️ Cloud Information 
 The application was running on AWS during the project.  
