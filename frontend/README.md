@@ -1,3 +1,6 @@
+# Frontend
+This project was generated using Angualr CLI version 18.2.21
+
 ## 🧑‍💻 Setup for New Developers
 
 1. Clone the repo  
