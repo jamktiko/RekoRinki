@@ -6,11 +6,11 @@ Producers can create listings and add products. Customers can browse listings, v
 Reko is a school project made for learning purposes only. It is not meant for real-world use.
 
 # ✨ Key Features
-•	Browse listings 🗂️
-•	View products 🧺
-•	Shopping cart functionality (add & remove items) ➕➖
-•	Simple and clean user interface 🧼
-•	User registration and login pages 🔐
+•  Browse listings 🗂️
+•	 View products 🧺
+•	 Shopping cart functionality (add & remove items) ➕➖
+•	 Simple and clean user interface 🧼
+•	 User registration and login pages 🔐
 
 # 📌 Project Purpose
 The purpose of this project is to make a full-stack web application for school.  
