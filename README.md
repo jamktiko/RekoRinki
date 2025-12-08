@@ -9,11 +9,11 @@ Reko is a school project made for learning purposes only. It is not meant for re
 
 # ✨ Key Features
 
-- Browse listings 🗂️
-- View products 🧺
-- Shopping cart functionality (add & remove items) ➕➖
-- Simple and clean user interface 🧼
-- User registration and login pages 🔐
+- Browse listings 
+- View products 
+- Shopping cart functionality (add & remove items) 
+- Simple and clean user interface 
+- User registration and login pages 
 
 # 📌 Project Purpose
 
