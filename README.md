@@ -1,4 +1,4 @@
-# Reko – Local Food Marketplace
+# 🌱 Reko – Local Food Marketplace
 Reko is a web application that connects local food producers and customers.
 Producers can create listings and add products. Customers can browse listings, view products, and place orders.
 
@@ -12,7 +12,7 @@ Reko is a school project made for learning purposes only. It is not meant for re
 •	Simple and clean user interface 🧼
 •	User registration and login pages 🔐
 
-#📌 Project Purpose
+# 📌 Project Purpose
 The purpose of this project is to make a full-stack web application for school.  
 In this project, we learn:
 •	how to build a web application  
@@ -22,21 +22,21 @@ In this project, we learn:
 •	how to use cloud services (AWS)  
 •	how to work in a group
 
-#🛠️ Technologies
+# 🛠️ Technologies
 
-##🎨Frontend
+## 🎨Frontend
 •	Angular
 •	TypeScript
 •	HTML + CSS (Tailwind)
 
-##🖥️Backend
+## 🖥️Backend
 •	Node.js
 •	Express
 
-##🗄️Database
+## 🗄️Database
 •	MySQL (AWS RDS)
 
-##☁️ Cloud Information 
+## ☁️ Cloud Information 
 The application was running on AWS during the project.  
 After the project ends, the AWS services will be shut down.
 •	AWS 
@@ -49,7 +49,7 @@ o	EC2
 o	Cloud Watch
 o	Secret Manager
 
-#▶️ Running the Application Locally
+# ▶️ Running the Application Locally
 
 Clone the repository 
 git clone https://github.com/jamktiko/RekoRinki.git
