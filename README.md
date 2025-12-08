@@ -2,10 +2,10 @@
 Reko is a web application that connects local food producers and customers.
 Producers can create listings and add products. Customers can browse listings, view products, and place orders.
 
-#⚠️Notice:
+# ⚠️Notice:
 Reko is a school project made for learning purposes only. It is not meant for real-world use.
 
-#✨ Key Features
+# ✨ Key Features
 •	Browse listings 🗂️
 •	View products 🧺
 •	Shopping cart functionality (add & remove items) ➕➖
