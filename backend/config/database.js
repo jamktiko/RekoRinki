@@ -1,15 +1,19 @@
+// Tuodaan SecretsManagerClient sekä GetSecretValueCommand aws muuttujat tietokantayhteyttä varten
 import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from '@aws-sdk/client-secrets-manager';
+// tuodaan env tiedosto
 import dotenv from 'dotenv';
+// Ladataan ympäristömuuttujat .env tiedostosta
 dotenv.config();
+// luodaan client muuttuja jolla onaws tietokannan tunnukset
 const client = new SecretsManagerClient({ region: 'eu-north-1' });
-
+// Luodaan funktio, joka palauttaa aws tietokannan tiedot, ja jos kantaan ei saada yhteyttä käytetään paikallista tietokantaa
 async function getDbCredentials() {
+  // luodaan muuttuja joka saa .env tiedoston arvot
   const isDev = process.env.NODE_ENV == 'development';
-  console.log(isDev);
-
+  // käytetään .env tiedoston muuttujien tietoja jos ei saada yhteyttä aws kantaan
   if (isDev) {
     return {
       username: process.env.DB_USER,
@@ -19,15 +23,9 @@ async function getDbCredentials() {
       dbname: process.env.DB_NAME,
     };
   }
-
-  // const secretName = process.env.DB_SECRET_ARN;
+  // haetaan tietokannan tunnukset secretmanagerista silloin kun käytetään tuotantokantaa
   const secretName = JSON.parse(process.env.DB_SECRET_ARN);
-  console.log(secretName);
-  // const data = await client.send(
-  //   new GetSecretValueCommand({ SecretId: secretName })
-  // );
-  // const secret = JSON.parse(data.SecretString);
-
+  // palautetaan tietokannan tunnukset
   return {
     username: secretName.username,
     password: secretName.password,
@@ -38,3 +36,4 @@ async function getDbCredentials() {
 }
 
 export default getDbCredentials;
+// exportataan tunnustenhaku funktio

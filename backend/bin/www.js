@@ -1,66 +1,48 @@
 #!/usr/bin/env node
 import dotenv from 'dotenv';
 dotenv.config;
-/**
- * Module dependencies.
- */
+//Tuodaan. env tiedosto ja ladataan ympäristömuuttujat .env tiedostosta
+// Tuodaan app tiedosto
 import app from '../app.js';
+// tuodaan dbug kirjasto, sekä http
 import debugLib from 'debug';
 import http from 'http';
+// Luodaan nimiavaruus debuggausta varten
 const debug = debugLib('restapi:server');
-/**
- * Get port from environment and store in Express.
- */
-
+// Haetaan portti ympäristö muuttujista, tai käytetään porttia 3000 oletuksena
 const port = normalizePort(process.env.BACKEND_PORT || '3000');
 app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
+// Luodaan http serveri
 const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
+// Määritellään, että palvelin kuuntelee kaikkia verkkoosoitteita
 server.listen(port, '0.0.0.0');
+// luodaan virheen käsitteliä
 server.on('error', onError);
+// Luodaan kuuntelukäsitteliä
 server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
+// luodaan portin normalisointi funktio
 function normalizePort(val) {
+  // otetaan funktion arvo port muuttujaan
   const port = parseInt(val, 10);
-
+  // Tarkistetaan, että portti on numeerinen
   if (isNaN(port)) {
-    // named pipe
     return val;
   }
 
+  // Tarkistetaan, että porttinumero on kelvollinen
   if (port >= 0) {
-    // port number
     return port;
   }
 
   return false;
 }
-
-/**
- * Event listener for HTTP server "error" event.
- */
-
+// Virheenkäsittely funktio, joka heittää virheen
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
-
   const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
+  // luodaan porttiin liittyvät virheviestit
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
@@ -74,12 +56,9 @@ function onError(error) {
       throw error;
   }
 }
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
+// Luodaan listening funktio
 function onListening() {
+  // Haetaan palvelimen osoitetiedot
   const addr = server.address();
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
