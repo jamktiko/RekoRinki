@@ -29,10 +29,6 @@
 
 
     <!-- Virheilmoitukset salasana -->
-    <!-- <p *ngIf="passwordControl?.touched && passwordControl?.invalid" class="text-sm text-red-600 mt-[-10px] mb-[-5px]">
-      <span *ngIf="passwordControl?.errors?.['required']">Salasana on pakollinen.</span>
-      <span *ngIf="passwordControl?.errors?.['minlength']">Salasanan on oltava vähintään 6 merkkiä.</span>
-    </p> -->
     <p *ngIf="passwordControl?.touched && passwordControl?.invalid" class="text-sm text-red-600 mt-[-10px] mb-[-5px]">
       <span *ngIf="passwordControl?.errors?.['required']">Salasana on pakollinen.</span>
       <span *ngIf="passwordControl?.errors?.['minlength']">Salasanan on oltava vähintään 6 merkkiä pitkä.</span>
@@ -50,7 +46,6 @@
       <mat-progress-spinner *ngIf="loading" diameter="20" mode="indeterminate" class="!mr-1"></mat-progress-spinner>
 
       <!-- <span *ngIf="!loading">Kirjaudu sisään</span> -->
-      <!-- <a [routerLink]="['/profiili']">Kirjaudu sisään</a> -->
       <span *ngIf="!loading">Kirjaudu sisään</span>
     </button>
   </form>
