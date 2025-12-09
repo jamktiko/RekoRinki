@@ -21,11 +21,13 @@
     <div class="p-6 bg-white shadow-sm flex justify-center">
       <label for="searchInput" class="sr-only">Hae Rekosta</label>
 
+      <!-- (input)="onSerach($event)" tossa me kustumme onSearch funktio -->
+      <!-- [value]="searchTerm" #searchInput: näyttää se hakusana, jossa on tallentanut sinne searchIterm muuttuijaksi -->
       <input id="searchInput" type="text" placeholder="Hae Rekosta..." class="w-full max-w-md px-6 py-3 border border-gray-300 rounded-full
            focus:outline-none focus:ring-2 focus:ring-blue-500
            focus:border-transparent shadow-sm" (input)="onSearch($event)" [value]="searchTerm" #searchInput />
 
-      <!-- Clear-nappi -->
+      <!-- Clear-nappi: näkyy vastaa kun hakukentä on teksti -->
       @if (searchTerm) {
       <button (click)="clearSearch()" class="text-gray-400 hover:text-gray-600 px-2" aria-label="Tyhjennä hakukenttä">
         ✕
@@ -49,6 +51,7 @@
       @if (searchTerm) {
       <div class="flex items-center gap-2">
         <span class="text-gray-500 text-sm">
+          <!-- tossa näkyy, että montako ilmoituksia on näkyvissa hakunkentän perusteella -->
           Löytyi {{filteredNotifications.length}} ilmoitusta
         </span>
         <button (click)="clearSearch()" class="text-blue-500 hover:text-blue-700 text-sm underline">
@@ -63,6 +66,7 @@
     <!-- Ilmoituskortit -->
     <div
       class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 p-3 sm:p-4 lg:p-6 bg-gray-50 min-h-screen">
+      <!-- for-silmukalle käymme läpi kaikki ilmoituksia -->
       @for (notification of filteredNotifications; track notification.ilmoitusID) {
       <div
         class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer flex flex-col h-full"
@@ -70,8 +74,6 @@
 
         <!-- Kuva osio -->
         <div class="h-44 sm:h-48 bg-gray-200 flex items-center justify-center">
-
-
 
           <img [src]="notification.kuva" alt="tuotekuva" class="w-full h-full object-cover" title="ilmoitukset"
             onerror="this.style.display='none'">
