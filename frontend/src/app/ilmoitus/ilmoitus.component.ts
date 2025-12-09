@@ -3,8 +3,6 @@ import {
   YhdenIlmoitusReitti,
   YhdenIlmoitusTiedot,
   YhdenIlmoitusTuotteet,
-  IlmoitusTiedot,
-  KaikkiIlmoitusTiedot,
 } from '../types';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -21,75 +19,73 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './ilmoitus.component.css',
 })
 export class IlmoitusComponent {
+  // otamme käyttöön ostoskoriserivce
   readonly ostoskoriservice = inject(OstoskoriService);
 
-  // seriveissa oleva interface tyyppi
-  // NotificationService = inject(NotificationService);
-  // ilmoitukset: AppNotification[] = [];
-
+  // muuttuija,joka sisältää kaikki ilmoitukset, jotka backend palauttaa
   notification!: YhdenIlmoitusTiedot;
+
+  // muuttuija,joka sisältää yhden ilmoitus tiedot, jotka backend palauttaa
   relatedProducts: YhdenIlmoitusTuotteet[] = [];
+
+  // muuttuija,joka sisältää yhden ilmoitu reitti, jotka backend palauttaa
   reitit: YhdenIlmoitusReitti[] = [];
+
+  // jakopaikat ja ajat. jos on virhe heittää virhe ilmoitus
   loading = true;
   error: string | null = null;
-  // IlmoitusData!: IlmoitusTiedot;
 
   // tämä muuttuja avulla käyttäjä halua lisätä haluattun lukumäärä lisämään ostoskori
+  // eli Jokaisella tuotteella on oma FormControl. avain: product.unique ja value on uusi formcontrol
   tuoteMaaraControl: { [uniqueId: string]: FormControl } = {};
 
-  // notifications: AppNotification[] | any = [];
-
+  // Angualr komponentti constructor kohdassa tuoda kaikki palvelut käyttöön komponentien sisälle
   constructor(
+    // pystyy lukemaan URLissa olevt parametia kuten ilmoitus/1
     private route: ActivatedRoute,
+
+    // tämä suorittaa HTTP-kutsu backendille, eli pystyymme käyttää endpointia komponenttissa suoraan
     private notificationService: NotificationService,
+
+    // otaan MatSnakBar kirjasto käyttöön, kun käyttäjä lisää tuote ostoskori tulee siitä pinei ilmoitus
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    // hae ilmoituksen id reitista
+    // Kun siirryt reitille /ilmoitus/1,2 jne, tämä hakee numeron 1 ja kutsuu loadNotification(1).
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.loadNotification(id);
-      // this.loadProducts();
-      // this.fetchIlmoitukset();
     }
   }
 
-  // hae ilmoitusket data notification servicesta tiedosta
-  // fetchIlmoitukset(): void {
-  //   this.notificationService.getNotifications().subscribe({
-  //     next: (data) => {
-  //       this.ilmoitukset = data;
-  //       this.loading = false;
-  //       console.log('Haetut ilmoitukset:', data);
-  //     },
-  //     error: (err) => {
-  //       console.error('Virhe ilmoitusten hakemisessa:', err);
-  //       this.error = 'Ilmoituksia ei voitu ladata.';
-  //       this.loading = false;
-  //     },
-  //   });
-  // }
-
+  // funktio, joka haemme yhden ilmoitus tiedot notification servicesta API kutsuja getNotificationsById() funktion kautta ilmoitus komponenttin
   loadNotification(id: number) {
     this.notificationService.getNotificationById(id).subscribe({
       next: (data: YhdenIlmoitusTiedot) => {
+        // Backendista tulevat data sisälttää:
+
+        // tässä hae kaikki ilmoitusken tiedot
         this.notification = data;
 
-        // Aseta tuotteet ensin
+        // hae tuotteita
         this.relatedProducts = data.ilmoitus_has_Tuotteets || [];
 
-        // Luo FormControlit kaikille tuotteille NYT kun relatedProducts on asetettu
+        // Luo FormControlit kaikille tuotteille nyt kun relatedProducts on asetettu
         this.relatedProducts.forEach((product) => {
           // varmista, että arvo on numero
           const initial = Number(this.getCartQuantity(product.uniqueId)) || 0;
           const control = new FormControl(initial);
 
+          // Laitetaan input-kenttään alkuarvo ostoskorista
           // Kuuntele inputin muutosta — parsitaan aina numeroksi
           control.valueChanges.subscribe((rawValue) => {
             const value = Number(rawValue);
-            // jos ei numero tai negatiivinen, normalisoi 0:ksi
+            // jos ei numero tai negatiivinen, normalisoi siitä 0:ksi
             if (!isFinite(value) || value < 0) {
               control.setValue(0, { emitEvent: false });
+              // tallentaan siitä ostoskorissa
               this.updateCartQuantity(product, 0);
               return;
             }
@@ -100,7 +96,7 @@ export class IlmoitusComponent {
           this.tuoteMaaraControl[product.uniqueId] = control;
         });
 
-        // reitit suoraan backendistä
+        // reitit taulukko suoraan backendistä tänne
         this.reitit = data.reitits || [];
 
         this.loading = false;
@@ -119,43 +115,30 @@ export class IlmoitusComponent {
 
   // funktiolla normalisoidaan syöte (esim. negatiiviset arvot → 0) ja käsitellään ostoskori.
   updateCartQuantity(product: YhdenIlmoitusTuotteet, amount: number) {
+    // kun käyttäjä tyhjentää input-kenttä funktio palauttaa null ja sitten ei tekee mitään päivityksiä.
     if (amount == null) return;
-    amount = Number(amount);
-    if (!isFinite(amount) || amount < 0) amount = 0;
-    amount = Math.floor(amount); // varmista integer
 
-    // suora asetus ostoskoriin
+    // Jos inputissa laitetaan teksinta muttaa siitä NaN
+    amount = Number(amount);
+
+    // varmistetaan, että arvo on järkevä esim. jos arvo on negatiivinen muutetaan sen nollaksi
+    if (!isFinite(amount) || amount < 0) amount = 0;
+
+    // varmistetaan, että arvo on kokonaisluku
+    amount = Math.floor(amount);
+
+    // Kutsutaan ostoskoripalvelua ja tämä asettaa uuden määrän tälle tuotteelle. Jos määrä on 0 → tuote poistuu korista
     this.ostoskoriservice.setQuantity(product, amount);
-    // päivitämme kontrollin arvo ohjelmallisesti ilman eventin laukaisua (jos se tarvitaan)
+
+    // Synkronoidaan määrä input-kentän kanssa
     const ctrl = this.tuoteMaaraControl[product.uniqueId];
     if (ctrl && Number(ctrl.value) !== amount) {
+      // käytetään emitEvent: false Jottei input-kentän päivittäminen aiheuta loputonta silmukkaa
+      // (koska onInput → päivitys → uusi onInput jne.)
       ctrl.setValue(amount, { emitEvent: false });
     }
     console.log('Kori päivitetty:', product.uniqueId, amount);
   }
-
-  // loadProducts()-metodia suodattaa vain ne tuotteet, joiden ID on ilmoituksen producstID-listassa.
-  // loadProducts(): void {
-  //   this.productService.getProducts().subscribe({
-  //     next: (data) => {
-  //       if (this.notification && this.notification.productsID) {
-  //         // Suodata tuotteet ilmoituksen productsID:n perusteella
-  //         const filtered = data.filter((product) =>
-  //           this.notification.productsID.includes(product.id)
-  //         );
-  //         // Luo uudet objektit oikealla producerID:llä ja uniqueId:llä
-  //         this.relatedProducts = filtered.map((p) => ({
-  //           ...p,
-  //           producerID: this.notification.producerID, // Aseta oikea producerID
-  //           uniqueId: `${p.id}_${this.notification.producerID}`, // Päivitä uniqueId
-  //         }));
-  //       } else {
-  //         this.relatedProducts = [];
-  //       }
-  //     },
-  //     error: (err) => console.error('Virhe tuotteiden haussa:', err),
-  //   });
-  // }
 
   // Palauttaa, montako kappaletta tästä tuotteesta on korissa
   getCartQuantity(uniqueId: string): number {
@@ -169,73 +152,22 @@ export class IlmoitusComponent {
     return 0; // jos otoskorissa tyhenetään se määrä palauttaa 0.
   }
 
-  // addToCart metodi ei ole käytössä nyt ehkä myöhemmin tarvitaan.
-  // addToCart(p: Product): void {
-  //   // Käytä komponentin 'notification' olion id:tä suoraan, koska käyttäjä on katsomassa tiettyä ilmoitusta
-  //   const notificationID = this.notification?.id ?? null;
-  //   const producerID = this.notification?.producerID ?? null;
-  //   // Lisää ominaisuudet tuotteeseen
-  //   const productWithNotification = {
-  //     ...p,
-  //     notificationID: notificationID,
-  //     producerID: producerID,
-  //     uniqueId: `${p.id}_${producerID}`, // uusi yhdistetty tunniste
-  //   };
-  //   console.log('Lisätty koriin:', p);
-
-  //   // Lisää ostoskoriin tämä uusi objekti (tuote + ilmoitusID + producerID)
-  //   this.cstore.addToCart(productWithNotification);
-
-  //   // vähennetään tuotteen määrää varastossa
-  //   this.pstore.reduceAmount(p.id);
-
-  //   // Näytetään vahvistusilmoitus
-  //   console.log('SnackBar avataan nyt');
-  //   this.snackBar.open(`${p.name} lisätty ostoskoriin!`, '', {
-  //     duration: 3000, // näkyy 3 sekuntia
-  //     horizontalPosition: 'start',
-  //     verticalPosition: 'bottom',
-  //     panelClass: ['success-snackbar'], // voit muokata tyylillä
-  //   });
-  // }
-
-  // addToCart(p: YhdenIlmoitusTiedot): void {
-  //   const productWithNotification = {
-  //     ...p,
-  //     uniqueId: p.uniqueId,
-  //   };
-  //   this.cstore.addToCart(productWithNotification);
-
-  //   this.snackBar.open(`${p.name} lisätty ostoskoriin!`, '', {
-  //     duration: 3000,
-  //     horizontalPosition: 'start',
-  //     verticalPosition: 'bottom',
-  //     panelClass: ['success-snackbar'],
-  //   });
-  // }
-  //
+  // funktio toimii, kun lisätään yhden tuote ostoskori
   addOne(product: YhdenIlmoitusTuotteet): void {
-    // Tarkista korin määrä: Jos 0, lisää uusi tuote; muuten kasvata
-    // if (this.getCartQuantity(product.uniqueId) === 0) {
-    //   this.ostoskoriservice.addToCart(product); // Lisää uusi tuote korin eli Käyttää palvelua (mapaa itse)
-    // } else {
-    //   this.ostoskoriservice.addToCart(product); // Kasvata olemassa olevaa ja Sama metodi hoitaa lisäyksen (palvelu tarkistaa olemassaolon)
-    // }
-
-    // // Päivitä FormControlin arvo
-    // if (!this.tuoteMaaraControl[product.uniqueId]) {
-    //   // Luo FormControl jos ei vielä ole
-    //   this.tuoteMaaraControl[product.uniqueId] = new FormControl(1);
-    // } else {
-    //   // Kasvata arvoa yhdellä
-    //   const current = this.tuoteMaaraControl[product.uniqueId].value || 0;
-    //   this.tuoteMaaraControl[product.uniqueId].setValue(current + 1);
-    // }
-
     const uniqueId = product.uniqueId;
+
+    // ctrl viittaa siihen <input>-kenttään, jossa näkyy tuotteen määrä
     const ctrl = this.tuoteMaaraControl[uniqueId];
+
+    // current muuttuijalle haetaan tuotteen tämänhetkinen määrä
+    // ctrl?.value → jos input-kentässä on arvo, käytetään sitä
+    // Jos input ei ole olemassa (esim. renderöityy myöhemmin), käytetään:
+    // this.getCartQuantity(uniqueId) → määrä ostoskorissa
+    // Jos sekään ei ole olemassa, käytetään 0
     const current =
       Number(ctrl?.value ?? this.getCartQuantity(uniqueId) ?? 0) || 0;
+
+    // lasketaan uusi määrä
     const newValue = current + 1;
 
     // Aseta ostoskoriin
@@ -253,9 +185,12 @@ export class IlmoitusComponent {
     });
   }
 
+  // funktio toimii, kun vähennetään yhden tuote ostoskorissa
   removeOne(product: YhdenIlmoitusTuotteet & { uniqueId: string }): void {
     // Tarkista korin määrä: Älä vähennä jos 0
     const currentQuantity = this.getCartQuantity(product.uniqueId);
+
+    // Jos määrä on 0 --> ei voi vähentää siitä
     if (currentQuantity <= 0) {
       this.snackBar.open('Ei tuotetta korissa – ei voi vähentää!', '', {
         duration: 3000,
@@ -266,24 +201,13 @@ export class IlmoitusComponent {
       return;
     }
 
-    // // Jos määrä > 1, vähennä; jos == 1, poista kokonaan
-    // if (currentQuantity > 1) {
-    //   this.ostoskoriservice.decrement(product.uniqueId); // Vähennä määrää
-    // } else {
-    //   this.ostoskoriservice.removeFromCart(product.uniqueId); // Poista tuote kokonaan
-    // }
-
-    // // Päivitä FormControl
-    // if (this.tuoteMaaraControl[product.uniqueId]) {
-    //   const control = this.tuoteMaaraControl[product.uniqueId];
-    //   const newValue = Math.max((control.value || 0) - 1, 0);
-    //   control.setValue(newValue);
-    // }
-
+    // Haetaan uniqueId, input-kenttä ja nykyinen määrä
     const uniqueId = product.uniqueId;
     const ctrl = this.tuoteMaaraControl[uniqueId];
     const current =
       Number(ctrl?.value ?? this.getCartQuantity(uniqueId) ?? 0) || 0;
+
+    // Lasketaan uusi arvo ja Math.max estää että arvo menee negatiiviseksi
     const newValue = Math.max(current - 1, 0);
 
     // Aseta ostoskoriin / poista jos 0
