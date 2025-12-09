@@ -7,14 +7,14 @@ This project was generated using [Angualr CLI](https://github.com/angular/angula
 1. Clone the repo
 
    ```bash
-   git clone https://github.com/<user>/<repo>.git
+   git clone https://github.com/jamktiko/RekoRinki.git
 
    ```
 
 2. Check Node version
 
    ```bash
-   nvm use 22.20.0
+   nvm use 22.19.0
 
    ```
 
