@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CartStore } from '../cartstore';
 import { OstoskoriService } from '../ostoskori.service';
 
 @Component({
@@ -11,17 +10,20 @@ import { OstoskoriService } from '../ostoskori.service';
   styleUrl: './navigaatio.component.css',
 })
 export class NavigaatioComponent {
-  // komponentilla ei ole omaa tilaa, vaan tila on storessa
+  // hakee ostoskoriService-instanssin käyttöön
   readonly ostoskoriService = inject(OstoskoriService);
 
+  // muuttuija, joka kertoo, onko mobiili-valikko auki vai kiinni
   isMenuOpen = false;
-  showCartAlert = false; // tuotemäärä näkyminen menu kuvakeella
 
-  // Kun cstore.totalCount() kasvaa (eli tuote lisätään ostoskoriin),
-  // ngDoCheck() huomaa sen ja asettaa showCartAlert = true
+  // muuttuja, joka näyttää pienen punaisen ilmoituspisteen, kun ostoskoriin lisätään tuotteita
+  showCartAlert = false;
+
+  // Tämä funktio pyörii taustalla aina kun Angular päivittää näkymää.
   ngDoCheck() {
     // jos ostoskoriin lisätään jotain
     if (this.ostoskoriService.getTotalCount() > 0 && !this.isMenuOpen) {
+      // Jos molemmat ehdot pitävät paikkansa näytetään punainen ilmoituspiste (showCartAlert = true
       this.showCartAlert = true;
     }
   }
@@ -30,8 +32,5 @@ export class NavigaatioComponent {
   // taas kun suljetaan se menu kuvake näkyy tuotemäärä sinne menu kuvakken päälle
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
-    if (this.isMenuOpen) {
-      this.showCartAlert = false; // piilotetaan ilmoitus kun menu avataan
-    }
   }
 }
