@@ -1,0 +1,48 @@
+# Tiedostolla voi testata backendissa kirjautumista, rekisteröitymistä, sekä tilauksen tekemistä
+# Rekisteröitymis reitti. Jos reittiä haluaa käyttää käyttäjätunnuksen ja sähköpostin on oltava unikit
+# POST http://localhost:3000/register HTTP/1.1
+# Content-Type: application/json
+
+# {
+#   "tuottaja": false,
+#   "kayttajatunnus": "a123",
+#   "salasana": "Testi123",
+#   "etunimi": "a",
+#   "sukunimi": "a",
+#   "puhelinnro": "+35840012345678",
+#   "sahkoposti": "a@jamk.fi",
+#   "katuosoite": "Matarankatu 1",
+#   "postinumero": "40320",
+#   "postitoimipaikka": "Jyväskylä",
+#   "paikkakunta": "Jyväskylä"
+# }
+koodi jolla voidaan testata kirjautumista
+post http://localhost:3000/login HTTP/1.1
+Content-Type: application/json
+
+{
+"tuottaja": false,
+"sahkoposti": "a@jamk.fi",
+"salasana": "Testi123"
+}     
+
+# post http://localhost:3000/uusitilaus HTTP/1.1
+#  Content-Type: application/json
+# koodi, jolla voidaan tehdä tilaus
+# {
+#   "asiakasID": "1",
+# "tuottajaID": "2",
+# "ilmoitusID": "2",
+# "status": "odottaa",
+# "tilauspaiva": "2025-12-4",
+# "summa": "4.20",
+# "Reitit_id": "1",
+# "Tuotteet": [
+# {  "id": "1",
+# "tuoteID": "1",
+# "tuottajaID": "1",
+# "tilausID": "1",
+# "maara": "2",
+# "yksikkohinta": "4.20"}
+# ]
+# }
