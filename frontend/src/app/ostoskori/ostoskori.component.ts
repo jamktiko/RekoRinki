@@ -1,13 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ProductStore } from '../productstore';
-import { CartStore } from '../cartstore';
-import {
-  AppNotification,
-  IlmoitusTiedot,
-  Product,
-  YhdenIlmoitusReitti,
-  YhdenIlmoitusTiedot,
-} from '../types';
+import { IlmoitusTiedot, Product, YhdenIlmoitusTiedot } from '../types';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../notification.service';
 import { Router, RouterLink } from '@angular/router';
@@ -32,19 +24,23 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
   styleUrl: './ostoskori.component.css',
 })
 export class OstoskoriComponent {
+  // otamme ostoskoriservice käyttön:
   readonly ostoskoriService = inject(OstoskoriService);
-  public nservice = inject(NotificationService);
-  public router = inject(Router); // LISÄTTY: Router injektointi
 
+  // hakee ilmoitukset ja reitit
+  public nservice = inject(NotificationService);
+
+  // siirtyminen tuotesivulle
+  public router = inject(Router);
+
+  // haemme kaikki ilmoitukset backendistä
   notifications: IlmoitusTiedot[] = [];
 
+  // haemme jokaisen ilmoituksen tarkat tiedot (sisältää reitit)
   YhdenIlmoitusTiedot: YhdenIlmoitusTiedot[] | any = [];
 
-  // reitit: YhdenIlmoitusReitti[] = [];
-
-  // selectedRoute: number | null = null;
-
   // pulledPickupOptions -muuttuja, joka päivittyy ilmoitusten latauksen yhteydessä, jotta template kutsuu datan kerran.
+  // reitit valintalistaa varten
   pulledPickupOptions: {
     value: string;
     viewValue: string;
@@ -65,19 +61,24 @@ export class OstoskoriComponent {
 
   ngOnInit(): void {
     this.loadNotifications(); // Lataa ilmoitukset komponentissa
-    this.initFormControls();
-    // this.loadReittiDetailsForCart();
+    this.initFormControls(); // luodaan lomakekontrollit jokaiselle tuotteelle
   }
 
+  // tämä funktio tekee siitä noututiedot palkollinen, kun painetaan tilaus vahvitus nappi suorittaa NoutoTiedotPakollinen()
+  // Jos noututiedot ei ole valittu tulee virheilmoitus
   NoutoTiedotPakollinen() {
     console.log('Submit painettu, kontrolin arvo:', this.pickupControl.value);
-    // console.log('onkovalittunoutotieto:', this.OnkoValittuNoututieto);
+
+    // tarkistaa onko kenttä virhellinen
     if (this.pickupControl.invalid) {
+      // Merkitään kenttä "touchatuksi", jotta virheet tulevat näkyviin
       this.pickupControl.markAllAsTouched();
+      // päivitetään kentän validointi
       this.pickupControl.updateValueAndValidity();
       return;
     }
 
+    // Tallennetaan käyttäjän valitsema noutopaikka
     this.selectedPickup = this.pickupControl.value;
     console.log('Tilaus tehty');
 
@@ -87,63 +88,49 @@ export class OstoskoriComponent {
     this.showConfirmation = true;
   }
 
-  // loadReittiDetailsForCart() {
-  //   const ids = [
-  //     ...new Set(
-  //       this.getCartProductsWithDetails()
-  //         .map((p) => p.notificationID)
-  //         .filter((id) => id)
-  //     ),
-  //   ];
-
-  //   this.YhdenIlmoitusTiedot = [];
-
-  //   ids.forEach((id) => {
-  //     this.nservice.getNotificationById(id).subscribe((data) => {
-  //       console.log('SAATU YHDEN ILMOITUS TIEDOT:', data);
-  //       this.YhdenIlmoitusTiedot.push(data);
-  //     });
-  //   });
-  // }
-
   // lataa ilmoituskia
   loadNotifications(): void {
     console.log('Loading notifications in cart component...');
+
     this.nservice.getNotifications().subscribe({
       next: (data) => {
         console.log('Notifications loaded in cart:', data);
-        // this.notifications = data || [];
+
+        // Jos data on taulukko → talletetaan se.
+        // Jos notifikaatioita ei ole → asetetaan tyhjä taulukko.
         this.notifications = Array.isArray(data) ? data : [];
         console.log('Notifications set to:', this.notifications);
 
         // Hae vain yhden ilmoitus tiedot ilmoitusID perusteella
         const ids = this.notifications.map((n) => n.ilmoitusID);
+
+        // Tämä kertoo, montako täyttä ilmoitusta on jo ladattu.
+        // Kun loaded === ids.length, tiedämme että kaikki on haettu.
         let loaded = 0;
 
+        // Hae jokainen ilmoitus erikseen
         ids.forEach((id) => {
           this.nservice.getNotificationById(id).subscribe({
             next: (full) => {
+              // Kun yksittäinen ilmoitus latautuu
+              // Tallennetaan tiedot YhdenIlmoitusTiedot-listaan
               this.YhdenIlmoitusTiedot.push(full);
               console.log('Full notification loaded:', full);
               loaded++;
 
-              // 🔥 Kun kaikki ID:t on ladattu → nyt vasta luodaan pickupOptions
+              // Kun kaikki ID:t on ladattu → nyt vasta luodaan pickupOptions
               if (loaded === ids.length) {
                 this.pulledPickupOptions = this.getPickupOptions();
                 console.log('Noutopaikat ladattu:', this.pulledPickupOptions);
               }
-
-              // Kun kaikki on haettu, päivitä concat noutopaikat
-              // this.pulledPickupOptions = this.getPickupOptions();
             },
             error: (err) =>
               console.error('Error loading full notification id', id, err),
           });
-          // this.pulledPickupOptions = this.getPickupOptions();
 
-          console.log('kaikki notification', this.pulledPickupOptions); // tämä paluattaa tyhjä taulukko
-          console.log('all notification', this.getPickupOptions()); // tämä palauttaa value ja viewValue
-          console.log('kaikki ilmoitukset', data); // tämä paluattaa kaikki ilmoitukset
+          console.log('kaikki notification', this.pulledPickupOptions);
+          console.log('all notification', this.getPickupOptions());
+          console.log('kaikki ilmoitukset', data);
         });
       },
 
@@ -158,9 +145,11 @@ export class OstoskoriComponent {
   // noitificationID löytämme oikein ilmoitukset tiedot
   getPickupOptions(): { value: string; viewValue: string }[] {
     console.log('YhdenIlmoitusTiedot palauttaa', this.YhdenIlmoitusTiedot); // tämä palauttaa kaikki ilmoitukset
+
+    // jos data ei ole vielä ladattu paluttaa tyhjä taulukko
     if (!this.YhdenIlmoitusTiedot || this.YhdenIlmoitusTiedot.length === 0) {
       console.log('Yhden Ilmoitus Tiedot: ', this.YhdenIlmoitusTiedot);
-      return []; // Palauta tyhjä lista jos data ei ole vielä ladattu
+      return [];
     }
 
     // Jos ostoskorissa on tuotteita, kerää niiden ilmoitus-IDt
@@ -173,18 +162,23 @@ export class OstoskoriComponent {
     ];
     console.log('notificationIds:', notificationIds); // tämäkin palauttaa ilmoitukset id
 
+    // tässä muuttuijassa tallentaan palutettu reitit
     const pickups: { value: string; viewValue: string }[] = [];
     console.log('pickups palauttaa: ', pickups);
 
-    // Hae noutotiedot näistä ilmoituksista
+    // Hae noutotiedot näistä ilmoituksista IlmoitusID perusteella
     notificationIds.forEach((id) => {
+      // notif muuttuija etsin ilmoituksia (ilmoitusID perusteella)
       const notif = this.YhdenIlmoitusTiedot.find((n) => n.ilmoitusID === id);
+
       console.log(
         'this.YhdenIlmoitusTiedot.map((n) => n.ilmoitusID) ',
         this.YhdenIlmoitusTiedot.map((n) => n.ilmoitusID)
       );
       console.log('Notif YhenIlmoitusTiedot: ', notif);
       console.log('YhdenIlmoitustieodt:', this.YhdenIlmoitusTiedot);
+
+      // jos reitit löytyy paluttaa niitä pickups muuttujaksi
       if (notif?.reitits) {
         notif.reitits.forEach((r) => {
           const label = `${r.jakopaiva_aika} - ${r.lisatieto ?? ''}`.trim();
@@ -196,30 +190,8 @@ export class OstoskoriComponent {
     return pickups;
   }
 
-  // palauttaa listan { value: reittiID, viewValue: "päivä - lisätieto" }
-  // getPickupOptions(): { value: number; viewValue: string }[] {
-  //   if (!this.notifications || this.notifications.length === 0) return [];
-
-  //   const options: { value: number; viewValue: string }[] = [];
-
-  //   console.log('pickuproutes:', this.pickUpRoutes); // tämäkin palauttaa tyhjä taulukko
-  //   this.pickUpRoutes.forEach((notif) => {
-  //     console.log('notif', notif); // tämä ei toimiiiiii
-  //     const reitit = notif.reitits ?? [];
-  //     reitit.forEach((r) => {
-  //       console.log('reitti', r); //
-  //       const label = `${r.jakopaiva_aika} - ${r.lisatieto ?? ''}`.trim();
-  //       options.push({ value: r.reittiID, viewValue: label });
-  //     });
-  //   });
-  //   console.log('option palauttaa', options); // tämä palauttaa tyhjä taulukko
-
-  //   return options;
-  // }
-
   // käyttäjä vaihtaa noutopaikka
   onPickupChange(value: string): void {
-    // ei tämä konole toimii
     console.log('Valittu noutopaikka:', value); // Voit tallentaa tämän myöhemmin tilaukseen
     this.selectedPickup = value;
   }
@@ -249,8 +221,9 @@ export class OstoskoriComponent {
 
     // muunnetaan takaisin grammoiksi
     const grams = amountNumber * 500;
+
+    // päivittämme ostoskoriservicessa oleva määrä
     this.ostoskoriService.updateItemAmount(uniqueId, grams);
-    // this.ostoskoriService.getTotalCount();
     console.log('grams', grams);
   }
 
@@ -262,7 +235,7 @@ export class OstoskoriComponent {
       this.notifications.map((n) => n.ilmoitusID) // tämä palauttaa kaikki ilmoituksenID
     );
     return this.ostoskoriService.getItems().map((p) => {
-      // Parse producerID from uniqueId (e.g., "1_2" → producerID: 2)
+      // Purkaa tuotteen uniqueId;n (esim., "1_2" → tuottajaID: 2)
       const producerID = parseInt(p.uniqueId.split('_')[1]);
       const notificationID = parseInt(p.uniqueId.split('_')[0]); // Oletetaan, että tämä on notificationID (jos ei, muuta tarvittaessa)
 
@@ -275,11 +248,13 @@ export class OstoskoriComponent {
         producerID
       );
 
+      // notif muuttuija Löytää oikean ilmoituksen notificationID:n perusteella.
       const notif = this.notifications.find(
         (n) => n.ilmoitusID === notificationID
       );
       console.log('Found notification:', notif); // tämä palauttaa kaikki ilmoituksen
 
+      // paluttaa stringina tuottaja etu- ja sukunimet
       const producerName =
         notif?.tuottaja?.etunimi && notif?.tuottaja?.sukunimi
           ? `${notif.tuottaja.etunimi} ${notif.tuottaja.sukunimi}`
@@ -308,17 +283,25 @@ export class OstoskoriComponent {
     return product.uniqueId; // Käytä tuoteID ja tuottajaID tunnistamiseen
   }
 
+  // funktion tarkoitus on luoda dynaamisesti Angularin lomakekentät jokaiselle ostoskorin tuotteelle,
+  // jotta käyttäjä voi muuttaa määrää (quantity).
   initFormControls(): void {
     this.getCartProductsWithDetails().forEach((product) => {
+      // Luodaan uusi FormControl, jonka alkuarvo on tuotteen tämänhetkinen määrä ostoskorissa.
       const control = new FormControl(this.getCartQuantity(product.uniqueId));
+
+      // Kuuntele muutoksia kentässä
       control.valueChanges.subscribe((value) => {
+        // muunna arvo ihan numeroksi ja tarkista sama aikaa virheet
         const num = Number(value);
         if (!isNaN(num)) this.updateCartQuantity(product.uniqueId, num);
       });
+      // Tallenna FormControl tuotteen ID:llä eli jokainen kenttä tallennetaan olioon maaraControl.
       this.maaraControl[product.uniqueId] = control;
     });
   }
 
+  // täsäs funktiossa päivittää oikean määrä ostoskori palvelussa
   getCartQuantity(uniqueId: string): number {
     const item = this.ostoskoriService
       .getItems()
@@ -326,11 +309,13 @@ export class OstoskoriComponent {
     return item ? Math.ceil(item.amount / 500) : 0;
   }
 
+  // tämä funktio lisää yksi 500g paketti
   increment(uniqueId: string): void {
     const current = this.getCartQuantity(uniqueId);
     this.updateCartQuantity(uniqueId, current + 1);
   }
 
+  // tämä funkito vähentää 500g paketin
   decrement(uniqueId: string): void {
     const current = this.getCartQuantity(uniqueId);
     if (current > 1) this.updateCartQuantity(uniqueId, current - 1);
