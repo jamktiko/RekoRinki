@@ -1,3 +1,5 @@
+# Tiedostolla voi testata backendissa kirjautumista, rekisteröitymistä, sekä tilauksen tekemistä
+# Rekisteröitymis reitti. Jos reittiä haluaa käyttää käyttäjätunnuksen ja sähköpostin on oltava unikit
 # POST http://localhost:3000/register HTTP/1.1
 # Content-Type: application/json
 
@@ -14,7 +16,7 @@
 #   "postitoimipaikka": "Jyväskylä",
 #   "paikkakunta": "Jyväskylä"
 # }
-
+koodi jolla voidaan testata kirjautumista
 post http://localhost:3000/login HTTP/1.1
 Content-Type: application/json
 
@@ -26,7 +28,7 @@ Content-Type: application/json
 
 # post http://localhost:3000/uusitilaus HTTP/1.1
 #  Content-Type: application/json
-
+# koodi, jolla voidaan tehdä tilaus
 # {
 #   "asiakasID": "1",
 # "tuottajaID": "2",

@@ -1,4 +1,6 @@
+// Tuodaan sequelizeyhteys
 import con from '../dbconnection.js';
+// Tuodaan tarvittavat modelit
 import {
   Asiakas,
   Tuottaja,
@@ -8,10 +10,14 @@ import {
   Tilaus,
   Tuotteet,
 } from '../models/model.js';
+// Luodaan tilaus funktio tilauksen tekemiseen
 const tilaus = async (data) => {
+  // Aloitetaan transaktio
   const transaktio = await con.startUnmanagedTransaction();
   try {
+    // Luodaan summa muuttuja jonka arvo on 0
     let summa = 0;
+    // luodaan uusi tilaus tilaustauluun
     const uusiTilaus = await Tilaus.create(
       {
         asiakasID: data.asiakasID,
@@ -25,6 +31,7 @@ const tilaus = async (data) => {
       },
       { transaction: transaktio }
     );
+    // Lisätään tilauksen tuotteet tuotetauluun
     for (const i of data.Tuotteet) {
       await Tilaus_has_Tuotteet.create(
         {
@@ -36,21 +43,28 @@ const tilaus = async (data) => {
         },
         { transaction: transaktio }
       );
+      // Kasvatetaan summaa mikä on
       summa += i.maara * i.yksikkohinta;
+      // Vähennetään ostettujen tuotteiden määrä tuotesaldosta
       await Tuotteet.increment(
         { tuotesaldo: -i.maara },
         { where: { tuoteID: i.tuoteID }, transaction: transaktio }
       );
     }
+    // Päivitetään tilauksen lopullinen summa
     await Tilaus.increment(
       { summa: +summa },
       { where: { tilausnro: uusiTilaus.tilausnro }, transaction: transaktio }
     );
+    // Tehdään kommit ja transaktio onnistuu
     await transaktio.commit();
     return uusiTilaus;
+    // Virheen käsittely jos tilaus epäonnistuu
   } catch (error) {
+    // Peruutetaan transaktio transaktion tapahtumat ja heitetään error
     await transaktio.rollback();
     throw error;
   }
 };
 export default tilaus;
+// Exportataan tilausfunktio
