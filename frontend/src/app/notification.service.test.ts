@@ -1,14 +1,22 @@
+/**
+ * Tässä testitiedostossa varmistetaan Vitestin avulla,
+ * että front-end osaa hakea kaikki ilmoitukset back-endin rajapinnasta
+ */
+
 import { describe, it, expect, vi } from 'vitest';
 import { of, firstValueFrom } from 'rxjs';
 import { NotificationService, AppNotification } from './notification.service';
 
-// Pieni HttpClient-mock
+// Luodaan feikki-HttpClient (mock)
 const createHttpClientMock = () => ({
-  get: vi.fn(),
+  get: vi.fn(), // i.fn() tarkoittaa: tee testattava valhefunktio
 });
 
+// describe ryhmittelee testit NotificationServiceä varten
 describe('NotificationService', () => {
+  // it tarkistaa, että getNotifications() palauttaa oikean datan
   it('palauttaa kaikki ilmoitukset getNotifications()', async () => {
+    // luodaaan testidata
     const mockIlmoitukset: AppNotification[] = [
       {
         ilmoitusID: 1,
@@ -45,16 +53,20 @@ describe('NotificationService', () => {
     ];
 
     // 1) Luodaan HttpClient-mock ja kerrotaan mitä get palauttaa
+    // otetaan feikki-HttpClient käyttöön
+    // määrätään: kun kutsutaan http.get() → palautetaan mockIlmoitukset,
+    // of() tekee tästä Observablen, jotta se toimii NotificationServicessä
     const httpMock = createHttpClientMock();
     httpMock.get.mockReturnValue(of(mockIlmoitukset));
 
-    // 2) Luodaan service mockatulla HttpClientillä
+    // 2) Luodaan NotificationService käyttäen mockatulla HttpClientillä
     const service = new NotificationService(httpMock as any);
 
     // 3) Ylikirjoitetaan serverUrl testissä, jotta environmentia ei tarvita
     (service as any).serverUrl = 'http://fake-api/notifications';
 
-    // 4) Kutsutaan metodia
+    // 4) kutsutaan NotificationServicen metodia getNotifications()
+    // otetaan ensimmäinen arvo Observablesta → result
     const result = await firstValueFrom(service.getNotifications());
 
     // 5) Varmistetaan, että tulos on sama kuin mock-data

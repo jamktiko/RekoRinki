@@ -1,3 +1,8 @@
+/**
+ * InMemoryDataService-tiedostoa ei käytetä, koska se sisältää vain kovakoodattua testidataa.
+ * Oikea data haetaan nyt suoraan sovelluksen back-endistä (tietokannasta) front-endiin
+ */
+
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 import { Injectable } from '@angular/core';
 import { Product } from './types'; // tuotteen tyyppi
