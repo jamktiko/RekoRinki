@@ -17,14 +17,6 @@ export interface Product {
   kuva?: string;
 }
 
-/* Ostoskorin ja tuotekokoelman tietotyypit on tehty tarkoituksella samanlaisiksi, jotta
-   niiden käsittely storeissa olisi samanlaista. Ne ovat kuitenkin eri tietotyyppejä, ja
-   niistä voidaan tarvittaessa myöhemmin tehdä erilaisia. Ostoskori ja Tuotekokoelma 
-   sisältävät samat tiedot, mutta niiden tilat ovat erilaiset. Totalprice on olemassa
-   lähinnä sen vuoksi, että price-avaimessa säilyisi yhden tuotteen hinta, jota voidaan
-   tarvita tilaa käyttävissä komponenteissa. Kun se on valmiina, sitä ei tarvitse laskea.
-*/
-
 // Tuotekokoelman tietotyyppi
 export interface Products {
   products: Product[];

@@ -24,15 +24,6 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-/* SnackBarin oma Tailwind-tyyli */
-
-/* .success-snackbar {
-  @apply bg-green-100 text-green-900 font-semibold rounded-lg shadow-md px-4 py-3 flex justify-between items-center;
-} */
-/* .success-snackbar button {
-  @apply text-green-900 font-semibold ml-4;
-} */
-
 html,
 body {
   height: 100%;

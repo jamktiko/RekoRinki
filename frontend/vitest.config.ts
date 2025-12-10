@@ -1,3 +1,7 @@
+/**
+ * tämä tiedosto tekee testauksesta Angular-projektissa helpompaa ja luo aliasit, jotta koodin importit ovat siistejä.
+ */
+
 import { defineConfig } from 'vitest/config';
 import path from 'path';
 

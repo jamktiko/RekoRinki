@@ -1,3 +1,14 @@
+/**
+ * Tämä service hoitaa kaiken ostoskoriin liittyvän logiikan kuten:
+ *
+ *    tallentaa ostoskorin selaimen localStorageen
+ *    lisää tuotteita
+ *    poistaa tuotteita
+ *    muuttaa niiden määriä
+ *    laskee kokonaismäärät ja kokonaishinnan
+ *    muokkaa backendiltä tulevan "raakatuotteen" (YhdenIlmoitusTuotteet) sovelluksen omaan muotoon (Product)
+ */
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Product, YhdenIlmoitusTuotteet } from './types'; // ← Lisätty YhdenIlmoitusTuotteet
@@ -8,10 +19,12 @@ const LOCAL_KEY = 'ostoskori';
   providedIn: 'root',
 })
 export class OstoskoriService {
-  private _products = new BehaviorSubject<Product[]>([]);
-  public products$ = this._products.asObservable();
+  private _products = new BehaviorSubject<Product[]>([]); // ostoskorin tämänhetkinen tila (taulukko tuotteita)
+  public products$ = this._products.asObservable(); // observable-versio, jota komponentit voivat seurata
 
+  // Ladataan ostoskori localStoragesta
   constructor() {
+    // Jos localStoragessa on dataa → se laitetaan _products-muuttujaan.
     this.loadFromLocalStorage();
   }
 
@@ -23,7 +36,7 @@ export class OstoskoriService {
     }
   }
 
-  /** Tallentaa aina jokaisen muutoksen jälkeen */
+  /** Tallentaa aina jokaisen muutoksen jälkeen LocalStoragella */
   private saveToLocalStorage() {
     localStorage.setItem(LOCAL_KEY, JSON.stringify(this._products.value));
   }
@@ -55,20 +68,20 @@ export class OstoskoriService {
     if (!item) return;
 
     item.amount = newAmount;
-    // localStorage.setItem('cart', JSON.stringify(items));
+    // tallentaan sitten localstoragella
     this.saveToLocalStorage();
   }
 
   /** Aseta suoraan haluttu määrä (kpl) */
   setQuantity(rawProduct: YhdenIlmoitusTuotteet, count: number) {
-    // Jos käyttäjä tyhjentää kentän / kirjoittaa negatiivisen → 0
+    // Jos käyttäjä tyhjentää kentän / kirjoittaa negatiivisen muuttutetaan sen 0
     if (!count || count <= 0) {
       this.removeFromCart(rawProduct.uniqueId);
       return;
     }
 
-    const current = this._products.value;
-    const existing = current.find((p) => p.uniqueId === rawProduct.uniqueId);
+    const current = this._products.value; // tämänhetkinen ostoskori tilanne
+    const existing = current.find((p) => p.uniqueId === rawProduct.uniqueId); // löytyökö tämä tuote siellä ostoskorissa
 
     // Muunnetaan kpl → grammoiksi (teillä 1kpl = 500g)
     const amountInGrams = count * 500;
@@ -99,6 +112,7 @@ export class OstoskoriService {
         : p
     );
 
+    // loppussa tallennan tuote koriin ja sama aikaa localstorgaella
     this._products.next(updated);
     this.saveToLocalStorage();
   }
@@ -107,10 +121,12 @@ export class OstoskoriService {
   addToCart(rawProduct: YhdenIlmoitusTuotteet) {
     // ← Muutettu parametri
     const p = this.mapTuote(rawProduct); // ← Mapataan ensin
-    const current = this._products.value;
+    const current = this._products.value; // tämänhetkinen ostoskori tilanne
 
+    // löytyökö tämä tuote siellä ostoskorissa
     const existing = current.find((x) => x.uniqueId === p.uniqueId);
 
+    // Jos löytyy lisää määrä 500 grammalla
     if (existing) {
       const updated = current.map((x) =>
         x.uniqueId === p.uniqueId
@@ -124,6 +140,7 @@ export class OstoskoriService {
 
       this._products.next(updated);
     } else {
+      // jos ei lisätään uutena tuotteena
       const newItem: Product = {
         ...p,
         amount: 500,
@@ -133,11 +150,13 @@ export class OstoskoriService {
       this._products.next([...current, newItem]);
     }
 
+    // tallennetaan sinne Localstorgakella
     this.saveToLocalStorage();
   }
 
   /** Kasvata tuotteen määrää 500:lla (uusi metodi) */
   increment(uniqueId: string) {
+    // mapataan tuote ja lisää 500g
     const updated = this._products.value.map((p) =>
       p.uniqueId === uniqueId
         ? {

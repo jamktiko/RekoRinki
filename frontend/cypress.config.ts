@@ -1,3 +1,11 @@
+/**
+ * Tämä tiedosto:
+ *    kertoo Cypressille, että testataan Angular-sovellusta
+ *    määrittelee että sovellus löytyy osoitteesta http://localhost:4200
+ *    antaa paikan, johon voi lisätä lisäasetuksia myöhemmin
+ *    käynnistää Cypressin testit näillä asetuksilla
+ */
+
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
