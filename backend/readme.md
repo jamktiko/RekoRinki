@@ -2,27 +2,17 @@
 
 ## This backend uses the following key technologies:
 
-•
-Node.js (ES Modules)
-•
-Express 5
-•
-MySQL + Sequelize
-•
-JWT authentication
-•
-bcryptjs for password hashing
-•
-dotenv for environment variables
-•
-AWS Secrets Manager (for secure secret storage)
-•
-Morgan for HTTP request logging
-•
-CORS, cookie-parser, http-errors
-Dev tools:
-•
-nodemon for development hot-reloading
+- Node.js (ES Modules)
+- Express 5
+- MySQL + Sequelize
+- JWT authentication
+- bcryptjs for password hashing
+- dotenv for environment variables
+- AWS Secrets Manager (for secure secret storage)
+- Morgan for HTTP request logging
+- CORS, cookie-parser, http-errors
+- Dev tools:
+- nodemon for development hot-reloading
 
 ## Setup for New Developers
 
